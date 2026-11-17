@@ -1358,7 +1358,7 @@ export default function ProfileModal({
                           </div>
                           <button
                             type="button"
-                            onClick={() => onRemoveSavedPlan(p.id)}
+                            onClick={() => onRemoveSavedPlan(p.id || planData.id)}
                             className="p-1.5 text-stone-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition cursor-pointer shrink-0"
                             title="Eliminar de guardados"
                           >

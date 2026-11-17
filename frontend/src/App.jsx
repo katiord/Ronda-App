@@ -1401,7 +1401,28 @@ export default function App() {
     });
   };
 
-  // Helper para fusionar los datos visuales guardados únicamente en el navegador con el perfil anónimo del backend
+  // Helper para persistir y recuperar datos de rondas y favoritos por usuario en el navegador (soporte web/serverless + backend)
+  const persistLocalUserProfile = (userObj) => {
+    if (!userObj || !userObj.id) return;
+    try {
+      const storeKey = `ronda_user_store_${userObj.id}`;
+      const toStore = {
+        id: userObj.id,
+        neighborhood: userObj.neighborhood,
+        pet_friendly: Boolean(userObj.pet_friendly),
+        vegetarian_friendly: Boolean(userObj.vegetarian_friendly),
+        budget_preference: userObj.budget_preference || '$$',
+        saved_plans: Array.isArray(userObj.saved_plans) ? userObj.saved_plans : [],
+        favorite_place_ids: Array.isArray(userObj.favorite_place_ids) ? userObj.favorite_place_ids : []
+      };
+      localStorage.setItem(storeKey, JSON.stringify(toStore));
+      localStorage.setItem('ronda_offline_user', JSON.stringify(userObj));
+    } catch {
+      // ignore storage quota errors
+    }
+  };
+
+  // Helper para fusionar los datos visuales y las rondas guardadas en el navegador con el perfil anónimo del backend
   const mergeWithLocalGoogleProfile = (serverProfile, overrideLocal = null) => {
     let localMeta = overrideLocal;
     if (!localMeta) {
@@ -1412,13 +1433,53 @@ export default function App() {
         localMeta = null;
       }
     }
-    return {
+
+    const userId = serverProfile?.id || 'g_web_default';
+    let localStore = null;
+    try {
+      const rawStore = localStorage.getItem(`ronda_user_store_${userId}`);
+      if (rawStore) localStore = JSON.parse(rawStore);
+    } catch {
+      localStore = null;
+    }
+
+    // Combinar rondas guardadas del servidor y del navegador sin duplicar IDs
+    const serverPlans = Array.isArray(serverProfile?.saved_plans) ? serverProfile.saved_plans : [];
+    const storedPlans = Array.isArray(localStore?.saved_plans) ? localStore.saved_plans : [];
+    const seenPlanIds = new Set();
+    const mergedPlans = [];
+    [...storedPlans, ...serverPlans].forEach((p) => {
+      const pid = p?.id || p?.plan?.id;
+      if (pid && !seenPlanIds.has(pid)) {
+        seenPlanIds.add(pid);
+        mergedPlans.push(p);
+      } else if (!pid) {
+        mergedPlans.push(p);
+      }
+    });
+
+    // Combinar favoritos
+    const serverFavs = Array.isArray(serverProfile?.favorite_place_ids) ? serverProfile.favorite_place_ids : [];
+    const storedFavs = Array.isArray(localStore?.favorite_place_ids) ? localStore.favorite_place_ids : [];
+    const mergedFavs = Array.from(new Set([...storedFavs, ...serverFavs]));
+
+    const mergedUser = {
       ...serverProfile,
+      id: userId,
       name: localMeta?.displayName || serverProfile?.name || 'Viajero Porteño',
       email: localMeta?.emailHint || serverProfile?.email || '',
       picture: localMeta?.picture || null,
-      auth_provider: 'google'
+      auth_provider: 'google',
+      neighborhood: localStore?.neighborhood || serverProfile?.neighborhood || 'San Telmo',
+      pet_friendly: localStore?.pet_friendly ?? serverProfile?.pet_friendly ?? false,
+      vegetarian_friendly: localStore?.vegetarian_friendly ?? serverProfile?.vegetarian_friendly ?? false,
+      budget_preference: localStore?.budget_preference || serverProfile?.budget_preference || '$$',
+      saved_plans: mergedPlans,
+      favorite_place_ids: mergedFavs
     };
+
+    persistLocalUserProfile(mergedUser);
+    return mergedUser;
   };
 
   // Cargar catálogo de lugares enriquecido desde el backend para fallback completo
@@ -1457,12 +1518,18 @@ export default function App() {
         }
       })
       .catch(() => {
-        // Si está en modo web offline pero tiene sesión local guardada, restaurarla
+        // Si está en modo web o la instancia serverless reinició, restaurar desde el navegador
         try {
           const rawOffline = localStorage.getItem('ronda_offline_user');
           if (rawOffline) {
             const parsed = mergeWithLocalGoogleProfile(JSON.parse(rawOffline));
             setCurrentUser(parsed);
+            if (parsed.neighborhood && parsed.neighborhood !== 'Cualquiera') {
+              setNeighborhood(parsed.neighborhood);
+            }
+            if (parsed.budget_preference) {
+              setPriceTier(parsed.budget_preference);
+            }
             return;
           }
         } catch {
@@ -1525,7 +1592,7 @@ export default function App() {
         id: anonHash,
         auth_provider: 'google',
         token: `tok_web_${Date.now()}`,
-        neighborhood: googlePayload.neighborhood || 'Colegiales',
+        neighborhood: googlePayload.neighborhood || 'San Telmo',
         pet_friendly: Boolean(googlePayload.pet_friendly),
         vegetarian_friendly: Boolean(googlePayload.vegetarian_friendly),
         budget_preference: googlePayload.budget_preference || '$$',
@@ -1549,7 +1616,7 @@ export default function App() {
     setShowProfileModal(false);
     setAuthToast({
       title: `¡Hola, ${finalUser.name.split(' ')[0]}!`,
-      message: `Pasaporte Porteño conectado con Google (Zero-PII activo).`
+      message: `Pasaporte Porteño conectado.`
     });
     setTimeout(() => setAuthToast(null), 4000);
   };
@@ -1562,15 +1629,40 @@ export default function App() {
     setShowProfileModal(false);
     setAuthToast({
       title: 'Sesión finalizada',
-      message: 'Has desconectado tu cuenta de Google en este navegador.'
+      message: 'Has desconectado tu cuenta en este navegador.'
     });
     setTimeout(() => setAuthToast(null), 3000);
   };
 
   const handleUpdatePreferences = async (newPrefs) => {
+    if (!currentUser) return;
     const token = localStorage.getItem('ronda_token');
-    if (!token) return;
 
+    // 1. Actualización instantánea en estado y almacenamiento local del navegador
+    const optimisticUser = {
+      ...currentUser,
+      ...(newPrefs.neighborhood !== undefined ? { neighborhood: newPrefs.neighborhood } : {}),
+      ...(newPrefs.pet_friendly !== undefined ? { pet_friendly: newPrefs.pet_friendly } : {}),
+      ...(newPrefs.vegetarian_friendly !== undefined ? { vegetarian_friendly: newPrefs.vegetarian_friendly } : {}),
+      ...(newPrefs.budget_preference !== undefined ? { budget_preference: newPrefs.budget_preference } : {})
+    };
+    setCurrentUser(optimisticUser);
+    persistLocalUserProfile(optimisticUser);
+
+    if (optimisticUser.neighborhood && optimisticUser.neighborhood !== 'Cualquiera') {
+      setNeighborhood(optimisticUser.neighborhood);
+    }
+    if (optimisticUser.budget_preference) {
+      setPriceTier(optimisticUser.budget_preference);
+    }
+    setAuthToast({
+      title: 'Preferencias actualizadas',
+      message: 'Tus cambios se guardaron correctamente en tu perfil.'
+    });
+    setTimeout(() => setAuthToast(null), 3500);
+
+    // 2. Sincronización con el backend si está disponible
+    if (!token) return;
     try {
       const res = await fetch(`${API_BASE_URL}/api/user/preferences`, {
         method: 'PUT',
@@ -1583,21 +1675,9 @@ export default function App() {
       if (res.ok) {
         const updated = mergeWithLocalGoogleProfile(await res.json());
         setCurrentUser(updated);
-        if (updated.neighborhood && updated.neighborhood !== 'Cualquiera') {
-          setNeighborhood(updated.neighborhood);
-        }
-        const budget = updated.budget_preference || updated.preferences?.budget_preference;
-        if (budget) {
-          setPriceTier(budget);
-        }
-        setAuthToast({
-          title: 'Preferencias actualizadas',
-          message: 'Tus cambios se guardaron correctamente en tu perfil.'
-        });
-        setTimeout(() => setAuthToast(null), 3500);
       }
     } catch (err) {
-      console.warn('Error al actualizar preferencias:', err);
+      console.warn('Preferencias guardadas localmente (modo web):', err);
     }
   };
 
@@ -1611,6 +1691,56 @@ export default function App() {
       return;
     }
 
+    // Asegurar un ID único para la ronda (evitar colisión si tenía 'ronda_demo_01')
+    const stopSignature = (targetPlan.schedule || []).map((s) => s.place_name || s.id).join('|');
+    const resolvedId =
+      targetPlan.id && targetPlan.id !== 'ronda_demo_01'
+        ? targetPlan.id
+        : `ronda_${(targetPlan.neighborhood || 'caba').toLowerCase().replace(/\s+/g, '_')}_${Date.now()}`;
+
+    const nowFormatted = new Date().toLocaleDateString('es-AR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    const planWithId = {
+      ...targetPlan,
+      id: resolvedId,
+      saved_at: targetPlan.saved_at || nowFormatted
+    };
+
+    // Actualizar también el plan en pantalla si tenía el ID genérico
+    if (plan && (!plan.id || plan.id === 'ronda_demo_01')) {
+      setPlan(planWithId);
+    }
+
+    // 1. Guardado inmediato en el perfil del usuario (estado + localStorage)
+    const currentSaved = Array.isArray(currentUser.saved_plans) ? currentUser.saved_plans : [];
+    const alreadyExists = currentSaved.some((p) => {
+      const pData = p.plan || p;
+      const existingSig = (pData.schedule || []).map((s) => s.place_name || s.id).join('|');
+      return (
+        pData.id === resolvedId ||
+        (stopSignature && existingSig === stopSignature && pData.neighborhood === planWithId.neighborhood)
+      );
+    });
+
+    const nextSavedPlans = alreadyExists ? currentSaved : [planWithId, ...currentSaved];
+    const updatedLocalUser = {
+      ...currentUser,
+      saved_plans: nextSavedPlans
+    };
+
+    setCurrentUser(updatedLocalUser);
+    persistLocalUserProfile(updatedLocalUser);
+    triggerHaptic(14);
+    setPlanSavedToast(true);
+    setTimeout(() => setPlanSavedToast(false), 3000);
+
+    // 2. Sincronizar en segundo plano con el backend si responde
     try {
       const res = await fetch(`${API_BASE_URL}/api/user/saved-plans`, {
         method: 'POST',
@@ -1618,34 +1748,47 @@ export default function App() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ plan: targetPlan })
+        body: JSON.stringify({ plan: planWithId })
       });
       if (res.ok) {
         const updated = mergeWithLocalGoogleProfile(await res.json());
         setCurrentUser(updated);
-        setPlanSavedToast(true);
-        setTimeout(() => setPlanSavedToast(false), 3000);
       }
     } catch (err) {
-      console.warn('Error al guardar recorrido:', err);
+      console.warn('Ronda guardada en almacenamiento local del navegador:', err);
     }
   };
 
   const handleRemoveSavedPlan = async (planId) => {
+    if (!currentUser) return;
     const token = localStorage.getItem('ronda_token');
-    if (!token) return;
 
+    // 1. Eliminación inmediata en el estado y almacenamiento local
+    const currentSaved = Array.isArray(currentUser.saved_plans) ? currentUser.saved_plans : [];
+    const nextSaved = currentSaved.filter((p) => {
+      const pData = p.plan || p;
+      return p.id !== planId && pData.id !== planId;
+    });
+
+    const updatedLocalUser = {
+      ...currentUser,
+      saved_plans: nextSaved
+    };
+    setCurrentUser(updatedLocalUser);
+    persistLocalUserProfile(updatedLocalUser);
+
+    // 2. Sincronizar con el backend si está disponible
+    if (!token) return;
     try {
       const res = await fetch(`${API_BASE_URL}/api/user/saved-plans/${planId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
-        const updated = mergeWithLocalGoogleProfile(await res.json());
-        setCurrentUser(updated);
+        await res.json();
       }
     } catch (err) {
-      console.warn('Error al eliminar recorrido guardado:', err);
+      console.warn('Ronda eliminada localmente:', err);
     }
   };
 
@@ -1658,6 +1801,22 @@ export default function App() {
       return;
     }
 
+    // 1. Alternar favorito inmediatamente en estado y almacenamiento local
+    const currentFavs = new Set(Array.isArray(currentUser.favorite_place_ids) ? currentUser.favorite_place_ids : []);
+    if (currentFavs.has(placeId)) {
+      currentFavs.delete(placeId);
+    } else {
+      currentFavs.add(placeId);
+    }
+
+    const updatedLocalUser = {
+      ...currentUser,
+      favorite_place_ids: Array.from(currentFavs)
+    };
+    setCurrentUser(updatedLocalUser);
+    persistLocalUserProfile(updatedLocalUser);
+
+    // 2. Sincronizar con el backend si responde
     try {
       const res = await fetch(`${API_BASE_URL}/api/user/favorites/${placeId}`, {
         method: 'POST',
@@ -1668,7 +1827,7 @@ export default function App() {
         setCurrentUser(updated);
       }
     } catch (err) {
-      console.warn('Error al alternar favorito:', err);
+      console.warn('Favorito actualizado localmente:', err);
     }
   };
 
@@ -2104,7 +2263,7 @@ export default function App() {
       const fallbackSchedule = updateScheduleTransits(rawFallbackSchedule);
 
       setPlan({
-        id: 'ronda_demo_01',
+        id: `ronda_${fallbackNeighborhood.toLowerCase().replace(/\s+/g, '_')}_${Date.now()}`,
         title: `Una ronda por ${fallbackNeighborhood}.`,
         neighborhood: fallbackNeighborhood,
         mood: mood || 'amigos',
@@ -2176,6 +2335,20 @@ export default function App() {
   // PANTALLA 3: EL RECORRIDO HECHO (ITINERARIO)
   // ==========================================
   if (screen === 'itinerary' && plan) {
+    const currentStopSig = (plan.schedule || []).map((s) => s.place_name || s.id).join('|');
+    const isCurrentPlanSaved = Boolean(
+      currentUser &&
+        Array.isArray(currentUser.saved_plans) &&
+        currentUser.saved_plans.some((p) => {
+          const pData = p.plan || p;
+          const sig = (pData.schedule || []).map((s) => s.place_name || s.id).join('|');
+          return (
+            (plan.id && plan.id !== 'ronda_demo_01' && pData.id === plan.id) ||
+            (currentStopSig && sig === currentStopSig && pData.neighborhood === plan.neighborhood)
+          );
+        })
+    );
+
     return (
       <div className="min-h-screen ronda-canvas flex flex-col relative transition-colors duration-300">
         {/* Ventana de espera/transición idéntica a la inicial */}
@@ -2225,10 +2398,14 @@ export default function App() {
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => handleSavePlan(plan)}
-                  className="p-2 rounded-xl text-[var(--text-main)] hover:bg-black/5 dark:hover:bg-white/10 transition cursor-pointer"
-                  title="Guardar en mi perfil"
+                  className={`p-2 rounded-xl transition cursor-pointer ${
+                    isCurrentPlanSaved
+                      ? 'bg-[#E06D28]/15 text-[#E06D28]'
+                      : 'text-[var(--text-main)] hover:bg-black/5 dark:hover:bg-white/10'
+                  }`}
+                  title={isCurrentPlanSaved ? "Ronda guardada en tu perfil" : "Guardar en mi perfil"}
                 >
-                  <Bookmark className="w-4 h-4 text-[#E06D28]" />
+                  <Bookmark className={`w-4 h-4 text-[#E06D28] ${isCurrentPlanSaved ? 'fill-[#E06D28]' : ''}`} />
                 </button>
                 <button
                   type="button"
@@ -2731,10 +2908,14 @@ export default function App() {
               {/* Botón Guardar en mi perfil */}
               <button
                 onClick={() => handleSavePlan(plan)}
-                className="flex-1 bg-[#182A24] hover:bg-[#223931] text-white font-semibold py-3.5 px-6 rounded-2xl transition text-center text-sm flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+                className={`flex-1 font-semibold py-3.5 px-6 rounded-2xl transition text-center text-sm flex items-center justify-center gap-2 shadow-sm cursor-pointer btn-latido ${
+                  isCurrentPlanSaved
+                    ? 'bg-[#213D30] hover:bg-[#284B3B] text-white border border-emerald-500/40'
+                    : 'bg-[#182A24] hover:bg-[#223931] text-white'
+                }`}
               >
-                <Bookmark className="w-4 h-4 text-[#E06D28]" />
-                <span>Guardar en mi perfil</span>
+                <Bookmark className={`w-4 h-4 text-[#E06D28] ${isCurrentPlanSaved ? 'fill-[#E06D28]' : ''}`} />
+                <span>{isCurrentPlanSaved ? '✓ Ronda guardada en tu perfil' : 'Guardar en mi perfil'}</span>
               </button>
 
               {/* Botón Mandar por WhatsApp */}

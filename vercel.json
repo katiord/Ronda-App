@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/((?!places/|actividades/|assets/|favicon).*)",
+      "source": "/((?!api/|places/|actividades/|assets/|favicon).*)",
       "destination": "/index.html"
     }
   ]
