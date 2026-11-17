@@ -277,8 +277,10 @@ function RondaSplashWaitingScreen({ subtitle = "Buenos Aires a tu ritmo", hint =
         <div className="relative w-24 h-24 flex items-center justify-center mb-6">
           <div className="absolute inset-0 rounded-full ronda-tag animate-ping opacity-60"></div>
           <div className="absolute inset-2 rounded-full border border-[var(--border-card)]"></div>
-          <div className="w-14 h-14 rounded-full bg-[#182A24] dark:bg-[#1E3328] border border-[var(--border-card)] flex items-center justify-center shadow-lg">
-            <Compass className="w-7 h-7 text-white animate-pulse" />
+          <div className="w-14 h-14 rounded-2xl bg-[#182A24] dark:bg-[#1E3328] border border-[var(--border-card)] flex items-center justify-center shadow-lg">
+            <span className="font-editorial text-3xl font-bold text-white leading-none select-none">
+              r<span className="text-[#E06D28]">.</span>
+            </span>
           </div>
         </div>
 
