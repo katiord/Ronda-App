@@ -190,18 +190,22 @@ export default function ProfileModal({
   onRemoveSavedPlan,
   allPlaces = [],
   onOpenPlaceDetail,
-  onPlanFromHere
+  onPlanFromHere,
+  theme = 'light'
 }) {
   if (!isOpen) return null;
+
+  const isDark =
+    theme === 'dark' ||
+    (typeof document !== 'undefined' && document.documentElement.classList.contains('dark'));
 
   // Estados de navegación dentro del perfil
   const [activeProfileTab, setActiveProfileTab] = useState('passport'); // 'passport' | 'saved_plans' | 'favorites' | 'preferences'
   const [passportSubView, setPassportSubView] = useState('map'); // 'map' | 'badges'
   const [selectedBarrioId, setSelectedBarrioId] = useState(() => currentUser?.neighborhood || 'San Telmo');
 
-  // Estados de autenticación combinada:
-  // 1) Botón de Google con ventana emergente real (OAuth2 / GIS)
-  // 2) Formulario con Nombre, Gmail y Contraseña (Zero-PII en el navegador)
+  // Estados de autenticación (Opción A: Google First + Acordeón Manual Discreto)
+  const [showManualForm, setShowManualForm] = useState(false);
   const [authMode, setAuthMode] = useState('login'); // 'login' | 'register'
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -213,14 +217,13 @@ export default function ProfileModal({
   const [authError, setAuthError] = useState('');
   const [googlePopupHint, setGooglePopupHint] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const googleBtnContainerRef = useRef(null);
   const nameInputRef = useRef(null);
 
   const googleClientId =
     import.meta.env.VITE_GOOGLE_CLIENT_ID ||
     '587121353191-tbcfok5s726spqp4augfl7ohqf8mjmd7.apps.googleusercontent.com';
 
-  // Autocompletar el nombre guardado localmente si el usuario escribe un Gmail ya conocido en su navegador
+  // Autocompletar el nombre guardado localmente si el usuario escribe un correo ya conocido en su navegador
   const handleEmailChange = (val) => {
     setEmail(val);
     try {
@@ -234,46 +237,7 @@ export default function ProfileModal({
     }
   };
 
-  useEffect(() => {
-    if (!isOpen || currentUser || !googleClientId) return;
-    if (typeof window !== 'undefined' && window.google?.accounts?.id && googleBtnContainerRef.current) {
-      try {
-        window.google.accounts.id.initialize({
-          client_id: googleClientId,
-          callback: async (response) => {
-            if (response?.credential && onGoogleLogin) {
-              setIsSubmitting(true);
-              setAuthError('');
-              try {
-                await onGoogleLogin({
-                  credential: response.credential,
-                  neighborhood,
-                  pet_friendly: petFriendly,
-                  vegetarian_friendly: vegetarianFriendly,
-                  budget_preference: budgetPreference
-                });
-              } catch (err) {
-                setAuthError(err.message || 'No se pudo autenticar con Google.');
-              } finally {
-                setIsSubmitting(false);
-              }
-            }
-          }
-        });
-        window.google.accounts.id.renderButton(googleBtnContainerRef.current, {
-          theme: 'outline',
-          size: 'large',
-          shape: 'pill',
-          text: 'continue_with',
-          width: 320
-        });
-      } catch (err) {
-        console.warn('Google Identity Services init warning:', err);
-      }
-    }
-  }, [isOpen, currentUser, googleClientId, neighborhood, petFriendly, vegetarianFriendly, budgetPreference, onGoogleLogin]);
-
-  // Opción 2: Abrir la ventana emergente oficial de Google (accounts.google.com)
+  // Botón único principal: Abrir la ventana emergente oficial de Google (accounts.google.com)
   const handleOpenGooglePopup = () => {
     setAuthError('');
     setGooglePopupHint('');
@@ -320,16 +284,14 @@ export default function ProfileModal({
       }
     }
 
-    // Si aún no se configuró VITE_GOOGLE_CLIENT_ID, guiar al formulario o permitir acceso rápido
+    // Si el script de Google está bloqueado por el navegador, abrir el acordeón manual
+    setShowManualForm(true);
     setGooglePopupHint(
-      'Para abrir la ventana emergente oficial de accounts.google.com en la web, agregá tu VITE_GOOGLE_CLIENT_ID en Vercel. Mientras tanto, podés ingresar abajo con tu Nombre, Gmail y Contraseña.'
+      'No se pudo abrir la ventana emergente de Google en este navegador. Podés ingresar directamente acá abajo con tu correo y contraseña.'
     );
-    if (nameInputRef.current) {
-      nameInputRef.current.focus();
-    }
   };
 
-  // Opción 1: Formulario con Nombre, Gmail y Contraseña bajo arquitectura Zero-PII
+  // Acordeón secundario: Formulario con Correo y Contraseña bajo arquitectura Zero-PII
   const handleSubmitFormAuth = async (e) => {
     e.preventDefault();
     setAuthError('');
@@ -339,7 +301,7 @@ export default function ProfileModal({
     const cleanName = name.trim();
 
     if (!cleanEmail || !cleanEmail.includes('@')) {
-      setAuthError('Por favor ingresá un correo electrónico válido (ej. tu@gmail.com).');
+      setAuthError('Por favor ingresá un correo electrónico válido.');
       return;
     }
     if (!password || password.length < 4) {
@@ -373,12 +335,10 @@ export default function ProfileModal({
         };
         localStorage.setItem('ronda_local_accounts', JSON.stringify(accounts));
       } else {
-        // Modo Iniciar sesión: si la cuenta ya fue creada en este navegador, verificar su contraseña local
         if (existingLocal && existingLocal.pwdHash && existingLocal.pwdHash !== pwdHash) {
           throw new Error('Contraseña incorrecta para esta cuenta.');
         }
-        // Guardar o actualizar el nombre si el usuario lo completó al iniciar sesión
-        const resolvedName = cleanName || existingLocal?.name || cleanEmail.split('@')[0];
+        const resolvedName = existingLocal?.name || cleanName || cleanEmail.split('@')[0];
         accounts[cleanEmail] = {
           ...(existingLocal || {}),
           name: resolvedName,
@@ -387,10 +347,13 @@ export default function ProfileModal({
         localStorage.setItem('ronda_local_accounts', JSON.stringify(accounts));
       }
 
-      const finalDisplayName = cleanName || accounts[cleanEmail]?.name || cleanEmail.split('@')[0] || 'Viajero Porteño';
+      const finalDisplayName =
+        (authMode === 'register' ? cleanName : accounts[cleanEmail]?.name) ||
+        cleanEmail.split('@')[0] ||
+        'Viajero Porteño';
       const targetBarrio = authMode === 'register'
         ? neighborhood
-        : (accounts[cleanEmail]?.neighborhood || (cleanEmail === 'katia@gmail.com' ? 'Colegiales' : neighborhood));
+        : (accounts[cleanEmail]?.neighborhood || neighborhood);
 
       if (onGoogleLogin) {
         await onGoogleLogin({
@@ -406,29 +369,6 @@ export default function ProfileModal({
       setPassword('');
     } catch (err) {
       setAuthError(err.message || 'Ocurrió un error al iniciar sesión.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Acceso rápido demo (Katia) con 1 clic
-  const handleQuickDemoKatia = async () => {
-    setAuthError('');
-    setIsSubmitting(true);
-    try {
-      if (onGoogleLogin) {
-        await onGoogleLogin({
-          google_sub: 'katia@gmail.com',
-          displayName: 'Katia',
-          emailHint: 'katia@gmail.com',
-          neighborhood: 'Colegiales',
-          pet_friendly: false,
-          vegetarian_friendly: false,
-          budget_preference: '$$'
-        });
-      }
-    } catch (err) {
-      setAuthError(err.message || 'Ocurrió un error al cargar el perfil demo.');
     } finally {
       setIsSubmitting(false);
     }
@@ -622,55 +562,61 @@ export default function ProfileModal({
         </button>
 
         {/* ======================================================== */}
-        {/* CASO 1: USUARIO NO LOGUEADO (GOOGLE POPUP + FORMULARIO)  */}
+        {/* CASO 1: USUARIO NO LOGUEADO (OPCIÓN A: GOOGLE FIRST)     */}
         {/* ======================================================== */}
         {!currentUser ? (
           <div>
-            {/* Banner Oficial de Pasaporte Porteño */}
-            <div className="bg-gradient-to-br from-[#14241F] via-[#101D19] to-[#0A1310] border border-[#2D4538] rounded-2xl p-5 text-white mb-4 shadow-lg relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-44 h-44 bg-[#E06D28]/10 rounded-full blur-2xl pointer-events-none"></div>
-              
-              <div className="flex items-center justify-between mb-2.5">
+            {/* Banner Editorial de Pasaporte Porteño (Adaptado a Claro/Oscuro sin exceso de contraste) */}
+            <div className="ronda-card-inner border rounded-2xl p-5 mb-4 shadow-xs relative overflow-hidden">
+              <div className="flex items-center justify-between mb-2">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#E06D28] flex items-center gap-1.5 bg-[#E06D28]/10 border border-[#E06D28]/30 px-2.5 py-1 rounded-full">
                   <Compass className="w-3.5 h-3.5" /> Pasaporte de Viajero Porteño
                 </span>
-                <span className="text-[10px] text-stone-300 font-mono bg-white/10 px-2 py-0.5 rounded-full">
-                  CABA · Registro Urbano
+                <span className="text-[10px] ronda-text-muted font-mono ronda-card border px-2 py-0.5 rounded-full">
+                  CABA · 11 Barrios
                 </span>
               </div>
 
-              <h3 className="font-editorial text-2xl font-bold leading-tight mb-1">
+              <h3 className="font-editorial text-2xl font-bold text-[var(--text-main)] leading-tight mb-1">
                 Conquistá los barrios de Buenos Aires
               </h3>
-              <p className="text-xs text-stone-300 max-w-lg leading-relaxed mb-3">
-                Ingresá con tu ventana de Google o con tu nombre, Gmail y contraseña para sellar los 11 barrios en tu mapa interactivo y guardar tus rondas favoritas.
+              <p className="text-xs ronda-text-muted max-w-lg leading-relaxed">
+                Conectá tu cuenta para sellar los barrios que recorras en tu mapa interactivo y guardar tus rondas y lugares favoritos.
               </p>
-
-              <button
-                type="button"
-                onClick={handleQuickDemoKatia}
-                disabled={isSubmitting}
-                className="inline-flex items-center gap-2 bg-[#E06D28] hover:bg-[#C95B1D] text-white text-xs font-semibold px-3.5 py-1.5 rounded-xl transition shadow-sm cursor-pointer btn-latido"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-amber-200" />
-                <span>Probar Pasaporte con Perfil Demo (Katia)</span>
-              </button>
             </div>
 
-            {/* OPCIÓN 2: BOTÓN PARA ABRIR LA VENTANA EMERGENTE DE GMAIL */}
-            <div className="mb-4 space-y-2">
-              {googleClientId && (
-                <div className="flex justify-center" ref={googleBtnContainerRef} />
-              )}
+            {/* Selector compacto de barrio base antes de ingresar */}
+            <div className="mb-4">
+              <label className="text-[11px] font-semibold ronda-text-muted flex items-center justify-between mb-1.5">
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#E06D28]" />
+                  <span>Tu barrio de partida en CABA</span>
+                </span>
+                <span className="text-[10px] ronda-text-muted font-normal">Podés cambiarlo cuando quieras</span>
+              </label>
+              <select
+                value={neighborhood}
+                onChange={(e) => setNeighborhood(e.target.value)}
+                className="w-full ronda-card-inner border rounded-xl px-3.5 py-2.5 text-xs font-medium text-[var(--text-main)] outline-none focus:border-[#E06D28] transition cursor-pointer"
+              >
+                {BARRIOS_DATA.map((b) => (
+                  <option key={b.id} value={b.id} className="bg-[var(--bg-card)] text-[var(--text-main)]">
+                    {b.label} — {b.sub}
+                  </option>
+                ))}
+              </select>
+            </div>
 
+            {/* BOTÓN ÚNICO PRINCIPAL DE GOOGLE (SIN DUPLICADOS) */}
+            <div className="mb-4 space-y-2">
               <button
                 type="button"
                 onClick={handleOpenGooglePopup}
                 disabled={isSubmitting}
-                className="w-full bg-white hover:bg-stone-50 text-[#1F1F1F] border border-stone-300 font-semibold text-xs sm:text-sm py-3 px-5 rounded-2xl transition shadow-xs hover:shadow-md flex items-center justify-center gap-3 cursor-pointer btn-latido"
+                className="w-full bg-white dark:bg-[#1E2E26] hover:bg-stone-50 dark:hover:bg-[#25392F] text-[#14241F] dark:text-[#F8FAF9] border border-[#C5D2C9] dark:border-[#345243] font-semibold text-sm py-3.5 px-5 rounded-2xl transition shadow-sm hover:shadow-md flex items-center justify-center gap-3 cursor-pointer btn-latido"
               >
                 <GoogleLogoSvg className="w-5 h-5 shrink-0" />
-                <span>Abrir ventana de Google (Gmail)</span>
+                <span>{isSubmitting ? 'Conectando...' : 'Continuar con Google'}</span>
               </button>
 
               {googlePopupHint && (
@@ -680,166 +626,161 @@ export default function ProfileModal({
               )}
             </div>
 
-            {/* Separador visual */}
-            <div className="relative flex py-1.5 items-center mb-3">
-              <div className="flex-grow border-t ronda-border"></div>
-              <span className="flex-shrink mx-3 text-[10px] uppercase tracking-wider ronda-text-muted font-bold">
-                o ingresá con tu Nombre, Gmail y Contraseña
-              </span>
-              <div className="flex-grow border-t ronda-border"></div>
-            </div>
-
-            {/* OPCIÓN 1: PESTAÑAS INICIAR SESIÓN / CREAR MI CUENTA CON NOMBRE, GMAIL Y CONTRASEÑA */}
-            <div className="flex ronda-card-inner p-1 rounded-2xl border mb-3.5">
-              <button 
-                type="button"
-                onClick={() => { setAuthMode('login'); setAuthError(''); }}
-                className={`flex-1 py-2 text-xs font-bold rounded-xl transition cursor-pointer ${
-                  authMode === 'login'
-                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
-                    : 'ronda-text-muted hover:text-[var(--text-main)]'
-                }`}
-              >
-                Iniciar sesión
-              </button>
-              <button 
-                type="button"
-                onClick={() => { setAuthMode('register'); setAuthError(''); }}
-                className={`flex-1 py-2 text-xs font-bold rounded-xl transition cursor-pointer ${
-                  authMode === 'register'
-                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
-                    : 'ronda-text-muted hover:text-[var(--text-main)]'
-                }`}
-              >
-                Crear mi cuenta
-              </button>
-            </div>
-
             {authError && (
               <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-300 text-xs p-3 rounded-xl mb-3.5 text-center">
                 {authError}
               </div>
             )}
 
-            <form onSubmit={handleSubmitFormAuth} className="space-y-3 mb-3">
-              {/* Campo Nombre siempre disponible para que el usuario pueda poner su nombre */}
-              <div>
-                <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
-                  ¿Cómo te llamás?
-                </label>
-                <div className="relative">
-                  <User className="w-4 h-4 ronda-text-muted absolute left-3.5 top-3" />
-                  <input 
-                    ref={nameInputRef}
-                    type="text" 
-                    placeholder="Tu nombre o apodo (ej. Katia)"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required={authMode === 'register'}
-                    className="w-full ronda-card-inner border rounded-xl py-2.5 pl-10 pr-3.5 text-xs text-[var(--text-main)] placeholder:text-[var(--text-muted)] outline-none focus:border-[#E06D28]"
-                  />
-                </div>
-              </div>
+            {/* ACORDEÓN SECUNDARIO DISCRETO: ACCESO CON CORREO Y CONTRASEÑA */}
+            <div className="border-t ronda-border pt-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowManualForm((prev) => !prev);
+                  setAuthError('');
+                }}
+                className="w-full py-2 px-3 rounded-xl text-xs font-semibold ronda-text-muted hover:text-[var(--text-main)] hover:bg-black/5 dark:hover:bg-white/5 transition flex items-center justify-between cursor-pointer"
+              >
+                <span>¿Preferís ingresar con correo y contraseña?</span>
+                <ChevronRight
+                  className={`w-4 h-4 transition-transform duration-200 ${showManualForm ? 'rotate-90 text-[#E06D28]' : ''}`}
+                />
+              </button>
 
-              <div>
-                <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
-                  Correo de Gmail
-                </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 ronda-text-muted absolute left-3.5 top-3" />
-                  <input 
-                    type="email" 
-                    placeholder="tu@gmail.com"
-                    value={email}
-                    onChange={(e) => handleEmailChange(e.target.value)}
-                    required
-                    className="w-full ronda-card-inner border rounded-xl py-2.5 pl-10 pr-3.5 text-xs text-[var(--text-main)] placeholder:text-[var(--text-muted)] outline-none focus:border-[#E06D28]"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
-                  Contraseña
-                </label>
-                <div className="relative">
-                  <Lock className="w-4 h-4 ronda-text-muted absolute left-3.5 top-3" />
-                  <input 
-                    type="password" 
-                    placeholder="Al menos 6 caracteres"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="w-full ronda-card-inner border rounded-xl py-2.5 pl-10 pr-3.5 text-xs text-[var(--text-main)] placeholder:text-[var(--text-muted)] outline-none focus:border-[#E06D28]"
-                  />
-                </div>
-              </div>
-
-              {authMode === 'register' && (
-                <div className="pt-2 border-t ronda-border space-y-3">
-                  <div>
-                    <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
-                      Tu barrio base en CABA
-                    </label>
-                    <select
-                      value={neighborhood}
-                      onChange={(e) => setNeighborhood(e.target.value)}
-                      className="w-full ronda-card-inner border rounded-xl px-3 py-2 text-xs text-[var(--text-main)] outline-none focus:border-[#E06D28]"
+              {showManualForm && (
+                <div className="mt-3 pt-1 animate-fade-in">
+                  {/* Pestañas Iniciar sesión / Crear mi cuenta */}
+                  <div className="flex ronda-card-inner p-1 rounded-2xl border mb-3.5">
+                    <button 
+                      type="button"
+                      onClick={() => { setAuthMode('login'); setAuthError(''); }}
+                      className={`flex-1 py-2 text-xs font-bold rounded-xl transition cursor-pointer ${
+                        authMode === 'login'
+                          ? 'bg-[#14241F] dark:bg-[#243B30] text-white shadow-xs'
+                          : 'ronda-text-muted hover:text-[var(--text-main)]'
+                      }`}
                     >
-                      {BARRIOS_DATA.map((b) => (
-                        <option key={b.id} value={b.id} className="bg-[var(--bg-card)] text-[var(--text-main)]">
-                          {b.label}
-                        </option>
-                      ))}
-                    </select>
+                      Iniciar sesión
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => { setAuthMode('register'); setAuthError(''); }}
+                      className={`flex-1 py-2 text-xs font-bold rounded-xl transition cursor-pointer ${
+                        authMode === 'register'
+                          ? 'bg-[#14241F] dark:bg-[#243B30] text-white shadow-xs'
+                          : 'ronda-text-muted hover:text-[var(--text-main)]'
+                      }`}
+                    >
+                      Crear mi cuenta
+                    </button>
                   </div>
 
-                  <div className="ronda-card-inner border p-3 rounded-2xl space-y-2">
-                    <span className="text-[11px] font-bold text-[var(--text-main)] block mb-1">
-                      Preferencias de salida:
-                    </span>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs ronda-text-muted flex items-center gap-1.5">
-                        <Dog className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        <span>Priorizar siempre Pet Friendly</span>
-                      </span>
-                      <input 
-                        type="checkbox"
-                        checked={petFriendly}
-                        onChange={(e) => setPetFriendly(e.target.checked)}
-                        className="w-4 h-4 accent-[#E06D28] cursor-pointer"
-                      />
+                  <form onSubmit={handleSubmitFormAuth} className="space-y-3 mb-3">
+                    {/* Nombre solo al crear cuenta nueva (evita repetición al iniciar sesión) */}
+                    {authMode === 'register' && (
+                      <div>
+                        <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
+                          ¿Cómo te llamás?
+                        </label>
+                        <div className="relative">
+                          <User className="w-4 h-4 ronda-text-muted absolute left-3.5 top-3" />
+                          <input 
+                            ref={nameInputRef}
+                            type="text" 
+                            placeholder="Tu nombre o apodo"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                            className="w-full ronda-card-inner border rounded-xl py-2.5 pl-10 pr-3.5 text-xs text-[var(--text-main)] placeholder:text-[var(--text-muted)] outline-none focus:border-[#E06D28]"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
+                      <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
+                        Correo electrónico
+                      </label>
+                      <div className="relative">
+                        <Mail className="w-4 h-4 ronda-text-muted absolute left-3.5 top-3" />
+                        <input 
+                          type="email" 
+                          placeholder="tu@correo.com"
+                          value={email}
+                          onChange={(e) => handleEmailChange(e.target.value)}
+                          required
+                          className="w-full ronda-card-inner border rounded-xl py-2.5 pl-10 pr-3.5 text-xs text-[var(--text-main)] placeholder:text-[var(--text-muted)] outline-none focus:border-[#E06D28]"
+                        />
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs ronda-text-muted flex items-center gap-1.5">
-                        <Salad className="w-3.5 h-3.5 text-lime-600 dark:text-lime-400" />
-                        <span>Priorizar opciones vegetarianas</span>
-                      </span>
-                      <input 
-                        type="checkbox"
-                        checked={vegetarianFriendly}
-                        onChange={(e) => setVegetarianFriendly(e.target.checked)}
-                        className="w-4 h-4 accent-[#E06D28] cursor-pointer"
-                      />
+
+                    <div>
+                      <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
+                        Contraseña
+                      </label>
+                      <div className="relative">
+                        <Lock className="w-4 h-4 ronda-text-muted absolute left-3.5 top-3" />
+                        <input 
+                          type="password" 
+                          placeholder="Al menos 4 caracteres"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                          className="w-full ronda-card-inner border rounded-xl py-2.5 pl-10 pr-3.5 text-xs text-[var(--text-main)] placeholder:text-[var(--text-muted)] outline-none focus:border-[#E06D28]"
+                        />
+                      </div>
                     </div>
-                  </div>
+
+                    {authMode === 'register' && (
+                      <div className="ronda-card-inner border p-3 rounded-2xl space-y-2">
+                        <span className="text-[11px] font-bold text-[var(--text-main)] block mb-1">
+                          Preferencias de salida:
+                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs ronda-text-muted flex items-center gap-1.5">
+                            <Dog className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                            <span>Priorizar siempre Pet Friendly</span>
+                          </span>
+                          <input 
+                            type="checkbox"
+                            checked={petFriendly}
+                            onChange={(e) => setPetFriendly(e.target.checked)}
+                            className="w-4 h-4 accent-[#E06D28] cursor-pointer"
+                          />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs ronda-text-muted flex items-center gap-1.5">
+                            <Salad className="w-3.5 h-3.5 text-lime-600 dark:text-lime-400" />
+                            <span>Priorizar opciones vegetarianas</span>
+                          </span>
+                          <input 
+                            type="checkbox"
+                            checked={vegetarianFriendly}
+                            onChange={(e) => setVegetarianFriendly(e.target.checked)}
+                            className="w-4 h-4 accent-[#E06D28] cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    <button 
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-[#E06D28] hover:bg-[#C95B1D] text-white font-semibold text-xs py-3 rounded-xl transition shadow-sm mt-1 cursor-pointer disabled:opacity-50 btn-latido"
+                    >
+                      {isSubmitting ? 'Procesando...' : (authMode === 'login' ? 'Ingresar con mi correo' : 'Crear mi Pasaporte Porteño')}
+                    </button>
+                  </form>
                 </div>
               )}
-
-              <button 
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-[#E06D28] hover:bg-[#C95B1D] text-white font-semibold text-xs py-3 rounded-xl transition shadow-md mt-2 cursor-pointer disabled:opacity-50 btn-latido"
-              >
-                {isSubmitting ? 'Procesando...' : (authMode === 'login' ? 'Ingresar a mi cuenta' : 'Crear mi Pasaporte Porteño')}
-              </button>
-            </form>
+            </div>
 
             {/* Sello de Privacidad Manos Limpias (Zero-PII) */}
-            <div className="pt-2.5 border-t ronda-border flex items-start gap-2 text-[11px] ronda-text-muted leading-relaxed">
-              <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+            <div className="pt-3 mt-2 border-t ronda-border flex items-start gap-2 text-[11px] ronda-text-muted leading-relaxed">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
               <p>
-                🔒 <strong>Privacidad Manos Limpias:</strong> Tu nombre, correo y contraseña se validan en tu navegador y viajan como un código anónimo irreversible (el servidor jamás guarda claves ni correos en texto plano).
+                <strong>Privacidad Manos Limpias:</strong> Tus datos se validan en tu navegador y viajan como un código anónimo irreversible.
               </p>
             </div>
           </div>
@@ -861,7 +802,7 @@ export default function ProfileModal({
                     </h3>
                     <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded-full">
                       <GoogleLogoSvg className="w-3 h-3" />
-                      <span>Google · Sin datos en servidor</span>
+                      <span>Sesión activa</span>
                     </span>
                   </div>
                   <div className="flex items-center gap-2 mt-0.5">
@@ -881,7 +822,7 @@ export default function ProfileModal({
               <button
                 type="button"
                 onClick={onLogout}
-                className="p-2 rounded-xl text-[#5E6F66] hover:text-red-500 hover:bg-red-500/10 transition cursor-pointer"
+                className="p-2 rounded-xl ronda-text-muted hover:text-red-500 hover:bg-red-500/10 transition cursor-pointer"
                 title="Cerrar sesión"
               >
                 <LogOut className="w-4 h-4" />
@@ -895,7 +836,7 @@ export default function ProfileModal({
                 onClick={() => setActiveProfileTab('passport')}
                 className={`flex-1 min-w-[110px] py-2 px-2 text-xs font-bold rounded-xl transition cursor-pointer flex items-center justify-center gap-1.5 ${
                   activeProfileTab === 'passport'
-                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
+                    ? 'bg-[#14241F] dark:bg-[#243B30] text-white shadow-xs'
                     : 'ronda-text-muted hover:text-[var(--text-main)]'
                 }`}
               >
@@ -908,7 +849,7 @@ export default function ProfileModal({
                 onClick={() => setActiveProfileTab('saved_plans')}
                 className={`flex-1 min-w-[95px] py-2 px-2 text-xs font-bold rounded-xl transition cursor-pointer flex items-center justify-center gap-1.5 ${
                   activeProfileTab === 'saved_plans'
-                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
+                    ? 'bg-[#14241F] dark:bg-[#243B30] text-white shadow-xs'
                     : 'ronda-text-muted hover:text-[var(--text-main)]'
                 }`}
               >
@@ -921,7 +862,7 @@ export default function ProfileModal({
                 onClick={() => setActiveProfileTab('favorites')}
                 className={`flex-1 min-w-[95px] py-2 px-2 text-xs font-bold rounded-xl transition cursor-pointer flex items-center justify-center gap-1.5 ${
                   activeProfileTab === 'favorites'
-                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
+                    ? 'bg-[#14241F] dark:bg-[#243B30] text-white shadow-xs'
                     : 'ronda-text-muted hover:text-[var(--text-main)]'
                 }`}
               >
@@ -934,7 +875,7 @@ export default function ProfileModal({
                 onClick={() => setActiveProfileTab('preferences')}
                 className={`flex-1 min-w-[95px] py-2 px-2 text-xs font-bold rounded-xl transition cursor-pointer flex items-center justify-center gap-1.5 ${
                   activeProfileTab === 'preferences'
-                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
+                    ? 'bg-[#14241F] dark:bg-[#243B30] text-white shadow-xs'
                     : 'ronda-text-muted hover:text-[var(--text-main)]'
                 }`}
               >
@@ -947,23 +888,23 @@ export default function ProfileModal({
             {/* ======================================================== */}
             {activeProfileTab === 'passport' && (
               <div className="space-y-4">
-                {/* TARJETA TIPO PASAPORTE FÍSICO */}
-                <div className="bg-gradient-to-br from-[#12221B] via-[#0D1813] to-[#070D0A] text-white rounded-3xl p-4 sm:p-5 border border-[#2D4538] shadow-xl relative overflow-hidden">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                {/* TARJETA TIPO PASAPORTE FÍSICO (ARMONIZADA EN CLARO Y OSCURO) */}
+                <div className="ronda-card-inner rounded-3xl p-4 sm:p-5 border shadow-xs relative overflow-hidden">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b ronda-border">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#E06D28] bg-[#E06D28]/15 border border-[#E06D28]/30 px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#E06D28] bg-[#E06D28]/12 border border-[#E06D28]/30 px-2 py-0.5 rounded-full">
                           Pasaporte de Caminante Porteño
                         </span>
-                        <span className="text-[10px] text-stone-300 font-mono">
+                        <span className="text-[10px] ronda-text-muted font-mono">
                           N° RO-BA-{currentUser.id ? currentUser.id.slice(-4).toUpperCase() : '8429'}
                         </span>
                       </div>
-                      <h4 className="font-editorial text-2xl font-bold flex items-center gap-2">
+                      <h4 className="font-editorial text-2xl font-bold text-[var(--text-main)] flex items-center gap-2">
                         <span>{rankInfo.medal}</span>
                         <span>{rankInfo.title}</span>
                       </h4>
-                      <p className="text-xs text-stone-300 mt-0.5">
+                      <p className="text-xs ronda-text-muted mt-0.5">
                         {rankInfo.desc}
                       </p>
                     </div>
@@ -972,7 +913,7 @@ export default function ProfileModal({
                       <div className="text-lg font-bold font-mono text-[#E06D28]">
                         {exploredCount} / {totalBarrios}
                       </div>
-                      <div className="text-[10px] text-stone-300 uppercase font-semibold">
+                      <div className="text-[10px] ronda-text-muted uppercase font-semibold">
                         Barrios Conquistados
                       </div>
                     </div>
@@ -980,27 +921,27 @@ export default function ProfileModal({
 
                   {/* Barra de progreso de exploración */}
                   <div className="mt-3">
-                    <div className="flex justify-between text-[11px] font-medium text-stone-300 mb-1">
+                    <div className="flex justify-between text-[11px] font-medium ronda-text-muted mb-1">
                       <span>Progreso en la Ciudad de Buenos Aires</span>
                       <span className="font-mono text-[#E06D28] font-bold">{progressPct}%</span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                    <div className="w-full h-2 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
                       <div 
-                        className="h-full bg-gradient-to-r from-[#E06D28] to-emerald-400 rounded-full transition-all duration-700"
+                        className="h-full bg-gradient-to-r from-[#E06D28] to-emerald-500 rounded-full transition-all duration-700"
                         style={{ width: `${Math.max(8, progressPct)}%` }}
                       ></div>
                     </div>
                   </div>
 
                   {/* Sub-toggle: Mapa de Barrios vs Sellos */}
-                  <div className="flex gap-2 mt-4 pt-3 border-t border-white/10">
+                  <div className="flex gap-2 mt-4 pt-3 border-t ronda-border">
                     <button
                       type="button"
                       onClick={() => setPassportSubView('map')}
                       className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer ${
                         passportSubView === 'map'
                           ? 'bg-[#E06D28] text-white shadow-xs'
-                          : 'bg-white/5 hover:bg-white/10 text-stone-300'
+                          : 'ronda-card border ronda-text-muted hover:text-[var(--text-main)]'
                       }`}
                     >
                       <MapIcon className="w-3.5 h-3.5" />
@@ -1012,7 +953,7 @@ export default function ProfileModal({
                       className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer ${
                         passportSubView === 'badges'
                           ? 'bg-[#E06D28] text-white shadow-xs'
-                          : 'bg-white/5 hover:bg-white/10 text-stone-300'
+                          : 'ronda-card border ronda-text-muted hover:text-[var(--text-main)]'
                       }`}
                     >
                       <Award className="w-3.5 h-3.5" />
@@ -1021,60 +962,66 @@ export default function ProfileModal({
                   </div>
                 </div>
 
-                {/* VISTA 1: MAPA DE BARRIOS DE CABA */}
+                {/* VISTA 1: MAPA DE BARRIOS DE CABA (CONTRASTE SUAVIZADO DÍA / NOCHE) */}
                 {passportSubView === 'map' && (
                   <div className="space-y-3">
                     {/* Contenedor del Mapa SVG Interactivo */}
-                    <div className="ronda-card-inner border rounded-3xl p-3 sm:p-4 shadow-sm relative overflow-hidden bg-[#0A120E]">
+                    <div className="ronda-card-inner border rounded-3xl p-3 sm:p-4 shadow-xs relative overflow-hidden transition-colors">
                       <div className="flex items-center justify-between mb-2 px-1">
                         <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-main)] flex items-center gap-1.5">
                           <Compass className="w-3.5 h-3.5 text-[#E06D28]" />
                           <span>Radar Cartográfico Porteño</span>
                         </span>
-                        <div className="flex items-center gap-3 text-[10px] text-stone-400">
+                        <div className="flex items-center gap-3 text-[10px] ronda-text-muted">
                           <span className="flex items-center gap-1">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Explorado
+                            <span className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-500"></span> Explorado
                           </span>
                           <span className="flex items-center gap-1">
-                            <span className="w-2 h-2 rounded-full bg-stone-600"></span> Por descubrir
+                            <span className="w-2 h-2 rounded-full bg-stone-400 dark:bg-stone-500"></span> Por descubrir
                           </span>
                         </div>
                       </div>
 
-                      {/* SVG Canvas de CABA */}
+                      {/* SVG Canvas de CABA con paleta suave según tema */}
                       <div className="w-full aspect-[4/3] sm:aspect-[16/11] relative">
                         <svg 
                           viewBox="0 0 420 360" 
                           className="w-full h-full select-none"
                         >
                           <defs>
-                            {/* Gradiente del Río de la Plata */}
+                            {/* Gradiente del Río de la Plata adaptado a modo claro / oscuro */}
                             <linearGradient id="rioPlataGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                              <stop offset="0%" stopColor="#0B1A21" />
-                              <stop offset="100%" stopColor="#061217" />
+                              <stop offset="0%" stopColor={isDark ? '#16272E' : '#D5E6EC'} />
+                              <stop offset="100%" stopColor={isDark ? '#122026' : '#C5DBE3'} />
                             </linearGradient>
 
                             {/* Patrón sutil de cuadrícula de adoquines */}
                             <pattern id="gridMap" width="20" height="20" patternUnits="userSpaceOnUse">
-                              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#16261E" strokeWidth="0.5" strokeOpacity="0.6" />
+                              <path
+                                d="M 20 0 L 0 0 0 20"
+                                fill="none"
+                                stroke={isDark ? '#21332A' : '#D5E1DA'}
+                                strokeWidth="0.6"
+                                strokeOpacity="0.6"
+                              />
                             </pattern>
                           </defs>
 
-                          {/* Fondo del mapa */}
-                          <rect width="420" height="360" fill="#0D1612" rx="16" />
+                          {/* Fondo del mapa suave (sin negro puro ni blanco encandilante) */}
+                          <rect width="420" height="360" fill={isDark ? '#15221C' : '#E7EFEA'} rx="16" />
                           <rect width="420" height="360" fill="url(#gridMap)" rx="16" />
 
                           {/* Río de la Plata (costado noreste/este) */}
                           <path 
                             d="M 310,0 C 355,80 395,170 380,360 L 420,360 L 420,0 Z" 
                             fill="url(#rioPlataGrad)"
-                            stroke="#18333D"
+                            stroke={isDark ? '#233B44' : '#B0CCD6'}
                             strokeWidth="1"
                           />
                           <text 
                             x="385" 
                             y="180" 
-                            fill="#305866" 
+                            fill={isDark ? '#5A808E' : '#587F8D'} 
                             fontSize="9" 
                             fontWeight="700" 
                             letterSpacing="3" 
@@ -1088,6 +1035,26 @@ export default function ProfileModal({
                             const isExplored = visitedBarrios.includes(barrio.id);
                             const isSelected = selectedBarrioId === barrio.id;
 
+                            const polyFill = isDark
+                              ? (isSelected
+                                  ? (isExplored ? '#254234' : '#21322A')
+                                  : (isExplored ? '#1E362B' : '#192821'))
+                              : (isSelected
+                                  ? (isExplored ? '#CBE5D7' : '#DCE6E0')
+                                  : (isExplored ? '#D9EDE2' : '#F3F7F4'));
+
+                            const polyStroke = isDark
+                              ? (isSelected
+                                  ? '#D97736'
+                                  : (isExplored ? '#468E6E' : '#2C4237'))
+                              : (isSelected
+                                  ? '#D96B27'
+                                  : (isExplored ? '#4D9675' : '#BCCBC2'));
+
+                            const labelFill = isDark
+                              ? (isSelected ? '#F2AC79' : (isExplored ? '#D6E8DF' : '#8FA399'))
+                              : (isSelected ? '#B54D10' : (isExplored ? '#18382A' : '#4E6358'));
+
                             return (
                               <g 
                                 key={barrio.id}
@@ -1096,19 +1063,11 @@ export default function ProfileModal({
                               >
                                 <polygon
                                   points={barrio.polygon}
-                                  fill={
-                                    isSelected 
-                                      ? (isExplored ? '#1E3E2F' : '#192620')
-                                      : (isExplored ? '#142E22' : '#101915')
-                                  }
-                                  stroke={
-                                    isSelected
-                                      ? '#E06D28'
-                                      : (isExplored ? '#34D399' : '#23382D')
-                                  }
-                                  strokeWidth={isSelected ? '2.5' : (isExplored ? '1.5' : '1')}
+                                  fill={polyFill}
+                                  stroke={polyStroke}
+                                  strokeWidth={isSelected ? '2' : (isExplored ? '1.3' : '1')}
                                   strokeDasharray={(!isExplored && !isSelected) ? '3 2' : 'none'}
-                                  className="transition-colors hover:fill-[#203D30]"
+                                  className="transition-colors"
                                 />
 
                                 {/* Icono o tilde de exploración */}
@@ -1117,8 +1076,8 @@ export default function ProfileModal({
                                     cx={barrio.cx} 
                                     cy={barrio.cy - 7} 
                                     r="5.5" 
-                                    fill="#10B981" 
-                                    stroke="#064E3B" 
+                                    fill={isDark ? '#388E6C' : '#2E855E'} 
+                                    stroke={isDark ? '#1B4D38' : '#1F5C41'} 
                                     strokeWidth="1" 
                                   />
                                 ) : (
@@ -1126,7 +1085,7 @@ export default function ProfileModal({
                                     cx={barrio.cx} 
                                     cy={barrio.cy - 7} 
                                     r="3.5" 
-                                    fill="#263A30" 
+                                    fill={isDark ? '#344B3F' : '#A3B8AD'} 
                                   />
                                 )}
 
@@ -1148,7 +1107,7 @@ export default function ProfileModal({
                                   x={barrio.cx}
                                   y={barrio.cy + 7}
                                   textAnchor="middle"
-                                  fill={isSelected ? '#F6AD55' : (isExplored ? '#E6F4EA' : '#7D9287')}
+                                  fill={labelFill}
                                   fontSize={isSelected ? '9.5' : '8.5'}
                                   fontWeight={isSelected || isExplored ? 'bold' : 'normal'}
                                   className="pointer-events-none transition-all"
@@ -1176,17 +1135,17 @@ export default function ProfileModal({
                             </h5>
                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
                               isSelectedExplored 
-                                ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                                : 'bg-stone-500/15 text-stone-400 border border-stone-500/30'
+                                ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
+                                : 'ronda-card ronda-text-muted border'
                             }`}>
                               {isSelectedExplored ? (
                                 <>
-                                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                                   <span>Explorado</span>
                                 </>
                               ) : (
                                 <>
-                                  <Compass className="w-3 h-3 text-stone-400" />
+                                  <Compass className="w-3 h-3 ronda-text-muted" />
                                   <span>Por descubrir</span>
                                 </>
                               )}

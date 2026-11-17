@@ -358,11 +358,13 @@ function DesktopSidebar({ isOpen, setIsOpen, screen, onNavigate, setShowProfileM
       >
         <div>
           <div className="flex items-center justify-between mb-10">
-            {/* Solo la 'r.' con el Destello Doré */}
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-2xl bg-[#182A24] text-white flex items-center justify-center font-editorial font-bold text-xl shadow-xs glow-dore">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-2xl bg-[#182A24] dark:bg-[#1E3328] border border-white/10 text-white flex items-center justify-center font-editorial font-bold text-xl shadow-xs">
                 r<span className="text-[#E06D28]">.</span>
               </div>
+              <span className="font-editorial text-xl font-bold text-[var(--text-main)]">
+                ronda<span className="text-[#E06D28]">.</span>
+              </span>
             </div>
             <button 
               type="button"
@@ -379,43 +381,43 @@ function DesktopSidebar({ isOpen, setIsOpen, screen, onNavigate, setShowProfileM
               type="button"
               onClick={() => { triggerHaptic(8); onNavigate('config', 'quick'); setIsOpen(false); }}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl font-semibold text-sm cursor-pointer transition btn-latido ${
-                screen === 'config' ? 'ronda-tag font-bold shadow-xs' : 'ronda-text-muted hover:bg-black/5 dark:hover:bg-white/5'
+                screen === 'config' ? 'ronda-tag border font-bold shadow-xs text-[var(--text-main)]' : 'ronda-text-muted hover:text-[var(--text-main)] hover:bg-black/5 dark:hover:bg-white/5'
               }`}
             >
-              <Compass className="w-4 h-4 text-[#182A24]" />
+              <Compass className={`w-4 h-4 ${screen === 'config' ? 'text-[#E06D28]' : 'ronda-text-muted'}`} />
               <span>Crear recorrido</span>
             </button>
             <button 
               type="button"
               onClick={() => { triggerHaptic(8); onNavigate('recommended'); setIsOpen(false); }}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl font-semibold text-sm cursor-pointer transition btn-latido ${
-                screen === 'recommended' ? 'ronda-tag font-bold shadow-xs' : 'ronda-text-muted hover:bg-black/5 dark:hover:bg-white/5 font-medium'
+                screen === 'recommended' ? 'ronda-tag border font-bold shadow-xs text-[var(--text-main)]' : 'ronda-text-muted hover:text-[var(--text-main)] hover:bg-black/5 dark:hover:bg-white/5 font-medium'
               }`}
             >
-              <Sparkles className={`w-4 h-4 ${screen === 'recommended' ? 'text-[#182A24]' : 'text-[#5E6F66]'}`} />
+              <Sparkles className={`w-4 h-4 ${screen === 'recommended' ? 'text-[#E06D28]' : 'ronda-text-muted'}`} />
               <span>Recomendados</span>
             </button>
           </nav>
         </div>
 
-        {/* Tarjeta de perfil con avatar o inicial */}
+        {/* Tarjeta de perfil con avatar o inicial (Adaptada a modo claro y oscuro) */}
         <button 
           type="button"
           onClick={() => { triggerHaptic(8); setShowProfileModal(true); setIsOpen(false); }}
-          className="bg-white dark:bg-[#16201B] border border-[#D9E2DC] dark:border-[#25382E] hover:border-[#182A24] transition rounded-2xl p-3 flex items-center gap-3 w-full text-left cursor-pointer btn-latido"
+          className="ronda-card border hover:border-[#E06D28] transition rounded-2xl p-3 flex items-center gap-3 w-full text-left cursor-pointer btn-latido shadow-2xs"
         >
-          <div className="w-9 h-9 rounded-full bg-[#182A24] text-white flex items-center justify-center font-bold text-xs">
-            {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : <User className="w-5 h-5 text-white" />}
+          <div className="w-9 h-9 rounded-full bg-[#182A24] dark:bg-[#243B30] text-white flex items-center justify-center font-bold text-xs shrink-0">
+            {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : <User className="w-4 h-4 text-white" />}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[11px] text-[#5E6F66] leading-none mb-0.5">
+            <p className="text-[11px] ronda-text-muted leading-none mb-1">
               {currentUser?.neighborhood || 'Cuenta'}
             </p>
-            <p className="text-sm font-semibold text-[#182A24] truncate">
+            <p className="text-sm font-semibold text-[var(--text-main)] truncate">
               {currentUser?.name || 'Mi Perfil'}
             </p>
           </div>
-          <span className="text-xs text-[#5E6F66]">···</span>
+          <span className="text-xs ronda-text-muted">···</span>
         </button>
       </aside>
     </>
@@ -451,10 +453,10 @@ function MobileBottomNav({ isVisible, setIsVisible, screen, onNavigate, setShowP
           type="button" 
           onClick={() => { triggerHaptic(8); onNavigate('config', 'quick'); }}
           className={`flex flex-col items-center gap-1 text-[11px] font-medium transition cursor-pointer btn-latido ${
-            screen === 'config' ? 'text-[#182A24] font-bold' : 'text-[#5E6F66]'
+            screen === 'config' ? 'text-[var(--text-main)] font-bold' : 'ronda-text-muted'
           }`}
         >
-          <Compass className={`w-5 h-5 ${screen === 'config' ? 'text-[#182A24]' : 'text-[#5E6F66]'}`} />
+          <Compass className={`w-5 h-5 ${screen === 'config' ? 'text-[#E06D28]' : 'ronda-text-muted'}`} />
           <span>Crear</span>
         </button>
 
@@ -462,19 +464,19 @@ function MobileBottomNav({ isVisible, setIsVisible, screen, onNavigate, setShowP
           type="button" 
           onClick={() => { triggerHaptic(8); onNavigate('recommended'); }}
           className={`flex flex-col items-center gap-1 text-[11px] font-medium transition cursor-pointer btn-latido ${
-            screen === 'recommended' ? 'text-[#182A24] font-bold' : 'text-[#5E6F66]'
+            screen === 'recommended' ? 'text-[var(--text-main)] font-bold' : 'ronda-text-muted'
           }`}
         >
-          <Sparkles className={`w-5 h-5 ${screen === 'recommended' ? 'text-[#182A24]' : 'text-[#5E6F66]'}`} />
+          <Sparkles className={`w-5 h-5 ${screen === 'recommended' ? 'text-[#E06D28]' : 'ronda-text-muted'}`} />
           <span>Recomendados</span>
         </button>
 
         <button 
           type="button" 
           onClick={() => { triggerHaptic(8); setShowProfileModal(true); }}
-          className="flex flex-col items-center gap-1 text-[11px] font-medium text-[#5E6F66] transition cursor-pointer btn-latido"
+          className="flex flex-col items-center gap-1 text-[11px] font-medium ronda-text-muted hover:text-[var(--text-main)] transition cursor-pointer btn-latido"
         >
-          <div className="w-6 h-6 rounded-full bg-[#182A24] text-white flex items-center justify-center text-[10px] font-bold">
+          <div className="w-6 h-6 rounded-full bg-[#182A24] dark:bg-[#243B30] text-white flex items-center justify-center text-[10px] font-bold">
             {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : <User className="w-3.5 h-3.5 text-white" />}
           </div>
           <span>{currentUser?.name ? currentUser.name.split(' ')[0] : 'Perfil'}</span>
@@ -484,10 +486,10 @@ function MobileBottomNav({ isVisible, setIsVisible, screen, onNavigate, setShowP
         <button 
           type="button" 
           onClick={() => { triggerHaptic(8); setIsVisible(false); }}
-          className="flex flex-col items-center gap-1 text-[11px] font-medium text-[#5E6F66] hover:text-[#182A24] transition cursor-pointer btn-latido"
+          className="flex flex-col items-center gap-1 text-[11px] font-medium ronda-text-muted hover:text-[var(--text-main)] transition cursor-pointer btn-latido"
           title="Ocultar menú"
         >
-          <ChevronDown className="w-5 h-5 text-[#5E6F66]" />
+          <ChevronDown className="w-5 h-5 ronda-text-muted" />
           <span>Ocultar</span>
         </button>
       </nav>
@@ -2201,17 +2203,17 @@ export default function App() {
                   type="button"
                   onMouseEnter={() => setDesktopMenuOpen(true)}
                   onClick={() => setDesktopMenuOpen(prev => !prev)}
-                  className="hidden lg:flex items-center justify-center w-8 h-8 rounded-xl bg-[#F4F6F8] hover:bg-[#EBF2EC] border border-[#E2E8F0] cursor-pointer transition shadow-2xs"
+                  className="hidden lg:flex items-center justify-center w-8 h-8 rounded-xl bg-[#182A24] dark:bg-[#243B30] text-white border ronda-border cursor-pointer transition shadow-2xs"
                   title="Abrir menú"
                 >
-                  <span className="font-editorial text-lg font-bold text-[#182A24] leading-none select-none">
+                  <span className="font-editorial text-lg font-bold leading-none select-none">
                     r<span className="text-[#E06D28]">.</span>
                   </span>
                 </button>
 
                 <button 
                   onClick={() => setScreen('config')}
-                  className="flex items-center gap-1.5 text-sm font-medium text-[#182A24] hover:opacity-80 transition cursor-pointer"
+                  className="flex items-center gap-1.5 text-sm font-medium text-[var(--text-main)] hover:text-[#E06D28] transition cursor-pointer"
                 >
                   <ChevronLeft className="w-5 h-5" />
                   <span>Modificar ronda</span>
@@ -2241,13 +2243,13 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setShowProfileModal(true)}
-                  className="hidden sm:inline-flex items-center gap-2 bg-white hover:bg-[#EBF2EC] border border-[#E2E8F0] text-[#182A24] px-2.5 py-1.5 rounded-xl text-xs font-medium transition cursor-pointer ml-2 shadow-2xs"
+                  className="hidden sm:inline-flex items-center gap-2 ronda-card border hover:border-[#E06D28] text-[var(--text-main)] px-2.5 py-1.5 rounded-xl text-xs font-medium transition cursor-pointer ml-2 shadow-2xs"
                   title={currentUser ? `Perfil de ${currentUser.name}` : "Iniciar sesión o registrarse"}
                 >
-                  <div className="w-5 h-5 rounded-full bg-[#182A24] text-white flex items-center justify-center text-[9px] font-bold">
+                  <div className="w-5 h-5 rounded-full bg-[#182A24] dark:bg-[#243B30] text-white flex items-center justify-center text-[9px] font-bold">
                     {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : <User className="w-3 h-3 text-white" />}
                   </div>
-                  <span className="font-semibold text-xs text-[#182A24] truncate max-w-[85px]">
+                  <span className="font-semibold text-xs text-[var(--text-main)] truncate max-w-[85px]">
                     {currentUser?.name ? currentUser.name.split(' ')[0] : 'Perfil'}
                   </span>
                 </button>
@@ -2258,7 +2260,7 @@ export default function App() {
         <main className="flex-1 max-w-4xl w-full mx-auto px-5 pt-8 pb-28 lg:pb-16">
           <div className="mb-6">
             <div className="mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#2A4B3D] bg-[#EBF2EC] px-3 py-1 rounded-full border border-[#D5E3D8]">
+              <span className="text-[10px] font-bold uppercase tracking-wider ronda-tag px-3 py-1 rounded-full border">
                 Tu recorrido personalizado
               </span>
             </div>
@@ -2787,6 +2789,7 @@ export default function App() {
         allPlaces={catalogPlaces}
         onOpenPlaceDetail={(place) => openPlaceModal(place)}
         onPlanFromHere={handlePlanFromHere}
+        theme={theme}
       />
 
       {/* Toast Flotante de Ronda Guardada */}
@@ -2851,11 +2854,11 @@ export default function App() {
           type="button"
           onMouseEnter={() => setDesktopMenuOpen(true)}
           onClick={() => setDesktopMenuOpen(prev => !prev)}
-          className="hidden lg:flex items-center justify-center w-10 h-10 rounded-2xl bg-white/95 hover:bg-white backdrop-blur-md border border-[#E2E8F0] shadow-xs cursor-pointer fixed top-4 left-5 z-40 transition-all hover:scale-105 active:scale-95"
+          className="hidden lg:flex items-center justify-center w-10 h-10 rounded-2xl ronda-card border hover:border-[#E06D28] shadow-xs cursor-pointer fixed top-4 left-5 z-40 transition-all hover:scale-105 active:scale-95"
           aria-label="Abrir menú"
           title="Abrir menú"
         >
-          <span className="font-editorial text-2xl font-bold text-[#182A24] leading-none select-none">
+          <span className="font-editorial text-2xl font-bold text-[var(--text-main)] leading-none select-none">
             r<span className="text-[#E06D28]">.</span>
           </span>
         </button>
@@ -2905,6 +2908,7 @@ export default function App() {
           allPlaces={catalogPlaces}
           onOpenPlaceDetail={(place) => openPlaceModal(place)}
           onPlanFromHere={handlePlanFromHere}
+          theme={theme}
         />
 
         {/* Modal Translúcido de Detalle del Lugar y Actividades */}
@@ -2953,21 +2957,7 @@ export default function App() {
         <RondaSplashWaitingScreen subtitle={navigatingSubtitle} />
       )}
 
-      {/* Botón flotante 'r.' para abrir el menú en desktop al pasar el cursor */}
-      <button
-        type="button"
-        onMouseEnter={() => setDesktopMenuOpen(true)}
-        onClick={() => setDesktopMenuOpen(prev => !prev)}
-        className="hidden lg:flex items-center justify-center w-10 h-10 rounded-2xl bg-white/95 hover:bg-white backdrop-blur-md border border-[#E2E8F0] shadow-xs cursor-pointer fixed top-4 left-5 z-30 transition-all hover:scale-105 active:scale-95"
-        aria-label="Abrir menú"
-        title="Abrir menú"
-      >
-        <span className="font-editorial text-2xl font-bold text-[#182A24] leading-none select-none">
-          r<span className="text-[#E06D28]">.</span>
-        </span>
-      </button>
-
-      {/* Menú lateral de escritorio (colapsable al pasar el cursor) */}
+      {/* Menú lateral de escritorio (colapsable al pasar el cursor o tocar el logo 'r.') */}
       <DesktopSidebar 
         isOpen={desktopMenuOpen} 
         setIsOpen={setDesktopMenuOpen} 
@@ -2981,8 +2971,8 @@ export default function App() {
       <main className={`flex-1 max-w-4xl w-full mx-auto px-5 py-8 sm:py-12 ${configView === 'adjust' ? 'pb-44 lg:pb-32' : 'pb-28 lg:pb-12'}`}>
         <div className="lg:hidden flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-[#182A24] flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-[#F4F6F8]"></div>
+            <div className="w-7 h-7 rounded-xl bg-[#182A24] dark:bg-[#243B30] text-white flex items-center justify-center font-editorial font-bold text-sm">
+              r<span className="text-[#E06D28]">.</span>
             </div>
             <span className="font-editorial text-2xl font-bold text-[var(--text-main)]">
               ronda<span className="text-[#E06D28]">.</span>
@@ -2993,68 +2983,83 @@ export default function App() {
             <button
               type="button"
               onClick={toggleTheme}
-              className="p-1.5 rounded-full bg-white dark:bg-[#16201B] border border-[#D9E2DC] dark:border-[#25382E] text-[#182A24] dark:text-[#F1F5F3] transition cursor-pointer shadow-2xs"
+              className="p-1.5 rounded-full ronda-card border text-[var(--text-main)] transition cursor-pointer shadow-2xs"
               title={theme === 'dark' ? "Modo dia" : "Modo noche"}
             >
-              {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-[#F07E34]" /> : <Moon className="w-3.5 h-3.5 text-[#182A24]" />}
+              {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-[#F07E34]" /> : <Moon className="w-3.5 h-3.5 text-[var(--text-main)]" />}
             </button>
-            <div className="inline-flex items-center gap-1.5 bg-[#EBF2EC] dark:bg-[#1A2821] text-[#182A24] dark:text-[#E0EAE4] px-3 py-1 rounded-full text-xs font-semibold">
+            <div className="inline-flex items-center gap-1.5 ronda-card-inner border text-[var(--text-main)] px-3 py-1 rounded-full text-xs font-semibold">
               <currentWeatherVisual.Icon className={`w-3.5 h-3.5 ${currentWeatherVisual.iconColor}`} />
               <span>{currentWeatherVisual.text}</span>
             </div>
           </div>
         </div>
 
-        {/* Cabecera superior exclusiva para Desktop en Config */}
-        <div className="hidden lg:flex items-center justify-between pb-6 mb-8 border-b border-[#E2E8F0]/80">
+        {/* Cabecera superior exclusiva para Desktop en Config (Un único logo 'r.' que abre el menú lateral) */}
+        <div className="hidden lg:flex items-center justify-between pb-6 mb-8 border-b ronda-border">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-[#182A24] flex items-center justify-center shadow-xs">
-              <span className="font-editorial text-lg font-bold text-white leading-none">
-                r<span className="text-[#E06D28]">.</span>
-              </span>
-            </div>
-            <div>
+            <button
+              type="button"
+              onMouseEnter={() => setDesktopMenuOpen(true)}
+              onClick={() => setDesktopMenuOpen(prev => !prev)}
+              className="group flex items-center gap-2.5 cursor-pointer text-left focus:outline-none"
+              aria-label="Abrir menú lateral"
+              title="Abrir menú lateral"
+            >
+              <div className="w-9 h-9 rounded-xl bg-[#182A24] dark:bg-[#243B30] border border-[#2F493B] flex items-center justify-center shadow-xs group-hover:border-[#E06D28] transition">
+                <span className="font-editorial text-lg font-bold text-white leading-none">
+                  r<span className="text-[#E06D28]">.</span>
+                </span>
+              </div>
               <span className="font-editorial text-2xl font-bold text-[var(--text-main)]">
                 ronda<span className="text-[#E06D28]">.</span>
               </span>
-              <span className="ml-2.5 text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-[#EBF2EC] text-[#2A4B3D] border border-[#D5E3D8]">
-                {configView === 'quick' ? 'Plan Primero' : 'Armador de Salidas'}
-              </span>
-            </div>
+            </button>
+
+            {/* Botón directo de acceso al menú lateral / Recomendados visible en la primera ventana */}
+            <button
+              type="button"
+              onClick={() => setDesktopMenuOpen(prev => !prev)}
+              className="ml-1 inline-flex items-center gap-1.5 ronda-card-inner border hover:border-[#E06D28] text-[var(--text-main)] px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer shadow-2xs"
+              title="Abrir menú de navegación"
+            >
+              <Menu className="w-3.5 h-3.5 text-[#E06D28]" />
+              <span>Menú</span>
+            </button>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="inline-flex items-center gap-1.5 bg-[#EBF2EC] text-[#182A24] px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-[#D5E3D8]">
+            <div className="inline-flex items-center gap-1.5 ronda-card-inner text-[var(--text-main)] px-3.5 py-1.5 rounded-xl text-xs font-semibold border">
               <currentWeatherVisual.Icon className={`w-3.5 h-3.5 ${currentWeatherVisual.iconColor}`} />
               <span>{currentWeatherVisual.text}</span>
             </div>
 
-            {/* Boton selector de modo dia / noche */}
+            {/* Botón selector de modo día / noche */}
             <button
               type="button"
               onClick={toggleTheme}
-              className="p-2 rounded-xl bg-white dark:bg-[#16201B] border border-[#D9E2DC] dark:border-[#25382E] text-[#182A24] dark:text-[#F1F5F3] hover:text-[#E06D28] dark:hover:text-[#F07E34] transition cursor-pointer shadow-2xs"
+              className="p-2 rounded-xl ronda-card border text-[var(--text-main)] hover:text-[#E06D28] dark:hover:text-[#F07E34] transition cursor-pointer shadow-2xs"
               title={theme === 'dark' ? "Cambiar a modo dia" : "Cambiar a modo noche"}
               aria-label="Cambiar tema"
             >
-              {theme === 'dark' ? <Sun className="w-4 h-4 text-[#F07E34]" /> : <Moon className="w-4 h-4 text-[#182A24]" />}
+              {theme === 'dark' ? <Sun className="w-4 h-4 text-[#F07E34]" /> : <Moon className="w-4 h-4 text-[var(--text-main)]" />}
             </button>
 
-            {/* Chip de Perfil en Desktop */}
+            {/* Chip de Perfil en Desktop (Contraste corregido en modo claro y oscuro) */}
             <button
               type="button"
               onClick={() => setShowProfileModal(true)}
-              className="inline-flex items-center gap-2 bg-white hover:bg-white dark:bg-[#16201B] border border-[#D9E2DC] dark:border-[#25382E] hover:border-[#182A24]/30 text-[#182A24] px-3 py-1.5 rounded-xl text-xs font-medium transition cursor-pointer shadow-2xs"
+              className="inline-flex items-center gap-2.5 ronda-card border hover:border-[#E06D28] text-[var(--text-main)] px-3 py-1.5 rounded-xl text-xs font-medium transition cursor-pointer shadow-2xs"
               title={currentUser ? `Perfil de ${currentUser.name}` : "Iniciar sesión o registrarse"}
             >
-              <div className="w-6 h-6 rounded-full bg-[#182A24] text-white flex items-center justify-center text-[10px] font-bold">
+              <div className="w-6 h-6 rounded-full bg-[#182A24] dark:bg-[#243B30] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                 {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : <User className="w-3.5 h-3.5 text-white" />}
               </div>
               <div className="flex flex-col text-left leading-tight">
-                <span className="font-semibold text-xs text-[#182A24] truncate max-w-[110px]">
+                <span className="font-semibold text-xs text-[var(--text-main)] truncate max-w-[110px]">
                   {currentUser?.name ? currentUser.name.split(' ')[0] : 'Mi Perfil'}
                 </span>
-                <span className="text-[10px] text-[#5E6F66] leading-none">
+                <span className="text-[10px] ronda-text-muted leading-none mt-0.5">
                   {currentUser?.neighborhood || 'Ingresar'}
                 </span>
               </div>
@@ -3062,19 +3067,21 @@ export default function App() {
           </div>
         </div>
 
-        <div className="mb-3">
-          <span className="inline-block ronda-tag border text-xs font-bold tracking-wider px-3.5 py-1.5 rounded-full uppercase shadow-2xs">
-            {configView === 'quick' ? 'PLAN PRIMERO' : 'PASO 1 DE 2'}
-          </span>
-        </div>
+        {configView !== 'quick' && (
+          <div className="mb-3">
+            <span className="inline-block ronda-tag border text-xs font-bold tracking-wider px-3.5 py-1.5 rounded-full uppercase shadow-2xs">
+              PASO 1 DE 2
+            </span>
+          </div>
+        )}
 
         <h1 className="font-editorial text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-main)] leading-tight mb-8">
           Empieza por acá<span className="text-[#E06D28]">..</span>
         </h1>
 
         {weather.isRain && (
-          <div className="mb-8 bg-blue-50/80 border border-blue-200/80 rounded-2xl p-4 flex items-center gap-3 text-blue-900 text-sm">
-            <CloudRain className="w-5 h-5 text-blue-600 shrink-0" />
+          <div className="mb-8 bg-blue-50/80 dark:bg-sky-950/40 border border-blue-200/80 dark:border-sky-800/50 rounded-2xl p-4 flex items-center gap-3 text-blue-900 dark:text-sky-200 text-sm">
+            <CloudRain className="w-5 h-5 text-blue-600 dark:text-sky-400 shrink-0" />
             <p>
               <strong>Está lloviendo en Buenos Aires:</strong> Ronda adaptará automáticamente cafés, bodegones y refugios bajo techo para que disfrutes sin mojarte.
             </p>
@@ -3083,8 +3090,8 @@ export default function App() {
 
         {configView === 'quick' ? (
           <div className="space-y-6">
-            <section className="bg-white dark:bg-[#16201B] border border-[#D9E2DC] dark:border-[#25382E] rounded-3xl p-6 sm:p-8 shadow-xs">
-              <div className="flex items-center justify-between pb-5 border-b border-[#E2E8F0]/80 mb-6">
+            <section className="ronda-card border rounded-3xl p-6 sm:p-8 shadow-xs">
+              <div className="flex items-center justify-between pb-5 border-b ronda-border mb-6">
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider ronda-text-muted block mb-1">
                     Tu salida espontánea
@@ -3093,7 +3100,7 @@ export default function App() {
                     Ronda sugerida para este momento
                   </h2>
                 </div>
-                <div className="hidden sm:flex items-center gap-1.5 bg-[#EBF2EC] text-[#182A24] px-3.5 py-1.5 rounded-full text-xs font-semibold">
+                <div className="hidden sm:flex items-center gap-1.5 ronda-tag border px-3.5 py-1.5 rounded-full text-xs font-semibold">
                   <Sparkles className="w-4 h-4 text-[#E06D28]" />
                   <span>Listo en 1 clic</span>
                 </div>
@@ -3104,7 +3111,7 @@ export default function App() {
                 {/* 1. Hora actual */}
                 <div className="ronda-card-inner border rounded-2xl p-4 flex items-center gap-3.5 shadow-xs transition-colors">
                   <div className="w-10 h-10 rounded-xl ronda-icon-box border flex items-center justify-center shrink-0 shadow-xs transition-colors">
-                    <Clock className="w-5 h-5 text-[#2A4B3D]" />
+                    <Clock className="w-5 h-5 text-[#2A4B3D] dark:text-[#68B692]" />
                   </div>
                   <div className="min-w-0">
                     <span className="text-[11px] font-medium ronda-text-muted block">Hora actual</span>
@@ -3130,7 +3137,7 @@ export default function App() {
                 {/* 3. Barrio sugerido */}
                 <div className="ronda-card-inner border rounded-2xl p-4 flex items-center gap-3.5 shadow-xs transition-colors">
                   <div className="w-10 h-10 rounded-xl ronda-icon-box border flex items-center justify-center shrink-0 shadow-xs transition-colors">
-                    <MapPin className="w-5 h-5 text-[#2A4B3D]" />
+                    <MapPin className="w-5 h-5 text-[#2A4B3D] dark:text-[#68B692]" />
                   </div>
                   <div className="min-w-0">
                     <span className="text-[11px] font-medium ronda-text-muted block">Barrio sugerido</span>
@@ -3642,6 +3649,7 @@ export default function App() {
         allPlaces={catalogPlaces}
         onOpenPlaceDetail={(place) => openPlaceModal(place)}
         onPlanFromHere={handlePlanFromHere}
+        theme={theme}
       />
 
       {/* Toast Flotante de Ronda Guardada */}
