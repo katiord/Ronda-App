@@ -216,7 +216,9 @@ export default function ProfileModal({
   const googleBtnContainerRef = useRef(null);
   const nameInputRef = useRef(null);
 
-  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+  const googleClientId =
+    import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+    '587121353191-tbcfok5s726spqp4augfl7ohqf8mjmd7.apps.googleusercontent.com';
 
   // Autocompletar el nombre guardado localmente si el usuario escribe un Gmail ya conocido en su navegador
   const handleEmailChange = (val) => {
