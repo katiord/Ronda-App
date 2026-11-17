@@ -551,7 +551,7 @@ function ActivePlanSuggestion({ plan, onClick, mobileNavVisible, configView }) {
 // ==========================================
 // COMPONENTE: Modal Carta Translúcida con Detalle del Lugar y Actividades
 // ==========================================
-function PlaceDetailModal({ place, onClose, getPlaceGoogleMapsUrl, onPlanFromHere, isFavorite, onToggleFavorite }) {
+function PlaceDetailModal({ place, onClose, getPlaceGoogleMapsUrl, onPlanFromHere, isFavorite, onToggleFavorite, isVisited, onToggleVisited }) {
   if (!place) return null;
 
   useEffect(() => {
@@ -784,15 +784,34 @@ function PlaceDetailModal({ place, onClose, getPlaceGoogleMapsUrl, onPlanFromHer
                   triggerHaptic(14);
                   onToggleFavorite(place.id || (place.place_name || place.name)?.toLowerCase().replace(/[^a-z0-9]/g, '_'));
                 }}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl transition cursor-pointer text-xs font-semibold btn-latido border ${
+                className={`inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl transition cursor-pointer text-xs font-semibold btn-latido border ${
                   isFavorite 
                     ? 'bg-rose-500/15 border-rose-500/40 text-rose-500' 
                     : 'ronda-card-inner ronda-border text-[var(--text-main)] hover:bg-[var(--bg-card)]'
                 }`}
-                title={isFavorite ? "Quitar de mis joyitas" : "Guardar en mis joyitas"}
+                title={isFavorite ? "Quitar de favoritos" : "Guardar en favoritos"}
               >
-                <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-rose-600 text-rose-600 animate-chispeo' : 'text-[#5E6F66]'}`} />
-                <span className="hidden sm:inline">{isFavorite ? 'Guardado' : 'Favorito'}</span>
+                <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-rose-600 text-rose-600 animate-chispeo' : 'ronda-text-muted'}`} />
+                <span className="hidden sm:inline">{isFavorite ? 'Favorito' : 'Me gusta'}</span>
+              </button>
+            )}
+
+            {onToggleVisited && (
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHaptic(14);
+                  onToggleVisited(place.id || (place.place_name || place.name)?.toLowerCase().replace(/[^a-z0-9]/g, '_'));
+                }}
+                className={`inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl transition cursor-pointer text-xs font-semibold btn-latido border ${
+                  isVisited
+                    ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-700 dark:text-emerald-300'
+                    : 'ronda-card-inner ronda-border text-[var(--text-main)] hover:border-[#E06D28]'
+                }`}
+                title={isVisited ? "Quitar de lugares visitados" : "Marcar que ya visitaste este lugar"}
+              >
+                <Check className="w-3.5 h-3.5" />
+                <span>{isVisited ? 'Visitado' : 'Ya fui'}</span>
               </button>
             )}
           </div>
@@ -806,7 +825,7 @@ function PlaceDetailModal({ place, onClose, getPlaceGoogleMapsUrl, onPlanFromHer
                   onPlanFromHere(place);
                   onClose();
                 }}
-                className="inline-flex items-center gap-1.5 bg-[#182A24] hover:bg-[#2A4B3D] text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition cursor-pointer shadow-xs btn-latido"
+                className="inline-flex items-center gap-1.5 bg-[#182A24] dark:bg-[#243B30] hover:bg-[#2A4B3D] text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition cursor-pointer shadow-xs btn-latido"
               >
                 <Compass className="w-3.5 h-3.5 text-[#E06D28]" />
                 <span>Armar ronda</span>
@@ -816,7 +835,7 @@ function PlaceDetailModal({ place, onClose, getPlaceGoogleMapsUrl, onPlanFromHer
             <button
               type="button"
               onClick={onClose}
-              className="bg-white hover:bg-[#F1F5F9] text-[#182A24] border border-[#E2E8F0] text-xs font-semibold px-4 py-2.5 rounded-xl transition cursor-pointer btn-latido"
+              className="ronda-card-inner hover:bg-[var(--bg-card)] text-[var(--text-main)] border text-xs font-semibold px-4 py-2.5 rounded-xl transition cursor-pointer btn-latido"
             >
               Cerrar
             </button>
@@ -1413,7 +1432,8 @@ export default function App() {
         vegetarian_friendly: Boolean(userObj.vegetarian_friendly),
         budget_preference: userObj.budget_preference || '$$',
         saved_plans: Array.isArray(userObj.saved_plans) ? userObj.saved_plans : [],
-        favorite_place_ids: Array.isArray(userObj.favorite_place_ids) ? userObj.favorite_place_ids : []
+        favorite_place_ids: Array.isArray(userObj.favorite_place_ids) ? userObj.favorite_place_ids : [],
+        visited_place_ids: Array.isArray(userObj.visited_place_ids) ? userObj.visited_place_ids : []
       };
       localStorage.setItem(storeKey, JSON.stringify(toStore));
       localStorage.setItem('ronda_offline_user', JSON.stringify(userObj));
@@ -1463,6 +1483,11 @@ export default function App() {
     const storedFavs = Array.isArray(localStore?.favorite_place_ids) ? localStore.favorite_place_ids : [];
     const mergedFavs = Array.from(new Set([...storedFavs, ...serverFavs]));
 
+    // Combinar lugares visitados ("✓ Ya fui")
+    const serverVisited = Array.isArray(serverProfile?.visited_place_ids) ? serverProfile.visited_place_ids : [];
+    const storedVisited = Array.isArray(localStore?.visited_place_ids) ? localStore.visited_place_ids : [];
+    const mergedVisited = Array.from(new Set([...storedVisited, ...serverVisited]));
+
     const mergedUser = {
       ...serverProfile,
       id: userId,
@@ -1475,7 +1500,8 @@ export default function App() {
       vegetarian_friendly: localStore?.vegetarian_friendly ?? serverProfile?.vegetarian_friendly ?? false,
       budget_preference: localStore?.budget_preference || serverProfile?.budget_preference || '$$',
       saved_plans: mergedPlans,
-      favorite_place_ids: mergedFavs
+      favorite_place_ids: mergedFavs,
+      visited_place_ids: mergedVisited
     };
 
     persistLocalUserProfile(mergedUser);
@@ -1828,6 +1854,41 @@ export default function App() {
       }
     } catch (err) {
       console.warn('Favorito actualizado localmente:', err);
+    }
+  };
+
+  const handleToggleVisited = (placeId) => {
+    if (!placeId) return;
+
+    const token = localStorage.getItem('ronda_token');
+    if (!token || !currentUser) {
+      setShowProfileModal(true);
+      return;
+    }
+
+    const currentVisited = new Set(Array.isArray(currentUser.visited_place_ids) ? currentUser.visited_place_ids : []);
+    const wasVisited = currentVisited.has(placeId);
+    if (wasVisited) {
+      currentVisited.delete(placeId);
+    } else {
+      currentVisited.add(placeId);
+    }
+
+    const updatedLocalUser = {
+      ...currentUser,
+      visited_place_ids: Array.from(currentVisited)
+    };
+    setCurrentUser(updatedLocalUser);
+    persistLocalUserProfile(updatedLocalUser);
+    triggerHaptic(12);
+
+    if (!wasVisited) {
+      const foundPlace = catalogPlaces.find((p) => p.id === placeId) || LOCAL_PLACES_CATALOG.find((p) => p.id === placeId);
+      setAuthToast({
+        title: `✓ ${foundPlace?.name || 'Lugar'} marcado como visitado`,
+        message: 'Se actualizó el progreso de tus insignias y barrios en tu Pasaporte.'
+      });
+      setTimeout(() => setAuthToast(null), 3200);
     }
   };
 
@@ -2479,6 +2540,7 @@ export default function App() {
               const photoUrl = item.image_url || catalogPlace?.image_url || (catalogPlace?.id ? `/places/${catalogPlace.id}.jpg` : null);
               const pid = item.id || catalogPlace?.id || item.place_name?.toLowerCase().replace(/[^a-z0-9]/g, '_');
               const isFav = (currentUser?.favorite_place_ids || currentUser?.favorites || []).includes(pid);
+              const isVis = (currentUser?.visited_place_ids || []).includes(pid);
 
               return (
                 <React.Fragment key={idx}>
@@ -2509,7 +2571,7 @@ export default function App() {
 
                       {/* Contenido principal */}
                       <div className="flex-1 min-w-0">
-                        {/* Fila superior: Time Slot + Duración + Favoritos */}
+                        {/* Fila superior: Time Slot + Duración + Ya fui / Favoritos */}
                         <div className="flex items-center justify-between gap-2 mb-1.5">
                           <div className="flex items-center gap-2">
                             <span className="text-xs font-bold uppercase tracking-wider ronda-tag px-2.5 py-0.5 rounded-full border">
@@ -2520,25 +2582,44 @@ export default function App() {
                             </span>
                           </div>
 
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setFavoriteBurstId(pid);
-                              triggerHaptic(14);
-                              handleToggleFavorite(pid);
-                              setTimeout(() => setFavoriteBurstId(null), 400);
-                            }}
-                            className={`p-1.5 rounded-full transition cursor-pointer relative btn-latido ${
-                              isFav
-                                ? 'text-rose-600 bg-rose-50 hover:bg-rose-100'
-                                : 'ronda-text-muted hover:text-rose-500 hover:bg-rose-500/10'
-                            }`}
-                            title={isFav ? "Quitar de tus joyitas" : "Guardar en tus joyitas favoritas"}
-                          >
-                            <SparkleBurst active={favoriteBurstId === pid} />
-                            <Heart className={`w-4 h-4 ${isFav ? 'fill-rose-600' : ''} ${favoriteBurstId === pid ? 'animate-chispeo' : ''}`} />
-                          </button>
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleVisited(pid);
+                              }}
+                              className={`px-2.5 py-1 rounded-full text-[11px] font-bold border transition cursor-pointer flex items-center gap-1 btn-latido ${
+                                isVis
+                                  ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/40'
+                                  : 'ronda-card-inner text-[var(--text-main)] hover:border-[#E06D28]'
+                              }`}
+                              title={isVis ? "Quitar de lugares visitados" : "Marcar que ya visitaste este lugar"}
+                            >
+                              <Check className="w-3 h-3" />
+                              <span>{isVis ? 'Visitado' : 'Ya fui'}</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setFavoriteBurstId(pid);
+                                triggerHaptic(14);
+                                handleToggleFavorite(pid);
+                                setTimeout(() => setFavoriteBurstId(null), 400);
+                              }}
+                              className={`p-1.5 rounded-full transition cursor-pointer relative btn-latido ${
+                                isFav
+                                  ? 'text-rose-600 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100'
+                                  : 'ronda-text-muted hover:text-rose-500 hover:bg-rose-500/10'
+                              }`}
+                              title={isFav ? "Quitar de tus favoritos" : "Guardar en tus favoritos"}
+                            >
+                              <SparkleBurst active={favoriteBurstId === pid} />
+                              <Heart className={`w-4 h-4 ${isFav ? 'fill-rose-600' : ''} ${favoriteBurstId === pid ? 'animate-chispeo' : ''}`} />
+                            </button>
+                          </div>
                         </div>
 
                         {/* Alerta de Cierre Próximo */}
@@ -2967,6 +3048,7 @@ export default function App() {
         onUpdatePreferences={handleUpdatePreferences}
         onLoadSavedPlan={handleLoadSavedPlan}
         onRemoveSavedPlan={handleRemoveSavedPlan}
+        onToggleVisited={handleToggleVisited}
         allPlaces={catalogPlaces}
         onOpenPlaceDetail={(place) => openPlaceModal(place)}
         onPlanFromHere={handlePlanFromHere}
@@ -3003,6 +3085,8 @@ export default function App() {
           onPlanFromHere={handlePlanFromHere}
           isFavorite={(currentUser?.favorite_place_ids || currentUser?.favorites || []).includes(selectedPlaceModal?.id || (selectedPlaceModal?.place_name || selectedPlaceModal?.name)?.toLowerCase().replace(/[^a-z0-9]/g, '_'))}
           onToggleFavorite={handleToggleFavorite}
+          isVisited={(currentUser?.visited_place_ids || []).includes(selectedPlaceModal?.id || (selectedPlaceModal?.place_name || selectedPlaceModal?.name)?.toLowerCase().replace(/[^a-z0-9]/g, '_'))}
+          onToggleVisited={handleToggleVisited}
         />
       )}
     </div>
@@ -3086,6 +3170,7 @@ export default function App() {
           onUpdatePreferences={handleUpdatePreferences}
           onLoadSavedPlan={handleLoadSavedPlan}
           onRemoveSavedPlan={handleRemoveSavedPlan}
+          onToggleVisited={handleToggleVisited}
           allPlaces={catalogPlaces}
           onOpenPlaceDetail={(place) => openPlaceModal(place)}
           onPlanFromHere={handlePlanFromHere}
@@ -3101,6 +3186,8 @@ export default function App() {
             onPlanFromHere={handlePlanFromHere}
             isFavorite={(currentUser?.favorite_place_ids || currentUser?.favorites || []).includes(selectedPlaceModal?.id || (selectedPlaceModal?.place_name || selectedPlaceModal?.name)?.toLowerCase().replace(/[^a-z0-9]/g, '_'))}
             onToggleFavorite={handleToggleFavorite}
+            isVisited={(currentUser?.visited_place_ids || []).includes(selectedPlaceModal?.id || (selectedPlaceModal?.place_name || selectedPlaceModal?.name)?.toLowerCase().replace(/[^a-z0-9]/g, '_'))}
+            onToggleVisited={handleToggleVisited}
           />
         )}
 
@@ -3827,6 +3914,7 @@ export default function App() {
         onUpdatePreferences={handleUpdatePreferences}
         onLoadSavedPlan={handleLoadSavedPlan}
         onRemoveSavedPlan={handleRemoveSavedPlan}
+        onToggleVisited={handleToggleVisited}
         allPlaces={catalogPlaces}
         onOpenPlaceDetail={(place) => openPlaceModal(place)}
         onPlanFromHere={handlePlanFromHere}
@@ -3863,6 +3951,8 @@ export default function App() {
           onPlanFromHere={handlePlanFromHere}
           isFavorite={(currentUser?.favorite_place_ids || currentUser?.favorites || []).includes(selectedPlaceModal?.id || (selectedPlaceModal?.place_name || selectedPlaceModal?.name)?.toLowerCase().replace(/[^a-z0-9]/g, '_'))}
           onToggleFavorite={handleToggleFavorite}
+          isVisited={(currentUser?.visited_place_ids || []).includes(selectedPlaceModal?.id || (selectedPlaceModal?.place_name || selectedPlaceModal?.name)?.toLowerCase().replace(/[^a-z0-9]/g, '_'))}
+          onToggleVisited={handleToggleVisited}
         />
       )}
     </div>

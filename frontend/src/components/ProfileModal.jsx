@@ -188,6 +188,7 @@ export default function ProfileModal({
   onUpdatePreferences,
   onLoadSavedPlan,
   onRemoveSavedPlan,
+  onToggleVisited,
   allPlaces = [],
   onOpenPlaceDetail,
   onPlanFromHere,
@@ -203,6 +204,7 @@ export default function ProfileModal({
   const [activeProfileTab, setActiveProfileTab] = useState('passport'); // 'passport' | 'saved_plans' | 'favorites' | 'preferences'
   const [passportSubView, setPassportSubView] = useState('map'); // 'map' | 'badges'
   const [selectedBarrioId, setSelectedBarrioId] = useState(() => currentUser?.neighborhood || 'San Telmo');
+  const [expandedBadgeId, setExpandedBadgeId] = useState(null);
 
   // Estados de autenticación (Opción A: Google First + Acordeón Manual Discreto)
   const [showManualForm, setShowManualForm] = useState(false);
@@ -374,138 +376,115 @@ export default function ProfileModal({
     }
   };
 
-  // Cálculo dinámico de barrios explorados
+  // Lista de lugares marcados explícitamente con "✓ Ya fui"
+  const visitedPlaceIds = useMemo(() => {
+    return Array.isArray(currentUser?.visited_place_ids) ? currentUser.visited_place_ids : [];
+  }, [currentUser]);
+
+  // Cálculo de barrios explorados en base a los lugares realmente visitados ("✓ Ya fui")
   const visitedBarrios = useMemo(() => {
     const set = new Set();
-    if (currentUser?.neighborhood && currentUser.neighborhood !== 'Cualquiera') {
-      set.add(currentUser.neighborhood);
-    }
-    (currentUser?.saved_plans || []).forEach(p => {
-      const pData = p.plan || p;
-      if (pData.neighborhood && pData.neighborhood !== 'Cualquiera') {
-        set.add(pData.neighborhood);
-      }
-      (pData.schedule || []).forEach(step => {
-        const found = allPlaces.find(pl => pl.name === step.place_name || pl.id === step.place_id);
-        if (found?.neighborhood) set.add(found.neighborhood);
-      });
-    });
-    (currentUser?.favorite_place_ids || []).forEach(id => {
-      const found = allPlaces.find(pl => pl.id === id);
+    visitedPlaceIds.forEach((id) => {
+      const found = allPlaces.find((pl) => pl.id === id);
       if (found?.neighborhood) set.add(found.neighborhood);
     });
     return Array.from(set);
-  }, [currentUser, allPlaces]);
+  }, [visitedPlaceIds, allPlaces]);
 
-  // Rango honorífico del caminante porteño
+  // Nivel de progreso directo (sin nombres raros)
   const totalBarrios = BARRIOS_DATA.length;
   const exploredCount = visitedBarrios.length;
+  const visitedPlacesCount = visitedPlaceIds.length;
   const progressPct = Math.min(100, Math.round((exploredCount / totalBarrios) * 100));
 
   const rankInfo = useMemo(() => {
+    const placesLabel = `${visitedPlacesCount} ${visitedPlacesCount === 1 ? 'lugar visitado' : 'lugares visitados'} en ${exploredCount} de ${totalBarrios} barrios.`;
     if (exploredCount >= 9) {
-      return { title: 'Mito Urbano de CABA', medal: '👑', desc: 'Conocés cada adoquín, salón y rincón de la ciudad.' };
+      return { title: 'Nivel 4 · Experto en CABA', medal: '🏆', desc: placesLabel };
     }
     if (exploredCount >= 6) {
-      return { title: 'Baqueano de Adoquín', medal: '🥇', desc: 'Dominás el mapa de salidas porteñas y sus mejores joyitas.' };
+      return { title: 'Nivel 3 · Conocedor de Buenos Aires', medal: '🥇', desc: placesLabel };
     }
     if (exploredCount >= 3) {
-      return { title: 'Callejero de Cafetín', medal: '🥈', desc: 'Cruzaste varios barrios y sabés dónde sentarte a disfrutar.' };
+      return { title: 'Nivel 2 · Explorador de Barrios', medal: '🧭', desc: placesLabel };
     }
-    return { title: 'Paseante Curioso', medal: '🥉', desc: 'Iniciando el recorrido para sellar tu pasaporte porteño.' };
-  }, [exploredCount]);
+    return {
+      title: 'Nivel 1 · Primeros Recorridos',
+      medal: '📍',
+      desc: visitedPlacesCount > 0 ? placesLabel : 'Marcá "✓ Ya fui" en los lugares que visites para avanzar de nivel.'
+    };
+  }, [exploredCount, visitedPlacesCount, totalBarrios]);
 
-  // Sellos Porteños Coleccionables (Badges)
+  // Insignias con Modelo A: Nombres directos y Barra de Progreso (0 / 3 visitados)
   const badges = useMemo(() => {
-    const hasNotable = (currentUser?.favorite_place_ids || []).some(id => {
-      const p = allPlaces.find(pl => pl.id === id);
-      return p?.is_notable || p?.tags?.includes('notable') || ['bar_britanico', 'las_violetas', 'el_federal', 'tortoni', 'la_poesia', 'boliche_roberto'].some(k => p?.id?.includes(k));
-    }) || (currentUser?.saved_plans || []).some(plan => {
-      const pData = plan.plan || plan;
-      return (pData.schedule || []).some(s => (s.place_name || '').toLowerCase().match(/notable|británico|federal|violetas|poesía|tortoni|roberto/i)) ||
-        ['San Telmo', 'San Nicolás', 'Almagro'].includes(pData.neighborhood);
-    }) || ['San Telmo', 'San Nicolás', 'Almagro'].includes(currentUser?.neighborhood);
-
-    const hasJuegos = (currentUser?.favorite_place_ids || []).some(id => {
-      const p = allPlaces.find(pl => pl.id === id);
-      return p?.category === 'juegos' || p?.tags?.some(t => ['pool', 'billar', 'bowling', 'juegos'].includes(t)) || ['san_bernardo', 'academia', 'palos_bowling'].some(k => p?.id?.includes(k));
-    }) || (currentUser?.saved_plans || []).some(plan => {
-      const pData = plan.plan || plan;
-      return (pData.schedule || []).some(s => (s.place_name || '').toLowerCase().match(/pool|billar|bowling|san bernardo|academia/i));
-    });
-
-    const hasFerias = (currentUser?.saved_plans || []).some(plan => {
-      const pData = plan.plan || plan;
-      return pData.suggested_activity?.category === 'feria' ||
-        (pData.schedule || []).some(s => (s.place_name || '').toLowerCase().match(/feria|mercado de las pulgas|plaza francia|defensa/i)) ||
-        ['San Telmo', 'Colegiales', 'Recoleta'].includes(pData.neighborhood);
-    }) || ['San Telmo', 'Colegiales'].includes(currentUser?.neighborhood);
-
-    const hasTrasnoche = (currentUser?.saved_plans || []).some(plan => {
-      const pData = plan.plan || plan;
-      return (pData.schedule || []).some(s => (s.time_slot || '').match(/22:|23:|00:|01:|02:|03:|04:/)) ||
-        pData.mood === 'amigos' || pData.mood === 'noche';
-    });
-
-    const hasVerde = (currentUser?.saved_plans || []).some(plan => {
-      const pData = plan.plan || plan;
-      return (pData.schedule || []).some(s => (s.place_name || '').toLowerCase().match(/parque|jardín|reserva|botánico|ecoparque/i)) ||
-        ['Puerto Madero', 'Palermo', 'Recoleta'].includes(pData.neighborhood);
-    }) || ['Puerto Madero', 'Palermo'].includes(currentUser?.neighborhood);
-
-    const hasAmigo = Boolean(currentUser?.pet_friendly);
-
-    return [
+    const categoriesDef = [
       {
-        id: 'notable',
-        title: 'Guardián de Bares Notables',
-        category: 'Cafetín & Historia',
+        id: 'cafes',
+        title: 'Cafés & Bares Clásicos',
+        category: 'Cafeterías & Notables',
         icon: '☕',
-        unlocked: hasNotable,
-        tip: 'Guardá un favorito o ronda con Bar Británico, Las Violetas o El Federal.'
+        tip: 'Marcá "✓ Ya fui" en 3 cafeterías de especialidad o bares notables.',
+        matcher: (p) => p?.category === 'cafe'
+      },
+      {
+        id: 'gastronomia',
+        title: 'Bodegones & Gastronomía',
+        category: 'Restaurantes & Parrillas',
+        icon: '🍽️',
+        tip: 'Marcá "✓ Ya fui" en 3 bodegones, parrillas o restaurantes.',
+        matcher: (p) => p?.category === 'dining'
+      },
+      {
+        id: 'noche',
+        title: 'Bares & Noche',
+        category: 'Coctelería & Vermut',
+        icon: '🍸',
+        tip: 'Marcá "✓ Ya fui" en 3 bares de tragos, vermuterías o cervecerías.',
+        matcher: (p) => p?.category === 'nightlife' && (!p?.play_category || p.play_category.length === 0)
       },
       {
         id: 'juegos',
-        title: 'Tiza & Paño Verde',
-        category: 'Billar & Salones Clásicos',
+        title: 'Pool, Bowling & Juegos',
+        category: 'Salidas con Juegos',
         icon: '🎱',
-        unlocked: hasJuegos,
-        tip: 'Sumá un pool, billar o bowling tradicional como Café San Bernardo o La Academia.'
+        tip: 'Marcá "✓ Ya fui" en 3 salones de pool, fichines, bowling o juegos.',
+        matcher: (p) => p?.category === 'juegos' || (Array.isArray(p?.play_category) && p.play_category.length > 0)
       },
       {
-        id: 'ferias',
-        title: 'Caminante de Ferias',
-        category: 'Mercados & Paseos',
-        icon: '🛍️',
-        unlocked: hasFerias,
-        tip: 'Disfrutá ferias en San Telmo, Plaza Francia o Mercado de Pulgas.'
+        id: 'cultura',
+        title: 'Cultura, Librerías & Museos',
+        category: 'Arte & Paseos Culturales',
+        icon: '🏛️',
+        tip: 'Marcá "✓ Ya fui" en 3 museos, centros culturales o librerías.',
+        matcher: (p) => p?.category === 'culture' || p?.category === 'bookstore'
       },
       {
-        id: 'trasnoche',
-        title: 'Alquimista de Trasnoche',
-        category: 'Barras & Coctelería',
-        icon: '🍸',
-        unlocked: hasTrasnoche,
-        tip: 'Guardá un recorrido que termine en una barra de autor o de madrugada.'
-      },
-      {
-        id: 'verde',
-        title: 'Pulmón de la Ciudad',
-        category: 'Parques & Naturaleza',
+        id: 'parques',
+        title: 'Parques & Aire Libre',
+        category: 'Plazas, Reservas & Jardines',
         icon: '🌿',
-        unlocked: hasVerde,
-        tip: 'Recorré el Ecoparque, los Bosques de Palermo o la Reserva Costera.'
-      },
-      {
-        id: 'amigo',
-        title: 'Paseador Callejero',
-        category: 'Compañero Fiel',
-        icon: '🐕',
-        unlocked: hasAmigo,
-        tip: 'Activá la opción Pet Friendly en tus preferencias de salida.'
+        tip: 'Marcá "✓ Ya fui" en 3 parques, jardines o paseos al aire libre.',
+        matcher: (p) => p?.category === 'park' || p?.indoor_outdoor === 'outdoor'
       }
     ];
-  }, [currentUser, allPlaces]);
+
+    const goal = 3;
+    return categoriesDef.map((def) => {
+      const matchingAll = allPlaces.filter(def.matcher);
+      const visitedMatching = matchingAll.filter((p) => visitedPlaceIds.includes(p.id));
+      const count = visitedMatching.length;
+      const pct = Math.min(100, Math.round((count / goal) * 100));
+      return {
+        ...def,
+        goal,
+        count,
+        pct,
+        unlocked: count >= goal,
+        visitedPlaces: visitedMatching,
+        suggestedPlaces: matchingAll.slice(0, 6)
+      };
+    });
+  }, [visitedPlaceIds, allPlaces]);
 
   // Barrio seleccionado en el mapa
   const selectedBarrio = useMemo(() => {
@@ -933,7 +912,7 @@ export default function ProfileModal({
                     </div>
                   </div>
 
-                  {/* Sub-toggle: Mapa de Barrios vs Sellos */}
+                  {/* Sub-toggle: Mapa de Barrios vs Insignias */}
                   <div className="flex gap-2 mt-4 pt-3 border-t ronda-border">
                     <button
                       type="button"
@@ -957,7 +936,7 @@ export default function ProfileModal({
                       }`}
                     >
                       <Award className="w-3.5 h-3.5" />
-                      <span>Sellos Porteños ({badges.filter(b => b.unlocked).length}/6)</span>
+                      <span>Insignias ({badges.filter(b => b.unlocked).length}/6)</span>
                     </button>
                   </div>
                 </div>
@@ -1171,37 +1150,60 @@ export default function ProfileModal({
                         {selectedBarrio.description}
                       </p>
 
-                      {/* Lugares emblemáticos de este barrio */}
+                      {/* Lugares emblemáticos de este barrio con botón "✓ Ya fui" */}
                       {selectedBarrioPlaces.length > 0 && (
                         <div>
                           <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-main)] block mb-2">
-                            Lugares destacados en {selectedBarrio.label}:
+                            Lugares en {selectedBarrio.label} (marcá los que ya visitaste):
                           </span>
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                            {selectedBarrioPlaces.map((place) => (
-                              <div
-                                key={place.id}
-                                onClick={() => onOpenPlaceDetail && onOpenPlaceDetail(place)}
-                                className="ronda-card border rounded-xl p-2 hover:border-[#E06D28] transition cursor-pointer flex sm:flex-col items-center sm:items-start gap-2.5 sm:gap-1.5"
-                              >
-                                <div className="w-12 h-12 sm:w-full sm:h-20 rounded-lg overflow-hidden bg-stone-900 shrink-0">
-                                  <img 
-                                    src={place.image_url || `/places/${place.id}.jpg`} 
-                                    alt={place.name} 
-                                    className="w-full h-full object-cover"
-                                    onError={(e) => { e.target.style.display = 'none'; }}
-                                  />
+                            {selectedBarrioPlaces.map((place) => {
+                              const isVisited = visitedPlaceIds.includes(place.id);
+                              return (
+                                <div
+                                  key={place.id}
+                                  onClick={() => onOpenPlaceDetail && onOpenPlaceDetail(place)}
+                                  className="ronda-card border rounded-xl p-2.5 hover:border-[#E06D28] transition cursor-pointer flex flex-col justify-between gap-2"
+                                >
+                                  <div className="flex sm:flex-col items-center sm:items-start gap-2.5 sm:gap-1.5">
+                                    <div className="w-12 h-12 sm:w-full sm:h-20 rounded-lg overflow-hidden bg-stone-800 shrink-0">
+                                      <img 
+                                        src={place.image_url || `/places/${place.id}.jpg`} 
+                                        alt={place.name} 
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => { e.target.style.display = 'none'; }}
+                                      />
+                                    </div>
+                                    <div className="min-w-0 w-full">
+                                      <h6 className="text-xs font-bold text-[var(--text-main)] truncate">
+                                        {place.name}
+                                      </h6>
+                                      <p className="text-[10px] ronda-text-muted truncate">
+                                        {place.address}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  {onToggleVisited && (
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        onToggleVisited(place.id);
+                                      }}
+                                      className={`w-full py-1.5 px-2 rounded-lg text-[11px] font-bold border transition cursor-pointer flex items-center justify-center gap-1 ${
+                                        isVisited
+                                          ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/40'
+                                          : 'ronda-card-inner text-[var(--text-main)] hover:border-[#E06D28]'
+                                      }`}
+                                    >
+                                      <Check className="w-3 h-3" />
+                                      <span>{isVisited ? 'Visitado' : 'Ya fui'}</span>
+                                    </button>
+                                  )}
                                 </div>
-                                <div className="min-w-0">
-                                  <h6 className="text-xs font-bold text-[var(--text-main)] truncate">
-                                    {place.name}
-                                  </h6>
-                                  <p className="text-[10px] ronda-text-muted truncate">
-                                    {place.category === 'juegos' ? 'Juegos & Pool' : (place.category || 'Destacado')}
-                                  </p>
-                                </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                           </div>
                         </div>
                       )}
@@ -1262,54 +1264,126 @@ export default function ProfileModal({
                   </div>
                 )}
 
-                {/* VISTA 2: SELLOS PORTEÑOS (MEDALLERO) */}
+                {/* VISTA 2: INSIGNIAS POR CATEGORÍA (MODELO A: 0 / 3 VISITADOS CON BARRA) */}
                 {passportSubView === 'badges' && (
                   <div className="space-y-3">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {badges.map((badge) => (
-                        <div
-                          key={badge.id}
-                          className={`rounded-2xl border p-3.5 transition flex items-start gap-3 relative overflow-hidden ${
-                            badge.unlocked
-                              ? 'ronda-card border-[#E06D28]/40 shadow-xs'
-                              : 'ronda-card-inner border-dashed opacity-60'
-                          }`}
-                        >
-                          <div className={`w-11 h-11 rounded-2xl flex items-center justify-center text-xl shrink-0 ${
-                            badge.unlocked
-                              ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs border border-[#E06D28]/40'
-                              : 'bg-black/10 text-stone-400 border ronda-border'
-                          }`}>
-                            {badge.icon}
-                          </div>
+                      {badges.map((badge) => {
+                        const isExpanded = expandedBadgeId === badge.id;
+                        return (
+                          <div
+                            key={badge.id}
+                            className={`rounded-2xl border p-4 transition flex flex-col justify-between relative overflow-hidden ${
+                              badge.unlocked
+                                ? 'ronda-card border-emerald-500/50 shadow-xs'
+                                : 'ronda-card-inner ronda-border'
+                            }`}
+                          >
+                            <div
+                              onClick={() => setExpandedBadgeId(isExpanded ? null : badge.id)}
+                              className="cursor-pointer"
+                            >
+                              <div className="flex items-start gap-3">
+                                <div className={`w-11 h-11 rounded-2xl flex items-center justify-center text-xl shrink-0 border ${
+                                  badge.unlocked
+                                    ? 'bg-[#14241F] dark:bg-[#243B30] text-white border-emerald-500/40 shadow-xs'
+                                    : 'ronda-card ronda-border'
+                                }`}>
+                                  {badge.icon}
+                                </div>
 
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center justify-between gap-1 mb-0.5">
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-[#E06D28]">
-                                {badge.category}
-                              </span>
-                              <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${
-                                badge.unlocked 
-                                  ? 'bg-emerald-500/20 text-emerald-400' 
-                                  : 'bg-stone-500/20 text-stone-400'
-                              }`}>
-                                {badge.unlocked ? 'SELLADO' : 'PENDIENTE'}
-                              </span>
+                                <div className="min-w-0 flex-1">
+                                  <div className="flex items-center justify-between gap-1 mb-0.5">
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#E06D28]">
+                                      {badge.category}
+                                    </span>
+                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full font-mono ${
+                                      badge.unlocked 
+                                        ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300' 
+                                        : 'ronda-card border ronda-text-muted'
+                                    }`}>
+                                      {badge.unlocked ? `✓ ${badge.count}/${badge.goal}` : `${badge.count} / ${badge.goal} visitados`}
+                                    </span>
+                                  </div>
+                                  <h5 className="font-editorial text-base font-bold text-[var(--text-main)] leading-snug">
+                                    {badge.title}
+                                  </h5>
+                                  <p className="text-[11px] ronda-text-muted mt-1 leading-snug">
+                                    {badge.tip}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {/* Barra de progreso 0 / 3 */}
+                              <div className="mt-3">
+                                <div className="w-full h-1.5 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
+                                  <div
+                                    className={`h-full rounded-full transition-all duration-500 ${
+                                      badge.unlocked
+                                        ? 'bg-emerald-500'
+                                        : 'bg-[#E06D28]'
+                                    }`}
+                                    style={{ width: `${badge.pct}%` }}
+                                  />
+                                </div>
+                                <div className="flex items-center justify-between mt-1.5 text-[10px] ronda-text-muted font-medium">
+                                  <span>
+                                    {badge.unlocked ? 'Insignia completada' : `Faltan ${Math.max(0, badge.goal - badge.count)} para completar`}
+                                  </span>
+                                  <span className="text-[#E06D28] font-semibold">
+                                    {isExpanded ? 'Ocultar lugares ▲' : 'Elegir lugares ▼'}
+                                  </span>
+                                </div>
+                              </div>
                             </div>
-                            <h5 className="font-editorial text-sm font-bold text-[var(--text-main)] leading-snug">
-                              {badge.title}
-                            </h5>
-                            <p className="text-[11px] ronda-text-muted mt-1 leading-snug">
-                              {badge.tip}
-                            </p>
+
+                            {/* Desplegable de lugares de esta categoría para marcar "✓ Ya fui" */}
+                            {isExpanded && badge.suggestedPlaces?.length > 0 && (
+                              <div className="mt-3 pt-2.5 border-t ronda-border space-y-1.5 animate-fade-in">
+                                <span className="text-[10px] font-bold uppercase tracking-wider ronda-text-muted block mb-1">
+                                  Marcá los que ya conocés:
+                                </span>
+                                {badge.suggestedPlaces.map((pl) => {
+                                  const isVis = visitedPlaceIds.includes(pl.id);
+                                  return (
+                                    <div
+                                      key={pl.id}
+                                      className="flex items-center justify-between gap-2 p-2 rounded-xl ronda-card border text-xs"
+                                    >
+                                      <div
+                                        onClick={() => onOpenPlaceDetail && onOpenPlaceDetail(pl)}
+                                        className="min-w-0 flex-1 cursor-pointer hover:text-[#E06D28] transition"
+                                      >
+                                        <p className="font-semibold text-[var(--text-main)] truncate">{pl.name}</p>
+                                        <p className="text-[10px] ronda-text-muted truncate">{pl.neighborhood}</p>
+                                      </div>
+                                      {onToggleVisited && (
+                                        <button
+                                          type="button"
+                                          onClick={() => onToggleVisited(pl.id)}
+                                          className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition cursor-pointer shrink-0 flex items-center gap-1 ${
+                                            isVis
+                                              ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/40'
+                                              : 'ronda-card-inner text-[var(--text-main)] hover:border-[#E06D28]'
+                                          }`}
+                                        >
+                                          <Check className="w-3 h-3" />
+                                          <span>{isVis ? 'Visitado' : 'Ya fui'}</span>
+                                        </button>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
 
                     <div className="ronda-card-inner border rounded-2xl p-3.5 text-center">
                       <p className="text-xs ronda-text-muted">
-                        💡 <strong>¿Cómo se sellan las medallas?</strong> Guardá rondas en tus barrios favoritos, sumá actividades de pool o ferias y armá salidas con tu mascota para desbloquearlas automáticamente.
+                        💡 <strong>¿Cómo llenás tus insignias?</strong> Tocá <strong>"✓ Ya fui"</strong> en las paradas de tus rondas, en los lugares de cada barrio o desplegando cada insignia acá arriba hasta llegar a <strong>3/3 visitados</strong>.
                       </p>
                     </div>
                   </div>
