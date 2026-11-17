@@ -114,8 +114,9 @@ Para no agotar la ventana de contexto ni desperdiciar tokens:
 1. **Paso 1 - Definición & Crítica**: El Orquestador define una micro-tarea, pudiendo consultar al Crítico & Ideador para identificar la mejor dirección de producto.
 2. **Paso 2 - Investigación**: Si hay dudas técnicas o de datos, el Investigador aporta la solución exacta.
 3. **Paso 3 - Codificación**: El Programador implementa exclusivamente esa micro-tarea.
-4. **Paso 4 - Harness & Revisión**: Se corre el Harness de validación y el Revisor valida sintaxis, funcionamiento y eficiencia.
-5. **Paso 5 - Confirmación & Sugerencia**: Se le presenta el resultado al usuario junto con las valoraciones u oportunidades de mejora planteadas.
+4. **Paso 4 - Harness & Revisión**: Se corre el Harness de validación (`node harness/run.js`) y el build de frontend (`npm --prefix frontend run build`), y el Revisor valida sintaxis, funcionamiento y eficiencia.
+5. **Paso 5 - Despliegue Instantáneo y Reversible (`RULE-DEP-01`)**: Una vez aprobado por el Harness y el build, se realiza automáticamente un commit atómico (`git commit -m "..."`) y `git push origin main` para que el cambio impacte de forma inmediata en la aplicación web en producción (Vercel). Cada cambio debe quedar en su propio commit independiente informando el hash (ej. `41b11c2`), de modo que si al usuario no le convence un cambio en la web, pueda pedir eliminarlo o deshacerlo en cualquier momento (`git revert <hash>` + `git push origin main`) y restaurar o rehacer la versión anterior al instante.
+6. **Paso 6 - Confirmación & Sugerencia**: Se le presenta el resultado al usuario junto con el código del commit desplegado y las valoraciones u oportunidades de mejora planteadas.
 
 ---
 
@@ -124,3 +125,4 @@ Para no agotar la ventana de contexto ni desperdiciar tokens:
 - Cada tarea debe mantener un log de estado en `SPEC.md`.
 - No se avanzará a una nueva fase sin la aprobación del Harness, del Revisor y del Usuario.
 - El comando oficial de auditoría es: `node harness/run.js`.
+- **Regla de Despliegue Web y Reversibilidad (`RULE-DEP-01`)**: Todo cambio aprobado por el usuario y validado por el Harness se sube inmediatamente a `origin/main` mediante un commit atómico y reversible. Si el usuario solicita deshacer o rehacer un cambio, se revierte limpiamente ese commit y se actualiza la web en el acto.

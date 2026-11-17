@@ -96,3 +96,11 @@ Este documento define las reglas inquebrantables de arquitectura, dominio y cali
     2. **Ámbito de instalación**: aclarar si es local y aislado al proyecto (ej. `node_modules/` o entorno virtual `venv`) o si afecta al sistema global.
     3. **Evaluación de seguridad y riesgos potenciales**: confirmar si es una dependencia estándar de la industria, si tiene reputación comprobada, o si presenta algún riesgo para el sistema operativo o archivos del usuario.
     4. Solicitar la aprobación del usuario antes de proceder si involucra cambios sensibles.
+
+---
+
+## 7. Reglas de Despliegue Web Instantáneo y Reversibilidad
+
+- **[RULE-DEP-01] Despliegue Instantáneo y Commits Atómicos Reversibles**:
+  - Todo cambio de código que haya sido solicitado/aprobado por el usuario y haya superado el Harness (`node harness/run.js`) y la compilación (`npm --prefix frontend run build`) debe subirse de inmediato al repositorio remoto (`git commit` + `git push origin main`) para que impacte automáticamente en la aplicación web (Vercel).
+  - **Reversibilidad Garantizada**: Cada cambio debe registrarse en un **commit atómico e independiente** (informando siempre el hash corto al usuario). Si el usuario decide que un cambio no le gusta al verlo en la web, el equipo revertirá ese commit específico (`git revert --no-edit <commit_hash>` seguido de `git push origin main`) o lo rehará sin afectar el resto del progreso.
