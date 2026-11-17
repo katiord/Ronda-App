@@ -3,6 +3,7 @@ import {
   User, 
   X, 
   Mail, 
+  Lock,
   MapPin, 
   Heart, 
   Compass, 
@@ -166,6 +167,18 @@ function GoogleLogoSvg({ className = "w-5 h-5" }) {
   );
 }
 
+async function hashBrowserSecret(text) {
+  if (typeof window !== 'undefined' && window.crypto?.subtle) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text + '::ronda_local_pwd_v1');
+    const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hashBuffer))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+  return btoa(unescape(encodeURIComponent(text + '::ronda_local_pwd_v1')));
+}
+
 export default function ProfileModal({
   isOpen,
   onClose,
@@ -186,19 +199,38 @@ export default function ProfileModal({
   const [passportSubView, setPassportSubView] = useState('map'); // 'map' | 'badges'
   const [selectedBarrioId, setSelectedBarrioId] = useState(() => currentUser?.neighborhood || 'San Telmo');
 
-  // Estados de autenticación exclusiva con Google (Zero-PII)
-  const [showGoogleAccountChooser, setShowGoogleAccountChooser] = useState(false);
-  const [googleEmail, setGoogleEmail] = useState('katia@gmail.com');
-  const [googleDisplayName, setGoogleDisplayName] = useState('Katia');
-  const [neighborhood, setNeighborhood] = useState('Colegiales');
+  // Estados de autenticación combinada:
+  // 1) Botón de Google con ventana emergente real (OAuth2 / GIS)
+  // 2) Formulario con Nombre, Gmail y Contraseña (Zero-PII en el navegador)
+  const [authMode, setAuthMode] = useState('login'); // 'login' | 'register'
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [neighborhood, setNeighborhood] = useState('San Telmo');
   const [petFriendly, setPetFriendly] = useState(false);
   const [vegetarianFriendly, setVegetarianFriendly] = useState(false);
   const [budgetPreference, setBudgetPreference] = useState('$$');
   const [authError, setAuthError] = useState('');
+  const [googlePopupHint, setGooglePopupHint] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const googleBtnContainerRef = useRef(null);
+  const nameInputRef = useRef(null);
 
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+
+  // Autocompletar el nombre guardado localmente si el usuario escribe un Gmail ya conocido en su navegador
+  const handleEmailChange = (val) => {
+    setEmail(val);
+    try {
+      const accounts = JSON.parse(localStorage.getItem('ronda_local_accounts') || '{}');
+      const clean = val.trim().toLowerCase();
+      if (accounts[clean]?.name && !name) {
+        setName(accounts[clean].name);
+      }
+    } catch {
+      // ignore
+    }
+  };
 
   useEffect(() => {
     if (!isOpen || currentUser || !googleClientId) return;
@@ -239,39 +271,162 @@ export default function ProfileModal({
     }
   }, [isOpen, currentUser, googleClientId, neighborhood, petFriendly, vegetarianFriendly, budgetPreference, onGoogleLogin]);
 
-  const handleTriggerGoogleButton = () => {
+  // Opción 2: Abrir la ventana emergente oficial de Google (accounts.google.com)
+  const handleOpenGooglePopup = () => {
     setAuthError('');
-    setShowGoogleAccountChooser(true);
+    setGooglePopupHint('');
+
+    if (googleClientId && typeof window !== 'undefined' && window.google?.accounts?.oauth2) {
+      try {
+        const tokenClient = window.google.accounts.oauth2.initTokenClient({
+          client_id: googleClientId,
+          scope: 'openid email profile',
+          callback: async (tokenResponse) => {
+            if (tokenResponse?.error) {
+              setAuthError('Se canceló o cerró la ventana de Google.');
+              return;
+            }
+            if (tokenResponse?.access_token && onGoogleLogin) {
+              setIsSubmitting(true);
+              try {
+                const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                });
+                const info = await res.json();
+                await onGoogleLogin({
+                  google_sub: info.sub || info.email,
+                  displayName: info.name || info.given_name || (info.email ? info.email.split('@')[0] : 'Viajero Porteño'),
+                  emailHint: info.email || '',
+                  picture: info.picture || null,
+                  neighborhood,
+                  pet_friendly: petFriendly,
+                  vegetarian_friendly: vegetarianFriendly,
+                  budget_preference: budgetPreference
+                });
+              } catch (err) {
+                setAuthError(err.message || 'No se pudo obtener el perfil de Google.');
+              } finally {
+                setIsSubmitting(false);
+              }
+            }
+          }
+        });
+        tokenClient.requestAccessToken({ prompt: 'select_account' });
+        return;
+      } catch (err) {
+        console.warn('Error al abrir popup OAuth2 de Google:', err);
+      }
+    }
+
+    // Si aún no se configuró VITE_GOOGLE_CLIENT_ID, guiar al formulario o permitir acceso rápido
+    setGooglePopupHint(
+      'Para abrir la ventana emergente oficial de accounts.google.com en la web, agregá tu VITE_GOOGLE_CLIENT_ID en Vercel. Mientras tanto, podés ingresar abajo con tu Nombre, Gmail y Contraseña.'
+    );
+    if (nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
   };
 
-  const handleConfirmGoogleAccount = async (e, presetAccount = null) => {
-    if (e && e.preventDefault) e.preventDefault();
+  // Opción 1: Formulario con Nombre, Gmail y Contraseña bajo arquitectura Zero-PII
+  const handleSubmitFormAuth = async (e) => {
+    e.preventDefault();
     setAuthError('');
-    const targetEmail = (presetAccount?.email ?? googleEmail).trim().toLowerCase();
-    const targetName = (presetAccount?.name ?? googleDisplayName).trim() || targetEmail.split('@')[0] || 'Viajero Porteño';
-    const targetBarrio = presetAccount?.neighborhood ?? neighborhood;
+    setGooglePopupHint('');
 
-    if (!targetEmail || !targetEmail.includes('@')) {
-      setAuthError('Ingresá una dirección de correo de Google válida (ej. tu@gmail.com).');
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanName = name.trim();
+
+    if (!cleanEmail || !cleanEmail.includes('@')) {
+      setAuthError('Por favor ingresá un correo electrónico válido (ej. tu@gmail.com).');
+      return;
+    }
+    if (!password || password.length < 4) {
+      setAuthError('Por favor ingresá una contraseña de al menos 4 caracteres.');
       return;
     }
 
     setIsSubmitting(true);
     try {
+      const pwdHash = await hashBrowserSecret(`${cleanEmail}::${password}`);
+      let accounts = {};
+      try {
+        accounts = JSON.parse(localStorage.getItem('ronda_local_accounts') || '{}');
+      } catch {
+        accounts = {};
+      }
+
+      const existingLocal = accounts[cleanEmail];
+
+      if (authMode === 'register') {
+        if (!cleanName) {
+          throw new Error('Por favor escribí tu nombre o apodo.');
+        }
+        accounts[cleanEmail] = {
+          name: cleanName,
+          pwdHash,
+          neighborhood,
+          pet_friendly: petFriendly,
+          vegetarian_friendly: vegetarianFriendly,
+          budget_preference: budgetPreference
+        };
+        localStorage.setItem('ronda_local_accounts', JSON.stringify(accounts));
+      } else {
+        // Modo Iniciar sesión: si la cuenta ya fue creada en este navegador, verificar su contraseña local
+        if (existingLocal && existingLocal.pwdHash && existingLocal.pwdHash !== pwdHash) {
+          throw new Error('Contraseña incorrecta para esta cuenta.');
+        }
+        // Guardar o actualizar el nombre si el usuario lo completó al iniciar sesión
+        const resolvedName = cleanName || existingLocal?.name || cleanEmail.split('@')[0];
+        accounts[cleanEmail] = {
+          ...(existingLocal || {}),
+          name: resolvedName,
+          pwdHash
+        };
+        localStorage.setItem('ronda_local_accounts', JSON.stringify(accounts));
+      }
+
+      const finalDisplayName = cleanName || accounts[cleanEmail]?.name || cleanEmail.split('@')[0] || 'Viajero Porteño';
+      const targetBarrio = authMode === 'register'
+        ? neighborhood
+        : (accounts[cleanEmail]?.neighborhood || (cleanEmail === 'katia@gmail.com' ? 'Colegiales' : neighborhood));
+
       if (onGoogleLogin) {
         await onGoogleLogin({
-          google_sub: targetEmail,
-          displayName: targetName,
-          emailHint: targetEmail,
+          google_sub: cleanEmail,
+          displayName: finalDisplayName,
+          emailHint: cleanEmail,
           neighborhood: targetBarrio,
           pet_friendly: petFriendly,
           vegetarian_friendly: vegetarianFriendly,
           budget_preference: budgetPreference
         });
       }
-      setShowGoogleAccountChooser(false);
+      setPassword('');
     } catch (err) {
-      setAuthError(err.message || 'Ocurrió un error al conectar con Google.');
+      setAuthError(err.message || 'Ocurrió un error al iniciar sesión.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Acceso rápido demo (Katia) con 1 clic
+  const handleQuickDemoKatia = async () => {
+    setAuthError('');
+    setIsSubmitting(true);
+    try {
+      if (onGoogleLogin) {
+        await onGoogleLogin({
+          google_sub: 'katia@gmail.com',
+          displayName: 'Katia',
+          emailHint: 'katia@gmail.com',
+          neighborhood: 'Colegiales',
+          pet_friendly: false,
+          vegetarian_friendly: false,
+          budget_preference: '$$'
+        });
+      }
+    } catch (err) {
+      setAuthError(err.message || 'Ocurrió un error al cargar el perfil demo.');
     } finally {
       setIsSubmitting(false);
     }
@@ -465,239 +620,225 @@ export default function ProfileModal({
         </button>
 
         {/* ======================================================== */}
-        {/* CASO 1: USUARIO NO LOGUEADO (PASAPORTE + GOOGLE ONLY)    */}
+        {/* CASO 1: USUARIO NO LOGUEADO (GOOGLE POPUP + FORMULARIO)  */}
         {/* ======================================================== */}
         {!currentUser ? (
           <div>
             {/* Banner Oficial de Pasaporte Porteño */}
-            <div className="bg-gradient-to-br from-[#14241F] via-[#101D19] to-[#0A1310] border border-[#2D4538] rounded-2xl p-5 text-white mb-5 shadow-lg relative overflow-hidden">
+            <div className="bg-gradient-to-br from-[#14241F] via-[#101D19] to-[#0A1310] border border-[#2D4538] rounded-2xl p-5 text-white mb-4 shadow-lg relative overflow-hidden">
               <div className="absolute top-0 right-0 w-44 h-44 bg-[#E06D28]/10 rounded-full blur-2xl pointer-events-none"></div>
               
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-2.5">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#E06D28] flex items-center gap-1.5 bg-[#E06D28]/10 border border-[#E06D28]/30 px-2.5 py-1 rounded-full">
                   <Compass className="w-3.5 h-3.5" /> Pasaporte de Viajero Porteño
                 </span>
                 <span className="text-[10px] text-stone-300 font-mono bg-white/10 px-2 py-0.5 rounded-full">
-                  CABA · Acceso Google
+                  CABA · Registro Urbano
                 </span>
               </div>
 
-              <h3 className="font-editorial text-2xl font-bold leading-tight mb-1.5">
+              <h3 className="font-editorial text-2xl font-bold leading-tight mb-1">
                 Conquistá los barrios de Buenos Aires
               </h3>
-              <p className="text-xs text-stone-300 max-w-lg leading-relaxed">
-                Ingresá con tu cuenta de Google (Gmail) para sellar los 11 barrios en tu mapa interactivo, desbloquear medallas de bares notables y billar, y guardar tus rondas favoritas sin crear contraseñas nuevas.
+              <p className="text-xs text-stone-300 max-w-lg leading-relaxed mb-3">
+                Ingresá con tu ventana de Google o con tu nombre, Gmail y contraseña para sellar los 11 barrios en tu mapa interactivo y guardar tus rondas favoritas.
               </p>
+
+              <button
+                type="button"
+                onClick={handleQuickDemoKatia}
+                disabled={isSubmitting}
+                className="inline-flex items-center gap-2 bg-[#E06D28] hover:bg-[#C95B1D] text-white text-xs font-semibold px-3.5 py-1.5 rounded-xl transition shadow-sm cursor-pointer btn-latido"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-200" />
+                <span>Probar Pasaporte con Perfil Demo (Katia)</span>
+              </button>
             </div>
 
-            {authError && (
-              <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-300 text-xs p-3 rounded-xl mb-4 text-center">
-                {authError}
-              </div>
-            )}
-
-            {/* Bloque Central: Ingreso Exclusivo con Google (Gmail) */}
-            <div className="ronda-card-inner border rounded-3xl p-5 sm:p-6 shadow-xs space-y-4">
-              <div className="text-center space-y-1">
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
-                  <ShieldCheck className="w-3.5 h-3.5" /> Acceso Único sin Contraseñas
-                </span>
-                <h4 className="font-editorial text-xl font-bold text-[var(--text-main)]">
-                  Ingresá con tu cuenta de Google
-                </h4>
-                <p className="text-xs ronda-text-muted max-w-md mx-auto">
-                  Conectá tu Gmail en un toque para sincronizar tu Pasaporte Porteño y tus rondas guardadas.
-                </p>
-              </div>
-
-              {/* Contenedor oficial Google Identity Services si existe VITE_GOOGLE_CLIENT_ID */}
+            {/* OPCIÓN 2: BOTÓN PARA ABRIR LA VENTANA EMERGENTE DE GMAIL */}
+            <div className="mb-4 space-y-2">
               {googleClientId && (
                 <div className="flex justify-center" ref={googleBtnContainerRef} />
               )}
 
-              {/* Botón Principal Oficial: Continuar con Google (Gmail) */}
-              {!showGoogleAccountChooser ? (
-                <div className="space-y-2.5 pt-1">
-                  <button
-                    type="button"
-                    onClick={handleTriggerGoogleButton}
-                    disabled={isSubmitting}
-                    className="w-full bg-white hover:bg-stone-50 text-[#1F1F1F] border border-stone-300 font-semibold text-sm py-3.5 px-5 rounded-2xl transition shadow-sm hover:shadow-md flex items-center justify-center gap-3 cursor-pointer btn-latido"
-                  >
-                    <GoogleLogoSvg className="w-5 h-5 shrink-0" />
-                    <span>{isSubmitting ? 'Conectando con Google...' : 'Continuar con Google (Gmail)'}</span>
-                  </button>
+              <button
+                type="button"
+                onClick={handleOpenGooglePopup}
+                disabled={isSubmitting}
+                className="w-full bg-white hover:bg-stone-50 text-[#1F1F1F] border border-stone-300 font-semibold text-xs sm:text-sm py-3 px-5 rounded-2xl transition shadow-xs hover:shadow-md flex items-center justify-center gap-3 cursor-pointer btn-latido"
+              >
+                <GoogleLogoSvg className="w-5 h-5 shrink-0" />
+                <span>Abrir ventana de Google (Gmail)</span>
+              </button>
 
-                  {/* Acceso directo 1-clic con cuenta habitual */}
-                  <button
-                    type="button"
-                    onClick={(e) => handleConfirmGoogleAccount(e, { email: 'katia@gmail.com', name: 'Katia', neighborhood: 'Colegiales' })}
-                    disabled={isSubmitting}
-                    className="w-full ronda-card hover:border-[#E06D28] border text-[var(--text-main)] text-xs font-semibold py-2.5 px-4 rounded-xl transition flex items-center justify-between cursor-pointer"
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-[#182A24] text-white flex items-center justify-center text-[11px] font-bold">
-                        K
-                      </span>
-                      <span className="text-left">
-                        <span className="block font-bold leading-tight">Continuar como Katia</span>
-                        <span className="block text-[10px] ronda-text-muted">katia@gmail.com · Rondas sincronizadas</span>
-                      </span>
-                    </span>
-                    <ArrowRight className="w-4 h-4 text-[#E06D28]" />
-                  </button>
+              {googlePopupHint && (
+                <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/50 text-amber-800 dark:text-amber-200 text-[11px] p-2.5 rounded-xl text-center">
+                  {googlePopupHint}
                 </div>
-              ) : (
-                /* Selector interactivo de cuenta Google (Gmail) sin contraseña */
-                <form onSubmit={handleConfirmGoogleAccount} className="ronda-card border rounded-2xl p-4 space-y-3 animate-fade-in">
-                  <div className="flex items-center justify-between border-b ronda-border pb-2.5">
-                    <div className="flex items-center gap-2">
-                      <GoogleLogoSvg className="w-4 h-4" />
-                      <span className="text-xs font-bold text-[var(--text-main)]">
-                        Seleccioná tu cuenta de Gmail
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setShowGoogleAccountChooser(false)}
-                      className="text-[11px] ronda-text-muted hover:text-[var(--text-main)] cursor-pointer"
-                    >
-                      Volver
-                    </button>
-                  </div>
+              )}
+            </div>
 
-                  {/* Cuenta rápida sugerida */}
+            {/* Separador visual */}
+            <div className="relative flex py-1.5 items-center mb-3">
+              <div className="flex-grow border-t ronda-border"></div>
+              <span className="flex-shrink mx-3 text-[10px] uppercase tracking-wider ronda-text-muted font-bold">
+                o ingresá con tu Nombre, Gmail y Contraseña
+              </span>
+              <div className="flex-grow border-t ronda-border"></div>
+            </div>
+
+            {/* OPCIÓN 1: PESTAÑAS INICIAR SESIÓN / CREAR MI CUENTA CON NOMBRE, GMAIL Y CONTRASEÑA */}
+            <div className="flex ronda-card-inner p-1 rounded-2xl border mb-3.5">
+              <button 
+                type="button"
+                onClick={() => { setAuthMode('login'); setAuthError(''); }}
+                className={`flex-1 py-2 text-xs font-bold rounded-xl transition cursor-pointer ${
+                  authMode === 'login'
+                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
+                    : 'ronda-text-muted hover:text-[var(--text-main)]'
+                }`}
+              >
+                Iniciar sesión
+              </button>
+              <button 
+                type="button"
+                onClick={() => { setAuthMode('register'); setAuthError(''); }}
+                className={`flex-1 py-2 text-xs font-bold rounded-xl transition cursor-pointer ${
+                  authMode === 'register'
+                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
+                    : 'ronda-text-muted hover:text-[var(--text-main)]'
+                }`}
+              >
+                Crear mi cuenta
+              </button>
+            </div>
+
+            {authError && (
+              <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-300 text-xs p-3 rounded-xl mb-3.5 text-center">
+                {authError}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmitFormAuth} className="space-y-3 mb-3">
+              {/* Campo Nombre siempre disponible para que el usuario pueda poner su nombre */}
+              <div>
+                <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
+                  ¿Cómo te llamás?
+                </label>
+                <div className="relative">
+                  <User className="w-4 h-4 ronda-text-muted absolute left-3.5 top-3" />
+                  <input 
+                    ref={nameInputRef}
+                    type="text" 
+                    placeholder="Tu nombre o apodo (ej. Katia)"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required={authMode === 'register'}
+                    className="w-full ronda-card-inner border rounded-xl py-2.5 pl-10 pr-3.5 text-xs text-[var(--text-main)] placeholder:text-[var(--text-muted)] outline-none focus:border-[#E06D28]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
+                  Correo de Gmail
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 ronda-text-muted absolute left-3.5 top-3" />
+                  <input 
+                    type="email" 
+                    placeholder="tu@gmail.com"
+                    value={email}
+                    onChange={(e) => handleEmailChange(e.target.value)}
+                    required
+                    className="w-full ronda-card-inner border rounded-xl py-2.5 pl-10 pr-3.5 text-xs text-[var(--text-main)] placeholder:text-[var(--text-muted)] outline-none focus:border-[#E06D28]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
+                  Contraseña
+                </label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 ronda-text-muted absolute left-3.5 top-3" />
+                  <input 
+                    type="password" 
+                    placeholder="Al menos 6 caracteres"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="w-full ronda-card-inner border rounded-xl py-2.5 pl-10 pr-3.5 text-xs text-[var(--text-main)] placeholder:text-[var(--text-muted)] outline-none focus:border-[#E06D28]"
+                  />
+                </div>
+              </div>
+
+              {authMode === 'register' && (
+                <div className="pt-2 border-t ronda-border space-y-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider ronda-text-muted block mb-1.5">
-                      Cuenta detectada en este dispositivo:
-                    </span>
-                    <button
-                      type="button"
-                      onClick={(e) => handleConfirmGoogleAccount(e, { email: 'katia@gmail.com', name: 'Katia', neighborhood: 'Colegiales' })}
-                      className="w-full ronda-card-inner hover:border-[#E06D28] border rounded-xl p-2.5 flex items-center justify-between transition cursor-pointer text-left"
+                    <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
+                      Tu barrio base en CABA
+                    </label>
+                    <select
+                      value={neighborhood}
+                      onChange={(e) => setNeighborhood(e.target.value)}
+                      className="w-full ronda-card-inner border rounded-xl px-3 py-2 text-xs text-[var(--text-main)] outline-none focus:border-[#E06D28]"
                     >
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-[#182A24] text-white flex items-center justify-center font-bold text-xs">
-                          K
-                        </div>
-                        <div>
-                          <div className="text-xs font-bold text-[var(--text-main)]">Katia</div>
-                          <div className="text-[11px] ronda-text-muted">katia@gmail.com</div>
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-bold text-[#E06D28] bg-[#E06D28]/10 px-2 py-1 rounded-lg">
-                        Entrar en 1 clic →
-                      </span>
-                    </button>
+                      {BARRIOS_DATA.map((b) => (
+                        <option key={b.id} value={b.id} className="bg-[var(--bg-card)] text-[var(--text-main)]">
+                          {b.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
-                  <div className="relative flex py-1 items-center">
-                    <div className="flex-grow border-t ronda-border"></div>
-                    <span className="flex-shrink mx-2 text-[10px] uppercase ronda-text-muted font-semibold">
-                      o usar otro correo Gmail
+                  <div className="ronda-card-inner border p-3 rounded-2xl space-y-2">
+                    <span className="text-[11px] font-bold text-[var(--text-main)] block mb-1">
+                      Preferencias de salida:
                     </span>
-                    <div className="flex-grow border-t ronda-border"></div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div>
-                      <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
-                        Tu correo de Google (Gmail)
-                      </label>
-                      <div className="relative">
-                        <Mail className="w-3.5 h-3.5 ronda-text-muted absolute left-3 top-2.5" />
-                        <input
-                          type="email"
-                          placeholder="tu@gmail.com"
-                          value={googleEmail}
-                          onChange={(e) => setGoogleEmail(e.target.value)}
-                          required
-                          className="w-full ronda-card-inner border rounded-xl py-2 pl-9 pr-3 text-xs text-[var(--text-main)] outline-none focus:border-[#E06D28]"
-                        />
-                      </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs ronda-text-muted flex items-center gap-1.5">
+                        <Dog className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                        <span>Priorizar siempre Pet Friendly</span>
+                      </span>
+                      <input 
+                        type="checkbox"
+                        checked={petFriendly}
+                        onChange={(e) => setPetFriendly(e.target.checked)}
+                        className="w-4 h-4 accent-[#E06D28] cursor-pointer"
+                      />
                     </div>
-
-                    <div>
-                      <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
-                        Nombre visible (solo en tu navegador)
-                      </label>
-                      <div className="relative">
-                        <User className="w-3.5 h-3.5 ronda-text-muted absolute left-3 top-2.5" />
-                        <input
-                          type="text"
-                          placeholder="Tu nombre o apodo"
-                          value={googleDisplayName}
-                          onChange={(e) => setGoogleDisplayName(e.target.value)}
-                          className="w-full ronda-card-inner border rounded-xl py-2 pl-9 pr-3 text-xs text-[var(--text-main)] outline-none focus:border-[#E06D28]"
-                        />
-                      </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs ronda-text-muted flex items-center gap-1.5">
+                        <Salad className="w-3.5 h-3.5 text-lime-600 dark:text-lime-400" />
+                        <span>Priorizar opciones vegetarianas</span>
+                      </span>
+                      <input 
+                        type="checkbox"
+                        checked={vegetarianFriendly}
+                        onChange={(e) => setVegetarianFriendly(e.target.checked)}
+                        className="w-4 h-4 accent-[#E06D28] cursor-pointer"
+                      />
                     </div>
                   </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-                    <div>
-                      <label className="text-[11px] font-semibold ronda-text-muted block mb-1">
-                        Barrio base en CABA
-                      </label>
-                      <select
-                        value={neighborhood}
-                        onChange={(e) => setNeighborhood(e.target.value)}
-                        className="w-full ronda-card-inner border rounded-xl px-3 py-2 text-xs text-[var(--text-main)] outline-none focus:border-[#E06D28]"
-                      >
-                        {BARRIOS_DATA.map((b) => (
-                          <option key={b.id} value={b.id} className="bg-[var(--bg-card)] text-[var(--text-main)]">
-                            {b.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="flex flex-col justify-end gap-1.5">
-                      <label className="flex items-center justify-between text-xs ronda-text-muted ronda-card-inner border px-3 py-1.5 rounded-xl cursor-pointer">
-                        <span className="flex items-center gap-1.5">
-                          <Dog className="w-3.5 h-3.5 text-emerald-500" />
-                          <span>Pet Friendly</span>
-                        </span>
-                        <input
-                          type="checkbox"
-                          checked={petFriendly}
-                          onChange={(e) => setPetFriendly(e.target.checked)}
-                          className="w-3.5 h-3.5 accent-[#E06D28]"
-                        />
-                      </label>
-                      <label className="flex items-center justify-between text-xs ronda-text-muted ronda-card-inner border px-3 py-1.5 rounded-xl cursor-pointer">
-                        <span className="flex items-center gap-1.5">
-                          <Salad className="w-3.5 h-3.5 text-lime-500" />
-                          <span>Opciones Veggie</span>
-                        </span>
-                        <input
-                          type="checkbox"
-                          checked={vegetarianFriendly}
-                          onChange={(e) => setVegetarianFriendly(e.target.checked)}
-                          className="w-3.5 h-3.5 accent-[#E06D28]"
-                        />
-                      </label>
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-[#182A24] hover:bg-[#223931] text-white font-semibold text-xs py-3 rounded-xl transition shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 btn-latido"
-                  >
-                    <GoogleLogoSvg className="w-4 h-4" />
-                    <span>{isSubmitting ? 'Vinculando Pasaporte...' : 'Vincular con Google sin contraseña'}</span>
-                  </button>
-                </form>
+                </div>
               )}
 
-              {/* Sello de Privacidad Manos Limpias (Zero-PII) */}
-              <div className="pt-3 border-t ronda-border flex items-start gap-2.5 text-[11px] ronda-text-muted leading-relaxed">
-                <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <p>
-                  🔒 <strong>Cero custodia de datos sensibles:</strong> Ronda no pide contraseñas ni almacena tu correo ni tu nombre en sus servidores. Tus datos visibles quedan únicamente en tu navegador.
-                </p>
-              </div>
+              <button 
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-[#E06D28] hover:bg-[#C95B1D] text-white font-semibold text-xs py-3 rounded-xl transition shadow-md mt-2 cursor-pointer disabled:opacity-50 btn-latido"
+              >
+                {isSubmitting ? 'Procesando...' : (authMode === 'login' ? 'Ingresar a mi cuenta' : 'Crear mi Pasaporte Porteño')}
+              </button>
+            </form>
+
+            {/* Sello de Privacidad Manos Limpias (Zero-PII) */}
+            <div className="pt-2.5 border-t ronda-border flex items-start gap-2 text-[11px] ronda-text-muted leading-relaxed">
+              <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+              <p>
+                🔒 <strong>Privacidad Manos Limpias:</strong> Tu nombre, correo y contraseña se validan en tu navegador y viajan como un código anónimo irreversible (el servidor jamás guarda claves ni correos en texto plano).
+              </p>
             </div>
           </div>
         ) : (
