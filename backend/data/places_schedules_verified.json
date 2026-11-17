@@ -1,0 +1,6230 @@
+{
+  "palermo_lab_cafe": {
+    "id": "palermo_lab_cafe",
+    "name": "LAB Tostadores de Café",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Lunes a Sábados de 08:00 a 20:00; Domingos de 10:00 a 19:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 8,
+    "close_hour": 20,
+    "close_hour_weekend": 20,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      }
+    }
+  },
+  "palermo_cuervo_cafe": {
+    "id": "palermo_cuervo_cafe",
+    "name": "Cuervo Café",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Lunes a Domingos de 08:00 a 20:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 8,
+    "close_hour": 20,
+    "close_hour_weekend": 20,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      }
+    }
+  },
+  "palermo_libros_pasaje": {
+    "id": "palermo_libros_pasaje",
+    "name": "Libros del Pasaje",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Lunes a Sábados de 10:00 a 21:00; Domingos de 14:00 a 21:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 21,
+    "close_hour_weekend": 21,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "21:00",
+        "open_hour": 10,
+        "close_hour": 21
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "21:00",
+        "open_hour": 10,
+        "close_hour": 21
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "21:00",
+        "open_hour": 10,
+        "close_hour": 21
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "21:00",
+        "open_hour": 10,
+        "close_hour": 21
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "21:00",
+        "open_hour": 10,
+        "close_hour": 21
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "21:00",
+        "open_hour": 10,
+        "close_hour": 21
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "21:00",
+        "open_hour": 14,
+        "close_hour": 21
+      }
+    }
+  },
+  "palermo_jardin_botanico": {
+    "id": "palermo_jardin_botanico",
+    "name": "Jardín Botánico Carlos Thays",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Martes a Domingos de 08:00 a 19:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 8,
+    "close_hour": 19,
+    "close_hour_weekend": 19,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "19:00",
+        "open_hour": 8,
+        "close_hour": 19
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "19:00",
+        "open_hour": 8,
+        "close_hour": 19
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "19:00",
+        "open_hour": 8,
+        "close_hour": 19
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "19:00",
+        "open_hour": 8,
+        "close_hour": 19
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "19:00",
+        "open_hour": 8,
+        "close_hour": 19
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "19:00",
+        "open_hour": 8,
+        "close_hour": 19
+      }
+    }
+  },
+  "palermo_rosedal": {
+    "id": "palermo_rosedal",
+    "name": "El Rosedal de Palermo",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Martes a Domingos de 10:00 a 19:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 19,
+    "close_hour_weekend": 19,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      }
+    }
+  },
+  "palermo_nino_gordo": {
+    "id": "palermo_nino_gordo",
+    "name": "Niño Gordo",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Martes a Domingos de 20:00 a 00:00 hs (Sábados y Domingos también almuerzos de 13:00 a 16:30). Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 20,
+    "close_hour": 24,
+    "close_hour_weekend": 24.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "00:00",
+        "open_hour": 20,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "00:00",
+        "open_hour": 20,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "00:00",
+        "open_hour": 20,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "00:30",
+        "open_hour": 20,
+        "close_hour": 24.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "00:30",
+        "open_hour": 20,
+        "close_hour": 24.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "00:00",
+        "open_hour": 20,
+        "close_hour": 24
+      }
+    }
+  },
+  "palermo_tres_monos": {
+    "id": "palermo_tres_monos",
+    "name": "Tres Monos Bar",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Lunes a Miércoles y Domingos de 18:00 a 02:00; Jueves a Sábados de 18:00 a 03:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 18,
+    "close_hour": 26,
+    "close_hour_weekend": 27,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "02:00",
+        "open_hour": 18,
+        "close_hour": 26
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "02:00",
+        "open_hour": 18,
+        "close_hour": 26
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "02:00",
+        "open_hour": 18,
+        "close_hour": 26
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "02:00",
+        "open_hour": 18,
+        "close_hour": 26
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "03:00",
+        "open_hour": 18,
+        "close_hour": 27
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "03:00",
+        "open_hour": 18,
+        "close_hour": 27
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "02:00",
+        "open_hour": 18,
+        "close_hour": 26
+      }
+    }
+  },
+  "palermo_bar_878": {
+    "id": "palermo_bar_878",
+    "name": "Bar 878",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Martes, Miércoles y Domingos de 19:00 a 02:00; Jueves, Viernes y Sábados de 19:00 a 03:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 19,
+    "close_hour": 26,
+    "close_hour_weekend": 27,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "02:00",
+        "open_hour": 19,
+        "close_hour": 26
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "02:00",
+        "open_hour": 19,
+        "close_hour": 26
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "02:00",
+        "open_hour": 19,
+        "close_hour": 26
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "03:00",
+        "open_hour": 19,
+        "close_hour": 27
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "03:00",
+        "open_hour": 19,
+        "close_hour": 27
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "02:00",
+        "open_hour": 19,
+        "close_hour": 26
+      }
+    }
+  },
+  "palermo_obrador_florida": {
+    "id": "palermo_obrador_florida",
+    "name": "Obrador Florida",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Miércoles a Domingos de 15:30 a 00:00 hs (Sábados y Domingos desde 13:00). Lunes y Martes cerrado.",
+    "days_open": [
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 15.5,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "15:30",
+        "close": "00:00",
+        "open_hour": 15.5,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "15:30",
+        "close": "00:00",
+        "open_hour": 15.5,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "13:00",
+        "close": "00:00",
+        "open_hour": 13,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "13:00",
+        "close": "00:00",
+        "open_hour": 13,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "13:00",
+        "close": "00:00",
+        "open_hour": 13,
+        "close_hour": 24
+      }
+    }
+  },
+  "palermo_plaza_cortazar": {
+    "id": "palermo_plaza_cortazar",
+    "name": "Plaza Cortázar (Serrano) & Calles de Diseño",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Espacio público abierto 24 hs; locales de diseño de 11:00 a 20:00 hs; bares y terrazas hasta las 03:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 11,
+    "close_hour": 20,
+    "close_hour_weekend": 20,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      }
+    }
+  },
+  "santelmo_mercado": {
+    "id": "santelmo_mercado",
+    "name": "Mercado de San Telmo",
+    "neighborhood": "San Telmo",
+    "horarios_detallados": "Lunes a Domingos de 09:00 a 20:00 hs (locales gastronómicos interiores hasta las 22:00 hs).",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 9,
+    "close_hour": 21,
+    "close_hour_weekend": 22,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "21:00",
+        "open_hour": 9,
+        "close_hour": 21
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "21:00",
+        "open_hour": 9,
+        "close_hour": 21
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "21:00",
+        "open_hour": 9,
+        "close_hour": 21
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "21:00",
+        "open_hour": 9,
+        "close_hour": 21
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "22:00",
+        "open_hour": 9,
+        "close_hour": 22
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "22:00",
+        "open_hour": 9,
+        "close_hour": 22
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "21:00",
+        "open_hour": 9,
+        "close_hour": 21
+      }
+    }
+  },
+  "santelmo_bar_britanico": {
+    "id": "santelmo_bar_britanico",
+    "name": "Bar Británico",
+    "neighborhood": "San Telmo",
+    "horarios_detallados": "Lunes a Domingos de 09:00 a 03:00 hs ininterrumpido.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 9,
+    "close_hour": 27,
+    "close_hour_weekend": 27,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "03:00",
+        "open_hour": 9,
+        "close_hour": 27
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "03:00",
+        "open_hour": 9,
+        "close_hour": 27
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "03:00",
+        "open_hour": 9,
+        "close_hour": 27
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "03:00",
+        "open_hour": 9,
+        "close_hour": 27
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "03:00",
+        "open_hour": 9,
+        "close_hour": 27
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "03:00",
+        "open_hour": 9,
+        "close_hour": 27
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "03:00",
+        "open_hour": 9,
+        "close_hour": 27
+      }
+    }
+  },
+  "santelmo_bar_el_federal": {
+    "id": "santelmo_bar_el_federal",
+    "name": "El Federal",
+    "neighborhood": "San Telmo",
+    "horarios_detallados": "Domingos a Jueves de 08:00 a 02:00; Viernes y Sábados de 08:00 a 04:00 hs (cocina cierra 1 hora antes).",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 8,
+    "close_hour": 26,
+    "close_hour_weekend": 28,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "02:00",
+        "open_hour": 8,
+        "close_hour": 26
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "02:00",
+        "open_hour": 8,
+        "close_hour": 26
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "02:00",
+        "open_hour": 8,
+        "close_hour": 26
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "02:00",
+        "open_hour": 8,
+        "close_hour": 26
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "04:00",
+        "open_hour": 8,
+        "close_hour": 28
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "04:00",
+        "open_hour": 8,
+        "close_hour": 28
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "02:00",
+        "open_hour": 8,
+        "close_hour": 26
+      }
+    }
+  },
+  "santelmo_mamba": {
+    "id": "santelmo_mamba",
+    "name": "Museo de Arte Moderno (MAMBA)",
+    "neighborhood": "San Telmo",
+    "horarios_detallados": "Lunes, Miércoles, Jueves y Viernes de 11:00 a 19:00; Sábados y Domingos de 11:00 a 20:00 hs. Martes cerrado.",
+    "days_open": [
+      "monday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 11,
+    "close_hour": 19,
+    "close_hour_weekend": 20,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "19:00",
+        "open_hour": 11,
+        "close_hour": 19
+      },
+      "tuesday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "19:00",
+        "open_hour": 11,
+        "close_hour": 19
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "19:00",
+        "open_hour": 11,
+        "close_hour": 19
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "19:00",
+        "open_hour": 11,
+        "close_hour": 19
+      }
+    }
+  },
+  "santelmo_parque_lezama": {
+    "id": "santelmo_parque_lezama",
+    "name": "Parque Lezama",
+    "neighborhood": "San Telmo",
+    "horarios_detallados": "Parque público abierto todos los días de 08:00 a 21:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 8,
+    "close_hour": 21,
+    "close_hour_weekend": 21,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      }
+    }
+  },
+  "santelmo_pulperia_quilapan": {
+    "id": "santelmo_pulperia_quilapan",
+    "name": "Pulpería Quilapán",
+    "neighborhood": "San Telmo",
+    "horarios_detallados": "Martes a Domingos de 10:00 a 00:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      }
+    }
+  },
+  "santelmo_la_brigada": {
+    "id": "santelmo_la_brigada",
+    "name": "Parrilla La Brigada",
+    "neighborhood": "San Telmo",
+    "horarios_detallados": "Lunes a Domingos de 12:00 a 15:30 y de 20:00 a 00:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 12,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      }
+    }
+  },
+  "santelmo_pasaje_defensa": {
+    "id": "santelmo_pasaje_defensa",
+    "name": "Pasaje de la Defensa (Casa de los Ezeiza)",
+    "neighborhood": "San Telmo",
+    "horarios_detallados": "Lunes a Domingos de 10:00 a 19:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 19,
+    "close_hour_weekend": 19,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      }
+    }
+  },
+  "recoleta_ateneo_splendid": {
+    "id": "recoleta_ateneo_splendid",
+    "name": "El Ateneo Grand Splendid",
+    "neighborhood": "Recoleta",
+    "horarios_detallados": "Lunes a Jueves de 09:00 a 22:00; Viernes y Sábados de 09:00 a 00:00; Domingos de 12:00 a 22:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 9,
+    "close_hour": 22,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "22:00",
+        "open_hour": 9,
+        "close_hour": 22
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "22:00",
+        "open_hour": 9,
+        "close_hour": 22
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "22:00",
+        "open_hour": 9,
+        "close_hour": 22
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "22:00",
+        "open_hour": 9,
+        "close_hour": 22
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "00:00",
+        "open_hour": 9,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "00:00",
+        "open_hour": 9,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "22:00",
+        "open_hour": 9,
+        "close_hour": 22
+      }
+    }
+  },
+  "recoleta_bellas_artes": {
+    "id": "recoleta_bellas_artes",
+    "name": "Museo Nacional de Bellas Artes (MNBA)",
+    "neighborhood": "Recoleta",
+    "horarios_detallados": "Martes a Viernes de 11:00 a 20:00; Sábados y Domingos de 10:00 a 20:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 11,
+    "close_hour": 20,
+    "close_hour_weekend": 20,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      }
+    }
+  },
+  "recoleta_la_biela": {
+    "id": "recoleta_la_biela",
+    "name": "La Biela",
+    "neighborhood": "Recoleta",
+    "horarios_detallados": "Lunes a Jueves y Domingos de 07:00 a 01:00; Viernes y Sábados de 07:00 a 02:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 7,
+    "close_hour": 25,
+    "close_hour_weekend": 26,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "01:00",
+        "open_hour": 7,
+        "close_hour": 25
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "01:00",
+        "open_hour": 7,
+        "close_hour": 25
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "01:00",
+        "open_hour": 7,
+        "close_hour": 25
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "01:00",
+        "open_hour": 7,
+        "close_hour": 25
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "02:00",
+        "open_hour": 7,
+        "close_hour": 26
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "02:00",
+        "open_hour": 7,
+        "close_hour": 26
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "01:00",
+        "open_hour": 7,
+        "close_hour": 25
+      }
+    }
+  },
+  "recoleta_ccr": {
+    "id": "recoleta_ccr",
+    "name": "Centro Cultural Recoleta (CCR)",
+    "neighborhood": "Recoleta",
+    "horarios_detallados": "Martes a Viernes de 13:30 a 22:00; Sábados y Domingos de 11:15 a 22:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 13.5,
+    "close_hour": 22,
+    "close_hour_weekend": 22,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "13:30",
+        "close": "22:00",
+        "open_hour": 13.5,
+        "close_hour": 22
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "13:30",
+        "close": "22:00",
+        "open_hour": 13.5,
+        "close_hour": 22
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "13:30",
+        "close": "22:00",
+        "open_hour": 13.5,
+        "close_hour": 22
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "11:15",
+        "close": "22:00",
+        "open_hour": 11.25,
+        "close_hour": 22
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "11:15",
+        "close": "22:00",
+        "open_hour": 11.25,
+        "close_hour": 22
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "11:15",
+        "close": "22:00",
+        "open_hour": 11.25,
+        "close_hour": 22
+      }
+    }
+  },
+  "recoleta_cumana": {
+    "id": "recoleta_cumana",
+    "name": "Cumaná",
+    "neighborhood": "Recoleta",
+    "horarios_detallados": "Lunes a Domingos de 12:00 a 00:30 hs continuo.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 12,
+    "close_hour": 24.5,
+    "close_hour_weekend": 24.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      }
+    }
+  },
+  "recoleta_plaza_francia": {
+    "id": "recoleta_plaza_francia",
+    "name": "Plaza Francia & Cementerio de la Recoleta",
+    "neighborhood": "Recoleta",
+    "horarios_detallados": "Plaza abierta 24 hs; feria de artesanos Sábados, Domingos y Feriados de 11:00 a 20:00 hs; Cementerio de Lunes a Domingos de 09:00 a 17:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 9,
+    "close_hour": 20,
+    "close_hour_weekend": 20,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      }
+    }
+  },
+  "recoleta_duhau_patio": {
+    "id": "recoleta_duhau_patio",
+    "name": "Los Salones del Piano Nobile & Jardín del Palacio Duhau",
+    "neighborhood": "Recoleta",
+    "horarios_detallados": "Lunes a Domingos de 07:00 a 23:30 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 7,
+    "close_hour": 23.5,
+    "close_hour_weekend": 23.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      }
+    }
+  },
+  "chacarita_sifon_soderia": {
+    "id": "chacarita_sifon_soderia",
+    "name": "Sifón Sodería",
+    "neighborhood": "Chacarita",
+    "horarios_detallados": "Lunes a Jueves de 18:00 a 01:00; Viernes de 18:00 a 02:00; Sábados de 12:00 a 02:00; Domingos de 12:00 a 01:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 18,
+    "close_hour": 25,
+    "close_hour_weekend": 26,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "01:00",
+        "open_hour": 18,
+        "close_hour": 25
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "01:00",
+        "open_hour": 18,
+        "close_hour": 25
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "01:00",
+        "open_hour": 18,
+        "close_hour": 25
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "01:00",
+        "open_hour": 18,
+        "close_hour": 25
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "02:00",
+        "open_hour": 12,
+        "close_hour": 26
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "02:00",
+        "open_hour": 12,
+        "close_hour": 26
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:00",
+        "open_hour": 12,
+        "close_hour": 25
+      }
+    }
+  },
+  "chacarita_la_fuerza": {
+    "id": "chacarita_la_fuerza",
+    "name": "Bar La Fuerza",
+    "neighborhood": "Chacarita",
+    "horarios_detallados": "Lunes a Jueves de 18:00 a 01:00; Viernes de 18:00 a 02:00; Sábados de 12:00 a 02:00; Domingos de 12:00 a 01:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 18,
+    "close_hour": 25,
+    "close_hour_weekend": 26,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "01:00",
+        "open_hour": 18,
+        "close_hour": 25
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "01:00",
+        "open_hour": 18,
+        "close_hour": 25
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "01:00",
+        "open_hour": 18,
+        "close_hour": 25
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "01:00",
+        "open_hour": 18,
+        "close_hour": 25
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "02:00",
+        "open_hour": 12,
+        "close_hour": 26
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "02:00",
+        "open_hour": 12,
+        "close_hour": 26
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:00",
+        "open_hour": 12,
+        "close_hour": 25
+      }
+    }
+  },
+  "chacarita_georgies": {
+    "id": "chacarita_georgies",
+    "name": "Georgie's",
+    "neighborhood": "Chacarita",
+    "horarios_detallados": "Martes a Sábados de 19:30 a 23:30 hs. Domingos y Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday"
+    ],
+    "open_hour": 19.5,
+    "close_hour": 23.5,
+    "close_hour_weekend": 23.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "19:30",
+        "close": "23:30",
+        "open_hour": 19.5,
+        "close_hour": 23.5
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "19:30",
+        "close": "23:30",
+        "open_hour": 19.5,
+        "close_hour": 23.5
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "19:30",
+        "close": "23:30",
+        "open_hour": 19.5,
+        "close_hour": 23.5
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "19:30",
+        "close": "23:30",
+        "open_hour": 19.5,
+        "close_hour": 23.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "19:30",
+        "close": "23:30",
+        "open_hour": 19.5,
+        "close_hour": 23.5
+      },
+      "sunday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      }
+    }
+  },
+  "chacarita_donnet": {
+    "id": "chacarita_donnet",
+    "name": "Donnet",
+    "neighborhood": "Chacarita",
+    "horarios_detallados": "Martes a Sábados de 18:00 a 00:00 hs. Domingos y Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday"
+    ],
+    "open_hour": 18,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "00:00",
+        "open_hour": 18,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "00:00",
+        "open_hour": 18,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "00:00",
+        "open_hour": 18,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "00:00",
+        "open_hour": 18,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "18:00",
+        "close": "00:00",
+        "open_hour": 18,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      }
+    }
+  },
+  "chacarita_falena": {
+    "id": "chacarita_falena",
+    "name": "Falena Librería & Cava",
+    "neighborhood": "Chacarita",
+    "horarios_detallados": "Lunes a Viernes de 15:00 a 19:30 hs. Sábados y Domingos cerrado.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday"
+    ],
+    "open_hour": 15,
+    "close_hour": 19.5,
+    "close_hour_weekend": 19.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "15:00",
+        "close": "19:30",
+        "open_hour": 15,
+        "close_hour": 19.5
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "15:00",
+        "close": "19:30",
+        "open_hour": 15,
+        "close_hour": 19.5
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "15:00",
+        "close": "19:30",
+        "open_hour": 15,
+        "close_hour": 19.5
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "15:00",
+        "close": "19:30",
+        "open_hour": 15,
+        "close_hour": 19.5
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "15:00",
+        "close": "19:30",
+        "open_hour": 15,
+        "close_hour": 19.5
+      },
+      "saturday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "sunday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      }
+    }
+  },
+  "chacarita_parque_los_andes": {
+    "id": "chacarita_parque_los_andes",
+    "name": "Parque Los Andes",
+    "neighborhood": "Chacarita",
+    "horarios_detallados": "Parque público abierto todos los días de 08:00 a 21:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 8,
+    "close_hour": 21,
+    "close_hour_weekend": 21,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      }
+    }
+  },
+  "colegiales_anafe": {
+    "id": "colegiales_anafe",
+    "name": "Anafe",
+    "neighborhood": "Colegiales",
+    "horarios_detallados": "Martes a Domingos de 20:00 a 00:00 hs (Viernes a Domingos también de 12:00 a 16:00). Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 20,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "00:00",
+        "open_hour": 20,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "00:00",
+        "open_hour": 20,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "00:00",
+        "open_hour": 20,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "00:00",
+        "open_hour": 20,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "00:00",
+        "open_hour": 20,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "00:00",
+        "open_hour": 20,
+        "close_hour": 24
+      }
+    }
+  },
+  "colegiales_strange_brewing": {
+    "id": "colegiales_strange_brewing",
+    "name": "Strange Brewing",
+    "neighborhood": "Colegiales",
+    "horarios_detallados": "Lunes a Miércoles de 16:00 a 00:00; Jueves y Domingos de 12:00 a 00:00; Viernes y Sábados de 12:00 a 01:30 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 16,
+    "close_hour": 24,
+    "close_hour_weekend": 25.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "16:00",
+        "close": "00:00",
+        "open_hour": 16,
+        "close_hour": 24
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "16:00",
+        "close": "00:00",
+        "open_hour": 16,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "16:00",
+        "close": "00:00",
+        "open_hour": 16,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "16:00",
+        "close": "00:00",
+        "open_hour": 16,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:30",
+        "open_hour": 12,
+        "close_hour": 25.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:30",
+        "open_hour": 12,
+        "close_hour": 25.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      }
+    }
+  },
+  "colegiales_santal_cafe": {
+    "id": "colegiales_santal_cafe",
+    "name": "Sântal Café & Listening Bar",
+    "neighborhood": "Colegiales",
+    "horarios_detallados": "Lunes a Domingos de 07:30 a 20:30 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 7.5,
+    "close_hour": 20.5,
+    "close_hour_weekend": 20.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "07:30",
+        "close": "20:30",
+        "open_hour": 7.5,
+        "close_hour": 20.5
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "07:30",
+        "close": "20:30",
+        "open_hour": 7.5,
+        "close_hour": 20.5
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "07:30",
+        "close": "20:30",
+        "open_hour": 7.5,
+        "close_hour": 20.5
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "07:30",
+        "close": "20:30",
+        "open_hour": 7.5,
+        "close_hour": 20.5
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "07:30",
+        "close": "20:30",
+        "open_hour": 7.5,
+        "close_hour": 20.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "07:30",
+        "close": "20:30",
+        "open_hour": 7.5,
+        "close_hour": 20.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "07:30",
+        "close": "20:30",
+        "open_hour": 7.5,
+        "close_hour": 20.5
+      }
+    }
+  },
+  "colegiales_tres_tostadores": {
+    "id": "colegiales_tres_tostadores",
+    "name": "Tres Tostadores",
+    "neighborhood": "Colegiales",
+    "horarios_detallados": "Lunes a Sábados de 08:00 a 20:00 hs. Domingos cerrado.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday"
+    ],
+    "open_hour": 8,
+    "close_hour": 20,
+    "close_hour_weekend": 20,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:00",
+        "open_hour": 8,
+        "close_hour": 20
+      },
+      "sunday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      }
+    }
+  },
+  "colegiales_mercado_pulgas": {
+    "id": "colegiales_mercado_pulgas",
+    "name": "Mercado de las Pulgas",
+    "neighborhood": "Colegiales",
+    "horarios_detallados": "Martes a Domingos de 10:00 a 19:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 19,
+    "close_hour_weekend": 19,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      }
+    }
+  },
+  "belgrano_corte_comedor": {
+    "id": "belgrano_corte_comedor",
+    "name": "Corte Comedor",
+    "neighborhood": "Belgrano",
+    "horarios_detallados": "Martes a Sábados de 12:00 a 16:00 y de 20:00 a 00:00; Domingos de 12:00 a 16:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 12,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      }
+    }
+  },
+  "belgrano_via_viva_barrio_chino": {
+    "id": "belgrano_via_viva_barrio_chino",
+    "name": "Paseo Vía Viva & Barrio Chino",
+    "neighborhood": "Belgrano",
+    "horarios_detallados": "Lunes a Domingos de 11:00 a 23:00 hs (fines de semana locales gastronómicos hasta las 01:00 hs).",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 11,
+    "close_hour": 23,
+    "close_hour_weekend": 25,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "23:00",
+        "open_hour": 11,
+        "close_hour": 23
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "23:00",
+        "open_hour": 11,
+        "close_hour": 23
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "23:00",
+        "open_hour": 11,
+        "close_hour": 23
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "23:00",
+        "open_hour": 11,
+        "close_hour": 23
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "01:00",
+        "open_hour": 11,
+        "close_hour": 25
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "01:00",
+        "open_hour": 11,
+        "close_hour": 25
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "23:00",
+        "open_hour": 11,
+        "close_hour": 23
+      }
+    }
+  },
+  "belgrano_museo_larreta": {
+    "id": "belgrano_museo_larreta",
+    "name": "Museo de Arte Español Enrique Larreta",
+    "neighborhood": "Belgrano",
+    "horarios_detallados": "Lunes, Miércoles, Jueves y Viernes de 11:00 a 19:00; Sábados y Domingos de 11:00 a 20:00 hs. Martes cerrado.",
+    "days_open": [
+      "monday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 11,
+    "close_hour": 19,
+    "close_hour_weekend": 20,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "19:00",
+        "open_hour": 11,
+        "close_hour": 19
+      },
+      "tuesday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "19:00",
+        "open_hour": 11,
+        "close_hour": 19
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "19:00",
+        "open_hour": 11,
+        "close_hour": 19
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "20:00",
+        "open_hour": 11,
+        "close_hour": 20
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "19:00",
+        "open_hour": 11,
+        "close_hour": 19
+      }
+    }
+  },
+  "belgrano_barrancas_glorieta": {
+    "id": "belgrano_barrancas_glorieta",
+    "name": "Barrancas de Belgrano & Glorieta de Tango",
+    "neighborhood": "Belgrano",
+    "horarios_detallados": "Parque público abierto todos los días de 08:00 a 21:00 hs; milongas en la Glorieta de 19:00 a 23:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 8,
+    "close_hour": 22,
+    "close_hour_weekend": 22,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "22:00",
+        "open_hour": 8,
+        "close_hour": 22
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "22:00",
+        "open_hour": 8,
+        "close_hour": 22
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "22:00",
+        "open_hour": 8,
+        "close_hour": 22
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "22:00",
+        "open_hour": 8,
+        "close_hour": 22
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "22:00",
+        "open_hour": 8,
+        "close_hour": 22
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "22:00",
+        "open_hour": 8,
+        "close_hour": 22
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "22:00",
+        "open_hour": 8,
+        "close_hour": 22
+      }
+    }
+  },
+  "belgrano_el_torreon": {
+    "id": "belgrano_el_torreon",
+    "name": "El Torreón de Belgrano R",
+    "neighborhood": "Belgrano",
+    "horarios_detallados": "Lunes a Domingos de 07:00 a 00:00 hs continuo.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 7,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      }
+    }
+  },
+  "belgrano_pizzeria_burgio": {
+    "id": "belgrano_pizzeria_burgio",
+    "name": "Pizzería Burgio",
+    "neighborhood": "Belgrano",
+    "horarios_detallados": "Martes a Domingos de 19:00 a 01:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 19,
+    "close_hour": 25,
+    "close_hour_weekend": 25.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "01:00",
+        "open_hour": 19,
+        "close_hour": 25
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "01:00",
+        "open_hour": 19,
+        "close_hour": 25
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "01:00",
+        "open_hour": 19,
+        "close_hour": 25
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "01:00",
+        "open_hour": 19,
+        "close_hour": 25
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "01:00",
+        "open_hour": 19,
+        "close_hour": 25
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "01:00",
+        "open_hour": 19,
+        "close_hour": 25
+      }
+    }
+  },
+  "santelmo_cafe_rivas": {
+    "id": "santelmo_cafe_rivas",
+    "name": "Café Rivas",
+    "neighborhood": "San Telmo",
+    "horarios_detallados": "Martes a Sábados de 12:00 a 00:00; Domingos de 12:00 a 18:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 12,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      }
+    }
+  },
+  "palermo_jardin_japones": {
+    "id": "palermo_jardin_japones",
+    "name": "Jardín Japonés de Buenos Aires",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Lunes a Domingos de 10:00 a 18:45 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 18.75,
+    "close_hour_weekend": 18.75,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:45",
+        "open_hour": 10,
+        "close_hour": 18.75
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:45",
+        "open_hour": 10,
+        "close_hour": 18.75
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:45",
+        "open_hour": 10,
+        "close_hour": 18.75
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:45",
+        "open_hour": 10,
+        "close_hour": 18.75
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:45",
+        "open_hour": 10,
+        "close_hour": 18.75
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:45",
+        "open_hour": 10,
+        "close_hour": 18.75
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:45",
+        "open_hour": 10,
+        "close_hour": 18.75
+      }
+    }
+  },
+  "santelmo_pasaje_san_lorenzo_casa_minima": {
+    "id": "santelmo_pasaje_san_lorenzo_casa_minima",
+    "name": "Pasaje San Lorenzo & La Casa Mínima",
+    "neighborhood": "San Telmo",
+    "horarios_detallados": "Pasaje abierto las 24 hs; visitas guiadas de la Casa Mínima de Martes a Domingos de 11:00 a 17:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 19,
+    "close_hour_weekend": 19,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "19:00",
+        "open_hour": 10,
+        "close_hour": 19
+      }
+    }
+  },
+  "recoleta_floralis_generica_parque_thays": {
+    "id": "recoleta_floralis_generica_parque_thays",
+    "name": "Floralis Genérica & Parque Thays",
+    "neighborhood": "Recoleta",
+    "horarios_detallados": "Parque público abierto todos los días de 08:00 a 21:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 8,
+    "close_hour": 21,
+    "close_hour_weekend": 21,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      }
+    }
+  },
+  "chacarita_circuito_murales_parque": {
+    "id": "chacarita_circuito_murales_parque",
+    "name": "Paseo de Murales & Veredas de Chacarita",
+    "neighborhood": "Chacarita",
+    "horarios_detallados": "Paseo al aire libre abierto las 24 hs (recomendado con luz natural de 09:00 a 19:00 hs).",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 9,
+    "close_hour": 19,
+    "close_hour_weekend": 19,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "19:00",
+        "open_hour": 9,
+        "close_hour": 19
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "19:00",
+        "open_hour": 9,
+        "close_hour": 19
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "19:00",
+        "open_hour": 9,
+        "close_hour": 19
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "19:00",
+        "open_hour": 9,
+        "close_hour": 19
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "19:00",
+        "open_hour": 9,
+        "close_hour": 19
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "19:00",
+        "open_hour": 9,
+        "close_hour": 19
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "19:00",
+        "open_hour": 9,
+        "close_hour": 19
+      }
+    }
+  },
+  "colegiales_plaza_mafalda_pasajes": {
+    "id": "colegiales_plaza_mafalda_pasajes",
+    "name": "Plaza Mafalda & Pasajes de Colegiales",
+    "neighborhood": "Colegiales",
+    "horarios_detallados": "Paseo público abierto las 24 hs (recomendado con luz natural de 08:00 a 20:30 hs).",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 8,
+    "close_hour": 20.5,
+    "close_hour_weekend": 20.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:30",
+        "open_hour": 8,
+        "close_hour": 20.5
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:30",
+        "open_hour": 8,
+        "close_hour": 20.5
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:30",
+        "open_hour": 8,
+        "close_hour": 20.5
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:30",
+        "open_hour": 8,
+        "close_hour": 20.5
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:30",
+        "open_hour": 8,
+        "close_hour": 20.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:30",
+        "open_hour": 8,
+        "close_hour": 20.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "20:30",
+        "open_hour": 8,
+        "close_hour": 20.5
+      }
+    }
+  },
+  "belgrano_plaza_castelli_estacion": {
+    "id": "belgrano_plaza_castelli_estacion",
+    "name": "Plaza Castelli & Pasaje Estación Belgrano R",
+    "neighborhood": "Belgrano",
+    "horarios_detallados": "Paseo público abierto 24 hs (recomendado de 08:00 a 21:00 hs).",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 8,
+    "close_hour": 21,
+    "close_hour_weekend": 21,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "21:00",
+        "open_hour": 8,
+        "close_hour": 21
+      }
+    }
+  },
+  "recoleta_presidente_bar": {
+    "id": "recoleta_presidente_bar",
+    "name": "Presidente Bar",
+    "neighborhood": "Recoleta",
+    "horarios_detallados": "Martes, Miércoles y Domingos de 19:00 a 02:00; Jueves, Viernes y Sábados de 19:00 a 03:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 19,
+    "close_hour": 26,
+    "close_hour_weekend": 27,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "02:00",
+        "open_hour": 19,
+        "close_hour": 26
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "02:00",
+        "open_hour": 19,
+        "close_hour": 26
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "02:00",
+        "open_hour": 19,
+        "close_hour": 26
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "03:00",
+        "open_hour": 19,
+        "close_hour": 27
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "03:00",
+        "open_hour": 19,
+        "close_hour": 27
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "02:00",
+        "open_hour": 19,
+        "close_hour": 26
+      }
+    }
+  },
+  "recoleta_milion_bar": {
+    "id": "recoleta_milion_bar",
+    "name": "Milión",
+    "neighborhood": "Recoleta",
+    "horarios_detallados": "Martes a Jueves de 19:00 a 02:00; Viernes y Sábados de 19:00 a 03:00; Domingos de 19:00 a 01:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 19,
+    "close_hour": 26,
+    "close_hour_weekend": 27,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "02:00",
+        "open_hour": 19,
+        "close_hour": 26
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "02:00",
+        "open_hour": 19,
+        "close_hour": 26
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "02:00",
+        "open_hour": 19,
+        "close_hour": 26
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "03:00",
+        "open_hour": 19,
+        "close_hour": 27
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "03:00",
+        "open_hour": 19,
+        "close_hour": 27
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "02:00",
+        "open_hour": 19,
+        "close_hour": 26
+      }
+    }
+  },
+  "sannicolas_teatro_colon": {
+    "id": "sannicolas_teatro_colon",
+    "name": "Teatro Colón",
+    "neighborhood": "San Nicolás",
+    "horarios_detallados": "Visitas guiadas todos los días de 10:00 a 16:45 hs; funciones según cartelera nocturna de 20:00 a 23:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 20,
+    "close_hour_weekend": 20,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      }
+    }
+  },
+  "sannicolas_petit_colon": {
+    "id": "sannicolas_petit_colon",
+    "name": "Café Petit Colón",
+    "neighborhood": "San Nicolás",
+    "horarios_detallados": "Lunes a Viernes de 07:00 a 22:00; Sábados de 08:00 a 22:00; Domingos de 09:00 a 20:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 7,
+    "close_hour": 22,
+    "close_hour_weekend": 22,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "22:00",
+        "open_hour": 7,
+        "close_hour": 22
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "22:00",
+        "open_hour": 7,
+        "close_hour": 22
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "22:00",
+        "open_hour": 7,
+        "close_hour": 22
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "22:00",
+        "open_hour": 7,
+        "close_hour": 22
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "22:00",
+        "open_hour": 8,
+        "close_hour": 22
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "22:00",
+        "open_hour": 8,
+        "close_hour": 22
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "08:00",
+        "close": "22:00",
+        "open_hour": 8,
+        "close_hour": 22
+      }
+    }
+  },
+  "sannicolas_el_cuartito": {
+    "id": "sannicolas_el_cuartito",
+    "name": "El Cuartito",
+    "neighborhood": "San Nicolás",
+    "horarios_detallados": "Martes a Domingos de 12:30 a 01:00 hs (Viernes y Sábados hasta las 02:00 hs). Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 12.5,
+    "close_hour": 25,
+    "close_hour_weekend": 26,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "12:30",
+        "close": "01:00",
+        "open_hour": 12.5,
+        "close_hour": 25
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "12:30",
+        "close": "01:00",
+        "open_hour": 12.5,
+        "close_hour": 25
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "12:30",
+        "close": "01:00",
+        "open_hour": 12.5,
+        "close_hour": 25
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:30",
+        "close": "02:00",
+        "open_hour": 12.5,
+        "close_hour": 26
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:30",
+        "close": "02:00",
+        "open_hour": 12.5,
+        "close_hour": 26
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:30",
+        "close": "01:00",
+        "open_hour": 12.5,
+        "close_hour": 25
+      }
+    }
+  },
+  "sannicolas_heladeria_cadore": {
+    "id": "sannicolas_heladeria_cadore",
+    "name": "Heladería Cadore",
+    "neighborhood": "San Nicolás",
+    "horarios_detallados": "Domingos a Jueves de 12:00 a 00:00; Viernes y Sábados de 12:00 a 01:30 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 12,
+    "close_hour": 24,
+    "close_hour_weekend": 25.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:30",
+        "open_hour": 12,
+        "close_hour": 25.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:30",
+        "open_hour": 12,
+        "close_hour": 25.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      }
+    }
+  },
+  "palermo_ecoparque": {
+    "id": "palermo_ecoparque",
+    "name": "Ecoparque de la Ciudad de Buenos Aires",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Martes a Domingos de 10:00 a 18:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 18,
+    "close_hour_weekend": 18,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:00",
+        "open_hour": 10,
+        "close_hour": 18
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:00",
+        "open_hour": 10,
+        "close_hour": 18
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:00",
+        "open_hour": 10,
+        "close_hour": 18
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:00",
+        "open_hour": 10,
+        "close_hour": 18
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:00",
+        "open_hour": 10,
+        "close_hour": 18
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "18:00",
+        "open_hour": 10,
+        "close_hour": 18
+      }
+    }
+  },
+  "palermo_casa_cavia": {
+    "id": "palermo_casa_cavia",
+    "name": "Casa Cavia",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Martes a Sábados de 10:00 a 00:00; Domingos de 10:00 a 19:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      }
+    }
+  },
+  "palermo_el_preferido": {
+    "id": "palermo_el_preferido",
+    "name": "El Preferido de Palermo",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Lunes a Domingos de 11:30 a 16:00 y de 19:00 a 01:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 11.5,
+    "close_hour": 25,
+    "close_hour_weekend": 25,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "01:00",
+        "open_hour": 11.5,
+        "close_hour": 25
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "01:00",
+        "open_hour": 11.5,
+        "close_hour": 25
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "01:00",
+        "open_hour": 11.5,
+        "close_hour": 25
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "01:00",
+        "open_hour": 11.5,
+        "close_hour": 25
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "01:00",
+        "open_hour": 11.5,
+        "close_hour": 25
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "01:00",
+        "open_hour": 11.5,
+        "close_hour": 25
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "01:00",
+        "open_hour": 11.5,
+        "close_hour": 25
+      }
+    }
+  },
+  "palermo_heladeria_rapanui": {
+    "id": "palermo_heladeria_rapanui",
+    "name": "Rapa Nui (Sucursal Botánico)",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Lunes a Jueves de 10:00 a 01:00; Viernes y Sábados de 10:00 a 02:00; Domingos de 10:00 a 01:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 25,
+    "close_hour_weekend": 26,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "01:00",
+        "open_hour": 10,
+        "close_hour": 25
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "01:00",
+        "open_hour": 10,
+        "close_hour": 25
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "01:00",
+        "open_hour": 10,
+        "close_hour": 25
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "01:00",
+        "open_hour": 10,
+        "close_hour": 25
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "02:00",
+        "open_hour": 10,
+        "close_hour": 26
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "02:00",
+        "open_hour": 10,
+        "close_hour": 26
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "01:00",
+        "open_hour": 10,
+        "close_hour": 25
+      }
+    }
+  },
+  "puertomadero_reserva_ecologica": {
+    "id": "puertomadero_reserva_ecologica",
+    "name": "Reserva Ecológica Costanera Sur",
+    "neighborhood": "Puerto Madero",
+    "horarios_detallados": "Martes a Domingos de 09:00 a 18:00 hs (verano hasta 19:00). Lunes cerrado por mantenimiento.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 9,
+    "close_hour": 18,
+    "close_hour_weekend": 18,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "18:00",
+        "open_hour": 9,
+        "close_hour": 18
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "18:00",
+        "open_hour": 9,
+        "close_hour": 18
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "18:00",
+        "open_hour": 9,
+        "close_hour": 18
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "18:00",
+        "open_hour": 9,
+        "close_hour": 18
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "18:00",
+        "open_hour": 9,
+        "close_hour": 18
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "18:00",
+        "open_hour": 9,
+        "close_hour": 18
+      }
+    }
+  },
+  "puertomadero_croque_madame_fortabat": {
+    "id": "puertomadero_croque_madame_fortabat",
+    "name": "Croque Madame en Colección Fortabat",
+    "neighborhood": "Puerto Madero",
+    "horarios_detallados": "Martes a Domingos de 10:00 a 20:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 20,
+    "close_hour_weekend": 20,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "20:00",
+        "open_hour": 10,
+        "close_hour": 20
+      }
+    }
+  },
+  "puertomadero_siga_la_vaca": {
+    "id": "puertomadero_siga_la_vaca",
+    "name": "Siga la Vaca Puerto Madero",
+    "neighborhood": "Puerto Madero",
+    "horarios_detallados": "Lunes a Domingos de 12:00 a 01:00 hs ininterrumpido.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 12,
+    "close_hour": 25,
+    "close_hour_weekend": 25,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:00",
+        "open_hour": 12,
+        "close_hour": 25
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:00",
+        "open_hour": 12,
+        "close_hour": 25
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:00",
+        "open_hour": 12,
+        "close_hour": 25
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:00",
+        "open_hour": 12,
+        "close_hour": 25
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:00",
+        "open_hour": 12,
+        "close_hour": 25
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:00",
+        "open_hour": 12,
+        "close_hour": 25
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:00",
+        "open_hour": 12,
+        "close_hour": 25
+      }
+    }
+  },
+  "puertomadero_heladeria_luccianos": {
+    "id": "puertomadero_heladeria_luccianos",
+    "name": "Lucciano's Puerto Madero",
+    "neighborhood": "Puerto Madero",
+    "horarios_detallados": "Domingos a Jueves de 11:00 a 00:00; Viernes y Sábados de 11:00 a 01:30 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 11,
+    "close_hour": 24,
+    "close_hour_weekend": 25.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "00:00",
+        "open_hour": 11,
+        "close_hour": 24
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "00:00",
+        "open_hour": 11,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "00:00",
+        "open_hour": 11,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "00:00",
+        "open_hour": 11,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "01:30",
+        "open_hour": 11,
+        "close_hour": 25.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "01:30",
+        "open_hour": 11,
+        "close_hour": 25.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "00:00",
+        "open_hour": 11,
+        "close_hour": 24
+      }
+    }
+  },
+  "sannicolas_palacio_libertad": {
+    "id": "sannicolas_palacio_libertad",
+    "name": "Palacio Libertad (ex CCK)",
+    "neighborhood": "San Nicolás",
+    "horarios_detallados": "Miércoles a Domingos de 14:00 a 20:00 hs. Lunes y Martes cerrado.",
+    "days_open": [
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 14,
+    "close_hour": 20,
+    "close_hour_weekend": 20,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "20:00",
+        "open_hour": 14,
+        "close_hour": 20
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "20:00",
+        "open_hour": 14,
+        "close_hour": 20
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "20:00",
+        "open_hour": 14,
+        "close_hour": 20
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "20:00",
+        "open_hour": 14,
+        "close_hour": 20
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "20:00",
+        "open_hour": 14,
+        "close_hour": 20
+      }
+    }
+  },
+  "sannicolas_confiteria_la_ideal": {
+    "id": "sannicolas_confiteria_la_ideal",
+    "name": "Confitería La Ideal",
+    "neighborhood": "San Nicolás",
+    "horarios_detallados": "Lunes a Domingos de 07:00 a 00:00 hs ininterrumpido.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 7,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "00:00",
+        "open_hour": 7,
+        "close_hour": 24
+      }
+    }
+  },
+  "sannicolas_el_establo": {
+    "id": "sannicolas_el_establo",
+    "name": "Parrilla El Establo",
+    "neighborhood": "San Nicolás",
+    "horarios_detallados": "Lunes a Sábados de 11:30 a 16:00 y de 19:30 a 00:00 hs. Domingos cerrado.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday"
+    ],
+    "open_hour": 11.5,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "00:00",
+        "open_hour": 11.5,
+        "close_hour": 24
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "00:00",
+        "open_hour": 11.5,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "00:00",
+        "open_hour": 11.5,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "00:00",
+        "open_hour": 11.5,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "00:00",
+        "open_hour": 11.5,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "11:30",
+        "close": "00:00",
+        "open_hour": 11.5,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      }
+    }
+  },
+  "sannicolas_heladeria_colonial": {
+    "id": "sannicolas_heladeria_colonial",
+    "name": "Heladería Colonial (Microcentro)",
+    "neighborhood": "San Nicolás",
+    "horarios_detallados": "Lunes a Jueves de 10:00 a 22:00; Viernes y Sábados de 10:00 a 00:00; Domingos de 12:00 a 22:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 22,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "22:00",
+        "open_hour": 10,
+        "close_hour": 22
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "22:00",
+        "open_hour": 10,
+        "close_hour": 22
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "22:00",
+        "open_hour": 10,
+        "close_hour": 22
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "22:00",
+        "open_hour": 10,
+        "close_hour": 22
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "22:00",
+        "open_hour": 10,
+        "close_hour": 22
+      }
+    }
+  },
+  "caballito_tranvia_historico": {
+    "id": "caballito_tranvia_historico",
+    "name": "Tranvía Histórico de Buenos Aires",
+    "neighborhood": "Caballito",
+    "horarios_detallados": "Sábados, Domingos y Feriados de 15:00 a 18:30 hs. Lunes a Viernes cerrado.",
+    "days_open": [
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 15,
+    "close_hour": 18.5,
+    "close_hour_weekend": 18.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "wednesday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "thursday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "friday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "15:00",
+        "close": "18:30",
+        "open_hour": 15,
+        "close_hour": 18.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "15:00",
+        "close": "18:30",
+        "open_hour": 15,
+        "close_hour": 18.5
+      }
+    }
+  },
+  "caballito_el_coleccionista": {
+    "id": "caballito_el_coleccionista",
+    "name": "Café El Coleccionista",
+    "neighborhood": "Caballito",
+    "horarios_detallados": "Lunes a Domingos de 07:00 a 23:30 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 7,
+    "close_hour": 23.5,
+    "close_hour_weekend": 23.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "07:00",
+        "close": "23:30",
+        "open_hour": 7,
+        "close_hour": 23.5
+      }
+    }
+  },
+  "caballito_los_chanchitos": {
+    "id": "caballito_los_chanchitos",
+    "name": "Bodegón Los Chanchitos",
+    "neighborhood": "Caballito",
+    "horarios_detallados": "Lunes a Domingos de 12:00 a 16:00 y de 20:00 a 00:30 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 12,
+    "close_hour": 24.5,
+    "close_hour_weekend": 24.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      }
+    }
+  },
+  "caballito_heladeria_tino": {
+    "id": "caballito_heladeria_tino",
+    "name": "Tino Helados",
+    "neighborhood": "Caballito",
+    "horarios_detallados": "Lunes a Jueves y Domingos de 11:00 a 01:00; Viernes y Sábados de 11:00 a 02:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 11,
+    "close_hour": 25,
+    "close_hour_weekend": 26,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "01:00",
+        "open_hour": 11,
+        "close_hour": 25
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "01:00",
+        "open_hour": 11,
+        "close_hour": 25
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "01:00",
+        "open_hour": 11,
+        "close_hour": 25
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "01:00",
+        "open_hour": 11,
+        "close_hour": 25
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "02:00",
+        "open_hour": 11,
+        "close_hour": 26
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "02:00",
+        "open_hour": 11,
+        "close_hour": 26
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "01:00",
+        "open_hour": 11,
+        "close_hour": 25
+      }
+    }
+  },
+  "almagro_el_boliche_de_roberto": {
+    "id": "almagro_el_boliche_de_roberto",
+    "name": "El Boliche de Roberto (Bar 1893)",
+    "neighborhood": "Almagro",
+    "horarios_detallados": "Miércoles a Sábados de 21:00 a 03:00 hs. Domingos, Lunes y Martes cerrado.",
+    "days_open": [
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday"
+    ],
+    "open_hour": 21,
+    "close_hour": 27,
+    "close_hour_weekend": 27,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "21:00",
+        "close": "03:00",
+        "open_hour": 21,
+        "close_hour": 27
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "21:00",
+        "close": "03:00",
+        "open_hour": 21,
+        "close_hour": 27
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "21:00",
+        "close": "03:00",
+        "open_hour": 21,
+        "close_hour": 27
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "21:00",
+        "close": "03:00",
+        "open_hour": 21,
+        "close_hour": 27
+      },
+      "sunday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      }
+    }
+  },
+  "almagro_las_violetas": {
+    "id": "almagro_las_violetas",
+    "name": "Confitería Las Violetas",
+    "neighborhood": "Almagro",
+    "horarios_detallados": "Lunes a Domingos de 06:00 a 00:00 hs continuo.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 6,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "06:00",
+        "close": "00:00",
+        "open_hour": 6,
+        "close_hour": 24
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "06:00",
+        "close": "00:00",
+        "open_hour": 6,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "06:00",
+        "close": "00:00",
+        "open_hour": 6,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "06:00",
+        "close": "00:00",
+        "open_hour": 6,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "06:00",
+        "close": "00:00",
+        "open_hour": 6,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "06:00",
+        "close": "00:00",
+        "open_hour": 6,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "06:00",
+        "close": "00:00",
+        "open_hour": 6,
+        "close_hour": 24
+      }
+    }
+  },
+  "almagro_cantina_pierino": {
+    "id": "almagro_cantina_pierino",
+    "name": "Cantina Pierino",
+    "neighborhood": "Almagro",
+    "horarios_detallados": "Martes a Sábados de 12:00 a 15:30 y de 20:00 a 00:00; Domingos de 12:00 a 16:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 12,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:00",
+        "open_hour": 12,
+        "close_hour": 24
+      }
+    }
+  },
+  "almagro_heladeria_la_flor": {
+    "id": "almagro_heladeria_la_flor",
+    "name": "Heladería La Flor de Almagro",
+    "neighborhood": "Almagro",
+    "horarios_detallados": "Lunes a Jueves y Domingos de 12:00 a 00:30; Viernes y Sábados de 12:00 a 01:30 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 12,
+    "close_hour": 24.5,
+    "close_hour_weekend": 25.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:30",
+        "open_hour": 12,
+        "close_hour": 25.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:30",
+        "open_hour": 12,
+        "close_hour": 25.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      }
+    }
+  },
+  "villacrespo_cafe_san_bernardo": {
+    "id": "villacrespo_cafe_san_bernardo",
+    "name": "Café San Bernardo",
+    "neighborhood": "Villa Crespo",
+    "horarios_detallados": "Lunes a Jueves de 14:00 a 03:00; Viernes y Sábados de 14:00 a 05:00; Domingos de 18:00 a 03:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 14,
+    "close_hour": 27,
+    "close_hour_weekend": 29,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "03:00",
+        "open_hour": 14,
+        "close_hour": 27
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "03:00",
+        "open_hour": 14,
+        "close_hour": 27
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "03:00",
+        "open_hour": 14,
+        "close_hour": 27
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "03:00",
+        "open_hour": 14,
+        "close_hour": 27
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "05:00",
+        "open_hour": 14,
+        "close_hour": 29
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "05:00",
+        "open_hour": 14,
+        "close_hour": 29
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "03:00",
+        "open_hour": 14,
+        "close_hour": 27
+      }
+    }
+  },
+  "villacrespo_cafe_crespin": {
+    "id": "villacrespo_cafe_crespin",
+    "name": "Café Crespín",
+    "neighborhood": "Villa Crespo",
+    "horarios_detallados": "Martes a Domingos de 09:00 a 20:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 9,
+    "close_hour": 20,
+    "close_hour_weekend": 20,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "09:00",
+        "close": "20:00",
+        "open_hour": 9,
+        "close_hour": 20
+      }
+    }
+  },
+  "villacrespo_los_bohemios": {
+    "id": "villacrespo_los_bohemios",
+    "name": "Los Bohemios Restaurante",
+    "neighborhood": "Villa Crespo",
+    "horarios_detallados": "Lunes a Domingos de 12:00 a 16:00 y de 20:00 a 00:30 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 12,
+    "close_hour": 24.5,
+    "close_hour_weekend": 24.5,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "00:30",
+        "open_hour": 12,
+        "close_hour": 24.5
+      }
+    }
+  },
+  "villacrespo_heladeria_via_fontana": {
+    "id": "villacrespo_heladeria_via_fontana",
+    "name": "Heladería Vía Fontana",
+    "neighborhood": "Villa Crespo",
+    "horarios_detallados": "Lunes a Jueves y Domingos de 11:00 a 00:00; Viernes y Sábados de 11:00 a 01:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 11,
+    "close_hour": 24,
+    "close_hour_weekend": 25,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "00:00",
+        "open_hour": 11,
+        "close_hour": 24
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "00:00",
+        "open_hour": 11,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "00:00",
+        "open_hour": 11,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "00:00",
+        "open_hour": 11,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "01:00",
+        "open_hour": 11,
+        "close_hour": 25
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "01:00",
+        "open_hour": 11,
+        "close_hour": 25
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "11:00",
+        "close": "00:00",
+        "open_hour": 11,
+        "close_hour": 24
+      }
+    }
+  },
+  "palermo_el_destello": {
+    "id": "palermo_el_destello",
+    "name": "Bar El Destello",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Martes, Miércoles y Domingos de 19:30 a 01:00; Jueves de 19:30 a 02:00; Viernes y Sábados de 19:30 a 03:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 19.5,
+    "close_hour": 25,
+    "close_hour_weekend": 27,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "19:30",
+        "close": "01:00",
+        "open_hour": 19.5,
+        "close_hour": 25
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "19:30",
+        "close": "01:00",
+        "open_hour": 19.5,
+        "close_hour": 25
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "19:30",
+        "close": "01:00",
+        "open_hour": 19.5,
+        "close_hour": 25
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "19:30",
+        "close": "03:00",
+        "open_hour": 19.5,
+        "close_hour": 27
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "19:30",
+        "close": "03:00",
+        "open_hour": 19.5,
+        "close_hour": 27
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "19:30",
+        "close": "01:00",
+        "open_hour": 19.5,
+        "close_hour": 25
+      }
+    }
+  },
+  "palermo_jobs_arcade": {
+    "id": "palermo_jobs_arcade",
+    "name": "Jobs Arcade Palermo",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Martes, Miércoles y Domingos de 20:00 a 01:00; Jueves de 20:00 a 03:00; Viernes y Sábados de 20:00 a 04:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 20,
+    "close_hour": 25,
+    "close_hour_weekend": 28,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "01:00",
+        "open_hour": 20,
+        "close_hour": 25
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "01:00",
+        "open_hour": 20,
+        "close_hour": 25
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "01:00",
+        "open_hour": 20,
+        "close_hour": 25
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "04:00",
+        "open_hour": 20,
+        "close_hour": 28
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "04:00",
+        "open_hour": 20,
+        "close_hour": 28
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "20:00",
+        "close": "01:00",
+        "open_hour": 20,
+        "close_hour": 25
+      }
+    }
+  },
+  "palermo_geek_out": {
+    "id": "palermo_geek_out",
+    "name": "Geek Out! Club",
+    "neighborhood": "Palermo",
+    "horarios_detallados": "Martes a Jueves de 14:00 a 22:00; Viernes de 14:00 a 03:00; Sábados de 14:00 a 05:00 hs. Domingos y Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday"
+    ],
+    "open_hour": 14,
+    "close_hour": 22,
+    "close_hour_weekend": 27,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "22:00",
+        "open_hour": 14,
+        "close_hour": 22
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "22:00",
+        "open_hour": 14,
+        "close_hour": 22
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "22:00",
+        "open_hour": 14,
+        "close_hour": 22
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "03:00",
+        "open_hour": 14,
+        "close_hour": 27
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "03:00",
+        "open_hour": 14,
+        "close_hour": 27
+      },
+      "sunday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      }
+    }
+  },
+  "colegiales_paloko_bowling": {
+    "id": "colegiales_paloko_bowling",
+    "name": "Paloko Bowling Colegiales",
+    "neighborhood": "Colegiales",
+    "horarios_detallados": "Martes a Jueves y Domingos de 10:00 a 02:00; Viernes y Sábados de 10:00 a 04:00; Lunes de 16:00 a 02:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 26,
+    "close_hour_weekend": 28,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "02:00",
+        "open_hour": 10,
+        "close_hour": 26
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "02:00",
+        "open_hour": 10,
+        "close_hour": 26
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "02:00",
+        "open_hour": 10,
+        "close_hour": 26
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "02:00",
+        "open_hour": 10,
+        "close_hour": 26
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "04:00",
+        "open_hour": 10,
+        "close_hour": 28
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "04:00",
+        "open_hour": 10,
+        "close_hour": 28
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "02:00",
+        "open_hour": 10,
+        "close_hour": 26
+      }
+    }
+  },
+  "belgrano_memphis_bowling": {
+    "id": "belgrano_memphis_bowling",
+    "name": "Memphis Social Bowling",
+    "neighborhood": "Belgrano",
+    "horarios_detallados": "Lunes a Jueves y Domingos de 13:00 a 02:00; Viernes y Sábados de 13:00 a 04:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 13,
+    "close_hour": 26,
+    "close_hour_weekend": 28,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "13:00",
+        "close": "02:00",
+        "open_hour": 13,
+        "close_hour": 26
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "13:00",
+        "close": "02:00",
+        "open_hour": 13,
+        "close_hour": 26
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "13:00",
+        "close": "02:00",
+        "open_hour": 13,
+        "close_hour": 26
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "13:00",
+        "close": "02:00",
+        "open_hour": 13,
+        "close_hour": 26
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "13:00",
+        "close": "04:00",
+        "open_hour": 13,
+        "close_hour": 28
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "13:00",
+        "close": "04:00",
+        "open_hour": 13,
+        "close_hour": 28
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "13:00",
+        "close": "02:00",
+        "open_hour": 13,
+        "close_hour": 26
+      }
+    }
+  },
+  "sannicolas_bar_la_academia": {
+    "id": "sannicolas_bar_la_academia",
+    "name": "Bar La Academia",
+    "neighborhood": "San Nicolás",
+    "horarios_detallados": "Abierto las 24 horas del día, los 7 días de la semana, los 365 días del año ininterrumpidamente.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 0,
+    "close_hour": 24,
+    "close_hour_weekend": 24,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "00:00",
+        "close": "23:59",
+        "open_hour": 0,
+        "close_hour": 23.983333333333334
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "00:00",
+        "close": "23:59",
+        "open_hour": 0,
+        "close_hour": 23.983333333333334
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "00:00",
+        "close": "23:59",
+        "open_hour": 0,
+        "close_hour": 23.983333333333334
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "00:00",
+        "close": "23:59",
+        "open_hour": 0,
+        "close_hour": 23.983333333333334
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "00:00",
+        "close": "23:59",
+        "open_hour": 0,
+        "close_hour": 23.983333333333334
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "00:00",
+        "close": "23:59",
+        "open_hour": 0,
+        "close_hour": 23.983333333333334
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "00:00",
+        "close": "23:59",
+        "open_hour": 0,
+        "close_hour": 23.983333333333334
+      }
+    }
+  },
+  "sannicolas_full_suerte": {
+    "id": "sannicolas_full_suerte",
+    "name": "Full Suerte (Sucursal Obelisco)",
+    "neighborhood": "San Nicolás",
+    "horarios_detallados": "Domingos a Jueves de 10:00 a 00:00; Viernes de 10:00 a 01:00; Sábados de 10:00 a 02:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 10,
+    "close_hour": 24,
+    "close_hour_weekend": 26,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "02:00",
+        "open_hour": 10,
+        "close_hour": 26
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "02:00",
+        "open_hour": 10,
+        "close_hour": 26
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "10:00",
+        "close": "00:00",
+        "open_hour": 10,
+        "close_hour": 24
+      }
+    }
+  },
+  "almagro_acatraz": {
+    "id": "almagro_acatraz",
+    "name": "Acatraz Multiespacio",
+    "neighborhood": "Almagro",
+    "horarios_detallados": "Jueves de 17:00 a 02:00; Viernes de 17:00 a 04:00; Sábados de 17:00 a 05:00; Domingos de 17:00 a 02:00 hs. Lunes, Martes y Miércoles cerrado.",
+    "days_open": [
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 17,
+    "close_hour": 26,
+    "close_hour_weekend": 29,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "wednesday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "17:00",
+        "close": "02:00",
+        "open_hour": 17,
+        "close_hour": 26
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "17:00",
+        "close": "05:00",
+        "open_hour": 17,
+        "close_hour": 29
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "17:00",
+        "close": "05:00",
+        "open_hour": 17,
+        "close_hour": 29
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "17:00",
+        "close": "02:00",
+        "open_hour": 17,
+        "close_hour": 26
+      }
+    }
+  },
+  "villacrespo_chebonche": {
+    "id": "villacrespo_chebonche",
+    "name": "CheBonche Bar de Juegos",
+    "neighborhood": "Villa Crespo",
+    "horarios_detallados": "Domingos a Jueves de 17:00 a 01:00; Viernes de 17:00 a 03:00; Sábados de 12:00 a 03:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 17,
+    "close_hour": 25,
+    "close_hour_weekend": 27,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "17:00",
+        "close": "01:00",
+        "open_hour": 17,
+        "close_hour": 25
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "17:00",
+        "close": "01:00",
+        "open_hour": 17,
+        "close_hour": 25
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "17:00",
+        "close": "01:00",
+        "open_hour": 17,
+        "close_hour": 25
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "17:00",
+        "close": "01:00",
+        "open_hour": 17,
+        "close_hour": 25
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "03:00",
+        "open_hour": 12,
+        "close_hour": 27
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "03:00",
+        "open_hour": 12,
+        "close_hour": 27
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "01:00",
+        "open_hour": 12,
+        "close_hour": 25
+      }
+    }
+  },
+  "caballito_sobek_bowling": {
+    "id": "caballito_sobek_bowling",
+    "name": "Sobek Bowling & Drinks",
+    "neighborhood": "Caballito",
+    "horarios_detallados": "Martes a Domingos de 19:00 a 03:00 hs. Lunes cerrado.",
+    "days_open": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 19,
+    "close_hour": 27,
+    "close_hour_weekend": 27,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": true,
+        "open": null,
+        "close": null,
+        "open_hour": null,
+        "close_hour": null
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "03:00",
+        "open_hour": 19,
+        "close_hour": 27
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "03:00",
+        "open_hour": 19,
+        "close_hour": 27
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "03:00",
+        "open_hour": 19,
+        "close_hour": 27
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "03:00",
+        "open_hour": 19,
+        "close_hour": 27
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "03:00",
+        "open_hour": 19,
+        "close_hour": 27
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "19:00",
+        "close": "03:00",
+        "open_hour": 19,
+        "close_hour": 27
+      }
+    }
+  },
+  "chacarita_doda_ludoteca": {
+    "id": "chacarita_doda_ludoteca",
+    "name": "Doda Café & Ludoteca",
+    "neighborhood": "Chacarita",
+    "horarios_detallados": "Lunes a Jueves de 16:00 a 23:00; Viernes de 16:00 a 02:00; Sábados de 14:00 a 02:00; Domingos de 14:00 a 22:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 16,
+    "close_hour": 23,
+    "close_hour_weekend": 26,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "16:00",
+        "close": "23:00",
+        "open_hour": 16,
+        "close_hour": 23
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "16:00",
+        "close": "23:00",
+        "open_hour": 16,
+        "close_hour": 23
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "16:00",
+        "close": "23:00",
+        "open_hour": 16,
+        "close_hour": 23
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "16:00",
+        "close": "23:00",
+        "open_hour": 16,
+        "close_hour": 23
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "02:00",
+        "open_hour": 14,
+        "close_hour": 26
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "02:00",
+        "open_hour": 14,
+        "close_hour": 26
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "14:00",
+        "close": "23:00",
+        "open_hour": 14,
+        "close_hour": 23
+      }
+    }
+  },
+  "santelmo_the_gibraltar": {
+    "id": "santelmo_the_gibraltar",
+    "name": "The Gibraltar Pub",
+    "neighborhood": "San Telmo",
+    "horarios_detallados": "Lunes a Miércoles de 16:00 a 02:00; Jueves y Viernes de 16:00 a 04:00; Sábados de 12:00 a 04:00; Domingos de 12:00 a 02:00 hs.",
+    "days_open": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ],
+    "open_hour": 16,
+    "close_hour": 26,
+    "close_hour_weekend": 28,
+    "schedule_by_day": {
+      "monday": {
+        "is_closed": false,
+        "open": "16:00",
+        "close": "02:00",
+        "open_hour": 16,
+        "close_hour": 26
+      },
+      "tuesday": {
+        "is_closed": false,
+        "open": "16:00",
+        "close": "02:00",
+        "open_hour": 16,
+        "close_hour": 26
+      },
+      "wednesday": {
+        "is_closed": false,
+        "open": "16:00",
+        "close": "02:00",
+        "open_hour": 16,
+        "close_hour": 26
+      },
+      "thursday": {
+        "is_closed": false,
+        "open": "16:00",
+        "close": "02:00",
+        "open_hour": 16,
+        "close_hour": 26
+      },
+      "friday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "04:00",
+        "open_hour": 12,
+        "close_hour": 28
+      },
+      "saturday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "04:00",
+        "open_hour": 12,
+        "close_hour": 28
+      },
+      "sunday": {
+        "is_closed": false,
+        "open": "12:00",
+        "close": "02:00",
+        "open_hour": 12,
+        "close_hour": 26
+      }
+    }
+  }
+}

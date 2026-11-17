@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg-app: #E6ECE7;
+  --bg-card: #FFFFFF;
+  --bg-card-inner: #F2F6F3;
+  --border-card: #C5D2C9;
+  --border-subtle: #D8E3DC;
+  --text-main: #14241F;
+  --text-muted: #4B6056;
+  --accent-orange: #E06D28;
+  --accent-orange-hover: #C95B1D;
+  --accent-green: #14241F;
+  --header-bg: rgba(255, 255, 255, 0.95);
+  --tag-bg: #DCE6DF;
+  --tag-text: #14241F;
+  --icon-bg: #FFFFFF;
+  --sidebar-bg: #E6ECE7;
+}
+
+.dark {
+  --bg-app: #080D0B;
+  --bg-card: #182620;
+  --bg-card-inner: #101915;
+  --border-card: #2F493B;
+  --border-subtle: #20352A;
+  --text-main: #F8FAF9;
+  --text-muted: #A3B5AC;
+  --accent-orange: #F07E34;
+  --accent-orange-hover: #D96922;
+  --accent-green: #2B4E3E;
+  --header-bg: rgba(8, 13, 11, 0.95);
+  --tag-bg: #1A2B22;
+  --tag-text: #E1ECE6;
+  --icon-bg: #1B2B22;
+  --sidebar-bg: #0C1411;
+}
+
+@layer base {
+  body {
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+}
+
+.font-editorial {
+  font-family: 'DM Serif Display', Georgia, serif;
+}
+
+/* Clases utilitarias dinámicas del sistema Ronda */
+.ronda-canvas {
+  background-color: var(--bg-app);
+  color: var(--text-main);
+}
+.ronda-card {
+  background-color: var(--bg-card);
+  border-color: var(--border-card);
+}
+.ronda-card-inner {
+  background-color: var(--bg-card-inner);
+  border-color: var(--border-card);
+}
+.ronda-border {
+  border-color: var(--border-card);
+}
+.ronda-text {
+  color: var(--text-main);
+}
+.ronda-text-muted {
+  color: var(--text-muted);
+}
+.ronda-tag {
+  background-color: var(--tag-bg);
+  color: var(--tag-text);
+  border-color: var(--border-card);
+}
+.ronda-icon-box {
+  background-color: var(--icon-bg);
+  border-color: var(--border-card);
+}
+.ronda-sidebar {
+  background-color: var(--sidebar-bg);
+  border-color: var(--border-card);
+}
+.ronda-header {
+  background-color: var(--header-bg);
+  border-color: var(--border-card);
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 1.6s linear infinite;
+}
+
+/* ======================================================== */
+/* 1. EL LATIDO PORTEÑO (FÍSICA ELÁSTICA / SPRING COMPRESSION) */
+/* ======================================================== */
+.btn-latido {
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease;
+  will-change: transform;
+}
+.btn-latido:active {
+  transform: scale(0.96);
+}
+
+/* ======================================================== */
+/* 2. EL DESTELLO DORÉ (AURA ÁMBAR DIFUSA)                  */
+/* ======================================================== */
+.glow-dore {
+  box-shadow: 0 4px 22px -2px rgba(224, 109, 40, 0.42);
+  transition: box-shadow 0.25s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.glow-dore:hover {
+  box-shadow: 0 6px 28px 0px rgba(224, 109, 40, 0.62);
+}
+.glow-dore:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 14px -2px rgba(224, 109, 40, 0.32);
+}
+
+/* ======================================================== */
+/* 4. EL CHISPEO PORTEÑO (MICRO-PARTÍCULAS DORADAS)         */
+/* ======================================================== */
+@keyframes chispeo-burst {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-chispeo {
+  animation: chispeo-burst 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes particle-fly {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx, 10px), var(--ty, -10px)) scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-particle {
+  animation: particle-fly 0.35s ease-out forwards;
+}
+
+/* ======================================================== */
+/* 5. LEAFLET MAP & POPUP (SOPORTE ELEGANTE DARK / NOCHE)  */
+/* ======================================================== */
+.dark .leaflet-tile-pane {
+  filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(90%);
+}
+.dark .leaflet-container {
+  background-color: var(--bg-card-inner);
+}
+.dark .leaflet-popup-content-wrapper,
+.dark .leaflet-popup-tip {
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-card);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+}

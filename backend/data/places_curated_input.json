@@ -1,0 +1,972 @@
+[
+  {
+    "id": "santelmo_cafe_rivas",
+    "nombre": "Café Rivas",
+    "barrio": "San Telmo",
+    "tipo": "gastronomia",
+    "archivo_foto": "santelmo_cafe_rivas.jpg",
+    "resumen": "Bar Notable situado en la histórica esquina fundacional de 1580 (Estados Unidos y Balcarce). Casona de techos altos, marquesina de hierro forjado, ventanales de guillotina, boiserie clásica, barra extensa y entrepiso con piano que recrea el espíritu bohemio porteño.",
+    "medios_de_pago": "Efectivo, Tarjetas de Débito y Crédito (Visa, Mastercard), Mercado Pago / QR",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Mesas en la vereda histórica aptas con mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Opciones de ensaladas, pastas caseras, tartas y tapeo vegetariano",
+    "caracteristicas": [
+      "Bar Notable oficial de Buenos Aires",
+      "Esquina histórica fundacional (1580)",
+      "Cocina porteña y copetín tradicional",
+      "Coctelería clásica y vermut",
+      "Entrepiso con piano y música en vivo"
+    ]
+  },
+  {
+    "id": "santelmo_bar_britanico",
+    "nombre": "Bar Británico",
+    "barrio": "San Telmo",
+    "tipo": "gastronomia",
+    "archivo_foto": "santelmo_bar_britanico.jpg",
+    "resumen": "Café Notable fundado en 1928 frente al Parque Lezama. Histórico refugio de escritores (donde Ernesto Sabato escribió parte de 'Sobre héroes y tumbas') y vecinos bohemios, con ventanales de guillotina a la ochava y carpintería de roble original.",
+    "medios_de_pago": "Efectivo, Débito, Crédito, Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Mesas sobre la vereda frente a Parque Lezama",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Tostados clásicos de queso, ensaladas, pizzas y medialunas",
+    "caracteristicas": [
+      "Bar Notable oficial",
+      "Vistas abiertas al Parque Lezama",
+      "Rincón literario de Ernesto Sabato",
+      "Picadas tradicionales y vermut de sifón"
+    ]
+  },
+  {
+    "id": "santelmo_bar_el_federal",
+    "nombre": "Bar El Federal",
+    "barrio": "San Telmo",
+    "tipo": "gastronomia",
+    "archivo_foto": "santelmo_bar_el_federal.jpg",
+    "resumen": "Auténtico templo porteño abierto en 1864 como pulpería. Conserva su barra original de madera con arco de vitraux, piso en damero, fotos de época de Pugliese y Goyeneche, y centenarios sifones de vidrio.",
+    "medios_de_pago": "Efectivo, Débito, Crédito (Visa/Mastercard), Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Sector de vereda apto para asistir con mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Picadas vegetarianas, quesos seleccionados, tortillas y sándwiches",
+    "caracteristicas": [
+      "Uno de los bares más antiguos de CABA (1864)",
+      "Barra de madera tallada con vitraux original",
+      "Picadas emblemáticas y cerveza artesanal tirada",
+      "Sitio de Interés Cultural"
+    ]
+  },
+  {
+    "id": "santelmo_mercado",
+    "nombre": "Mercado de San Telmo",
+    "barrio": "San Telmo",
+    "tipo": "actividad_y_gastronomia",
+    "archivo_foto": "santelmo_mercado.jpg",
+    "resumen": "Inaugurado en 1897 con estructura de hierro de Juan Antonio Buschiazzo. Combina puestos históricos de frutas, verduras y antigüedades con un vibrante polo de gastronomía internacional, café de especialidad y comida al paso.",
+    "medios_de_pago": "Efectivo, Tarjetas de Débito y Crédito, Mercado Pago / QR (en la gran mayoría de puestos)",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Permitido ingresar con mascotas con correa por los pasillos principales",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Múltiples opciones vegetarianas en puestos de comida callejera, tapas, panes de masa madre y café",
+    "caracteristicas": [
+      "Monumento Histórico Nacional",
+      "Arquitectura de hierro del siglo XIX",
+      "Mezcla única de antigüedades y gastronomía global",
+      "Café de especialidad al paso"
+    ]
+  },
+  {
+    "id": "santelmo_mamba",
+    "nombre": "Museo de Arte Moderno (MAMBA)",
+    "barrio": "San Telmo",
+    "tipo": "actividad",
+    "archivo_foto": "santelmo_mamba.jpg",
+    "resumen": "Emblemático museo instalado en el antiguo edificio industrial de ladrillo a la vista de la tabacalera Piccardo. Alberga colecciones de vanguardia argentina e internacional de artes visuales, diseño y exposiciones dinámicas.",
+    "medios_de_pago": "Tarjetas de Débito, Crédito y medios electrónicos online (entradas en boletería o web oficial; miércoles entrada gratuita)",
+    "pet_friendly": false,
+    "pet_friendly_detalle": "No apto mascotas en salas de exhibición (únicamente perros de asistencia certificados)",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "La cafetería del museo ofrece bebidas vegetales y opciones vegetarianas",
+    "caracteristicas": [
+      "Edificio de patrimonio industrial restaurado",
+      "Colecciones de arte contemporáneo argentino",
+      "Tienda de diseño y café propio",
+      "Miércoles con ingreso libre y gratuito"
+    ]
+  },
+  {
+    "id": "santelmo_parque_lezama",
+    "nombre": "Parque Lezama",
+    "barrio": "San Telmo",
+    "tipo": "actividad",
+    "archivo_foto": "santelmo_parque_lezama.jpg",
+    "resumen": "Histórico parque sobre las antiguas barrancas al río, atribuido como probable sitio de la primera fundación de Pedro de Mendoza en 1536. Senderos con tipas centenarias, anfiteatro, monumentos y pérgolas con vista a la iglesia ortodoxa rusa.",
+    "medios_de_pago": "Espacio público de acceso libre y gratuito",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "100% Pet Friendly al aire libre, cuenta con canil vallado para perros",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Entorno ideal para picnic con opciones take-away de los bares vecinos",
+    "caracteristicas": [
+      "Espacio verde público con barranca histórica",
+      "Canil para mascotas y ferias artesanales de fin de semana",
+      "Entorno arquitectónico con casonas y la Iglesia Rusa",
+      "Glorieta y paseos escultóricos"
+    ]
+  },
+  {
+    "id": "santelmo_pulperia_quilapan",
+    "nombre": "Pulpería Quilapán",
+    "barrio": "San Telmo",
+    "tipo": "gastronomia",
+    "archivo_foto": "santelmo_pulperia_quilapan.jpg",
+    "resumen": "Ubicada en una casona colonial con partes de 1714, rescatada con rigurosa arqueología urbana. Funciona como almacén de ramos generales, bodegón de platos camperos y museo vivo, con su emblemático aljibe histórico en el patio central.",
+    "medios_de_pago": "Efectivo, Débito, Crédito, Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Patio interno colonial y vereda aptos para mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Guisos vegetarianos de estación, quesos artesanales, empanadas de verdura y ensaladas",
+    "caracteristicas": [
+      "Casona colonial histórica con aljibe auténtico",
+      "Bodegón criollo y almacén de ramos generales",
+      "Vinos de pequeños productores y vermut de grifo",
+      "Juegos tradicionales como el sapo"
+    ]
+  },
+  {
+    "id": "santelmo_la_brigada",
+    "nombre": "Parrilla La Brigada",
+    "barrio": "San Telmo",
+    "tipo": "gastronomia",
+    "archivo_foto": "santelmo_la_brigada.jpg",
+    "resumen": "Templo de la carne argentina creado por Hugo Echevarrieta. Mundialmente famosa por cortar la carne tierna con cuchara sopera, su imponente cava subterránea de vinos argentinos y sus paredes colmadas de camisetas históricas firmadas por Maradona y Messi.",
+    "medios_de_pago": "Efectivo, Tarjetas de Débito y Crédito (Visa, Mastercard, Amex)",
+    "pet_friendly": false,
+    "pet_friendly_detalle": "Salón interior tradicional no admite mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Provoletas crocantes, ensaladas completas, papas fritas y vegetales asados a la brasa",
+    "caracteristicas": [
+      "Parrilla de culto internacional",
+      "Corte de carne con cuchara",
+      "Museo vivo del fútbol con reliquias de colección",
+      "Cava subterránea excepcional de bodegas nacionales"
+    ]
+  },
+  {
+    "id": "santelmo_pasaje_defensa",
+    "nombre": "Pasaje de la Defensa (Casa de los Ezeiza)",
+    "barrio": "San Telmo",
+    "tipo": "actividad",
+    "archivo_foto": "santelmo_pasaje_defensa.jpg",
+    "resumen": "Soberbia casona señorial de dos plantas construida hacia 1880 para la familia Ezeiza. Posee sucesivos patios con columnas de hierro, pisos calcáreos y galerías altas que hoy albergan anticuarios, galerías de arte y tiendas de diseño.",
+    "medios_de_pago": "Acceso libre a los patios. Locales comerciales aceptan Efectivo, Tarjetas y Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Se permite recorrer las galerías y patios con mascotas con correa",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Opciones de cafetería y snacks en el patio",
+    "caracteristicas": [
+      "Arquitectura señorial neoclásica del siglo XIX",
+      "Patios sucesivos y galerías balconadas",
+      "Galería de antigüedades y objetos de colección",
+      "Uno de los pasajes históricos más fotografiados de San Telmo"
+    ]
+  },
+  {
+    "id": "santelmo_pasaje_san_lorenzo_casa_minima",
+    "nombre": "Pasaje San Lorenzo & La Casa Mínima",
+    "barrio": "San Telmo",
+    "tipo": "actividad",
+    "archivo_foto": "santelmo_pasaje_san_lorenzo_casa_minima.jpg",
+    "resumen": "Encantador pasaje adoquinado que alberga 'La Casa Mínima', con apenas 2,5 metros de ancho, famosa por ser la vivienda más angosta de Buenos Aires y estar vinculada históricamente a los libertos del siglo XIX.",
+    "medios_de_pago": "Acceso libre en la calle. Visitas guiadas al interior (Zanjón de Granados) admiten tarjetas y web",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Pasaje público al aire libre 100% pet friendly",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Circuito de paseo al aire libre",
+    "caracteristicas": [
+      "La fachada más angosta de la ciudad (2,50 m)",
+      "Calle empedrada con atmósfera colonial intacta",
+      "Punto neurálgico del complejo arqueológico El Zanjón",
+      "Hito fotográfico obligado del Casco Histórico"
+    ]
+  },
+  {
+    "id": "palermo_lab_cafe",
+    "nombre": "LAB Tostadores de Café",
+    "barrio": "Palermo",
+    "tipo": "gastronomia",
+    "archivo_foto": "palermo_lab_cafe.jpg",
+    "resumen": "Templo pionero de la tercera ola de café en Buenos Aires con máquinas de tueste a la vista. Espacio de estética industrial dedicado al desarrollo de micro-lotes de alta calidad, métodos de filtrado y pastelería artesanal.",
+    "medios_de_pago": "Efectivo, Tarjetas de Débito y Crédito (Visa, Mastercard, Amex, Cabal), Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Muy bien recibido por dueños de mascotas, con mesas en la vereda",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Tostones vegetarianos, cookies, croissants, rolls y leches vegetales (avena, almendras)",
+    "caracteristicas": [
+      "Micro-tostaduría de café de especialidad a la vista",
+      "Métodos de filtrado especiales (V60, Chemex, Aeropress)",
+      "Granos de origen seleccionados para llevar",
+      "Estética industrial y atmósfera para concentrarse"
+    ]
+  },
+  {
+    "id": "palermo_cuervo_cafe",
+    "nombre": "Cuervo Café",
+    "barrio": "Palermo",
+    "tipo": "gastronomia",
+    "archivo_foto": "palermo_cuervo_cafe.jpg",
+    "resumen": "Cafetería urbana de culto con sello relajado en pleno Palermo Soho. Sus bancos de madera sobre la vereda al sol son una postal clásica de la movida joven que busca excelente espresso y opciones de brunch.",
+    "medios_de_pago": "Efectivo, Débito, Crédito, Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Pet Friendly destacado, dispone de recipientes de agua en vereda para perros",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Tostón de palta, sándwiches vegetarianos en pan de masa madre, alfajores veganos/vegetarianos",
+    "caracteristicas": [
+      "Bancos en la vereda bajo el sol palermitano",
+      "Café de especialidad de tueste propio",
+      "Propuesta de brunch y pastelería casera",
+      "Ambiente joven y relajado"
+    ]
+  },
+  {
+    "id": "palermo_libros_pasaje",
+    "nombre": "Libros del Pasaje",
+    "barrio": "Palermo",
+    "tipo": "actividad_y_gastronomia",
+    "archivo_foto": "palermo_libros_pasaje.jpg",
+    "resumen": "Prestigiosa librería independiente instalada en una casona de techos altos abovedados. Integra estanterías repletas de literatura con un patio cubierto central donde funciona un acogedor café ideal para leer.",
+    "medios_de_pago": "Efectivo, Débito, Crédito (Visa, Mastercard), Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Permitido ingresar con mascotas pequeñas tranquilas o con correa en el café",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Tartas vegetarianas, sándwiches de vegetales asados, pastelería dulce y café con leches vegetales",
+    "caracteristicas": [
+      "Café-librería emblemático de Palermo",
+      "Patio central techado con luz natural y plantas",
+      "Curaduría editorial impecable y presentaciones culturales",
+      "Espacio calmo para lectura y trabajo ligero"
+    ]
+  },
+  {
+    "id": "palermo_jardin_botanico",
+    "nombre": "Jardín Botánico Carlos Thays",
+    "barrio": "Palermo",
+    "tipo": "actividad",
+    "archivo_foto": "palermo_jardin_botanico.jpg",
+    "resumen": "Monumento Histórico Nacional diseñado por Carlos Thays en más de 7 hectáreas. Reúne más de 1.500 especies vegetales, senderos de sombra, esculturas de mármol y un famoso invernáculo Art Nouveau traído de Francia en 1897.",
+    "medios_de_pago": "Entrada libre y gratuita",
+    "pet_friendly": false,
+    "pet_friendly_detalle": "No se permite el ingreso de mascotas para proteger la fauna botánica y aves del predio",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Paseo al aire libre, sin venta gastronómica interna (permitido llevar viandas)",
+    "caracteristicas": [
+      "Invernáculo Art Nouveau de 1897 traído de París",
+      "Más de 1.500 especies arbóreas y jardines temáticos (romano, francés, oriental)",
+      "Patrimonio histórico y oasis verde de silencio",
+      "Entrada gratuita"
+    ]
+  },
+  {
+    "id": "palermo_rosedal",
+    "nombre": "El Rosedal de Palermo",
+    "barrio": "Palermo",
+    "tipo": "actividad",
+    "archivo_foto": "palermo_rosedal.jpg",
+    "resumen": "Parque diseñado por Benito Carrasco en el Parque 3 de Febrero. Cuenta con una colección de más de 18.000 rosales, un puente griego de madera sobre el lago, el Jardín de los Poetas y una gran pérgola de estilo romántico.",
+    "medios_de_pago": "Entrada libre y gratuita",
+    "pet_friendly": false,
+    "pet_friendly_detalle": "No se permite el ingreso con perros dentro del sector enrejado de las rosas; sí en los alrededores del lago",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Ideal para caminatas y descanso al aire libre",
+    "caracteristicas": [
+      "Colección viva de más de 18.000 rosales premiada internacionalmente",
+      "Puente blanco sobre el lago y alquiler de botes a pedal",
+      "Jardín de los Poetas con bustos de Dante, Borges, García Lorca y Shakespeare",
+      "Pérgola monumental y glorietas para fotos"
+    ]
+  },
+  {
+    "id": "palermo_nino_gordo",
+    "nombre": "Niño Gordo",
+    "barrio": "Palermo",
+    "tipo": "gastronomia",
+    "archivo_foto": "palermo_nino_gordo.jpg",
+    "resumen": "Parrilla asiática de vanguardia creada por Pedro Peña y Germán Sitz (incluida en Latin America's 50 Best). Sobresale por su impactante salón iluminado por decenas de faroles chinos rojos, peceras, estética pop y barra con cocina a la vista.",
+    "medios_de_pago": "Efectivo, Tarjetas de Débito y Crédito (Visa, Mastercard, Amex), Mercado Pago",
+    "pet_friendly": false,
+    "pet_friendly_detalle": "Salón interior y barra cerrados, no apto mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Platos a base de hongos shiitake, edamame especiado, arroces y ensaladas asiáticas",
+    "caracteristicas": [
+      "Parrilla asiática de autor premiada en 50 Best",
+      "Famoso Katsu Sando de bife de chorizo y tataki de lomo",
+      "Diseño inmersivo con lámparas rojas y peceras",
+      "Coctelería de autor innovadora"
+    ]
+  },
+  {
+    "id": "palermo_tres_monos",
+    "nombre": "Tres Monos Bar",
+    "barrio": "Palermo",
+    "tipo": "gastronomia",
+    "archivo_foto": "palermo_tres_monos.jpg",
+    "resumen": "Bar de coctelería de culto consolidado entre los mejores bares del mundo (Top 10 en The World's 50 Best Bars). Propuesta descontracturada con espíritu punk, luces de neón rosa, servicio cercano y tragos con destilados e ingredientes locales.",
+    "medios_de_pago": "Efectivo, Débito, Crédito, Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Sector exterior en vereda apto para asistir con perros",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Opciones de picoteo vegetarianas y coctelería 100% personalizable",
+    "caracteristicas": [
+      "Consagrado en The World's 50 Best Bars",
+      "Coctelería de autor con insumos autóctonos y sustentables",
+      "Ambiente informal con banda sonora de rock y punk",
+      "Laboratorio propio de destilados y fermentos"
+    ]
+  },
+  {
+    "id": "palermo_bar_878",
+    "nombre": "Bar 878",
+    "barrio": "Palermo",
+    "tipo": "gastronomia",
+    "archivo_foto": "palermo_bar_878.jpg",
+    "resumen": "Pionero indiscutido del circuito speakeasy porteño, oculto tras una puerta de madera maciza sin cartel en Thames. Salón tenue con paredes de ladrillo visto, una barra monumental con más de 100 etiquetas de whisky y cocina porteña nocturna.",
+    "medios_de_pago": "Efectivo, Débito, Crédito (Visa, Mastercard, Amex), Mercado Pago",
+    "pet_friendly": false,
+    "pet_friendly_detalle": "Ambiente cerrado y oscuro no apto para mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Tapeo vegetariano, buñuelos de acelga, quesos artesanales y pastas",
+    "caracteristicas": [
+      "Clásico bar a puertas cerradas con puerta histórica",
+      "Colección magistral de whiskies y vinos argentinos",
+      "Cocina porteña de trasnoche hasta altas horas",
+      "Atmósfera íntima y con luz de velas"
+    ]
+  },
+  {
+    "id": "palermo_obrador_florida",
+    "nombre": "Obrador Florida",
+    "barrio": "Palermo",
+    "tipo": "gastronomia",
+    "archivo_foto": "palermo_obrador_florida.jpg",
+    "resumen": "Heladería de alta cocina botánica creada por Mercedes Román en Soler. Elabora helados de estación a partir de frutas agroecológicas reales, flores, raíces, granos de cacao seleccionados y hierbas nativas, sin aditivos ni pastas industriales.",
+    "medios_de_pago": "Efectivo, Débito, Crédito, Mercado Pago / QR",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Atención hacia la vereda, 100% pet friendly para pedir con tu mascota",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "100% apto vegetarianos y con amplia oferta de helados veganos a base de agua o leches de frutos secos",
+    "caracteristicas": [
+      "Helados botánicos con frutas reales de estación",
+      "Cucuruchos de masa artesanal horneados a diario",
+      "Sabores disruptivos (higo, sauco, cedrón, chocolate de origen)",
+      "Producción agroecológica y trazable"
+    ]
+  },
+  {
+    "id": "palermo_plaza_cortazar",
+    "nombre": "Plaza Cortázar (Serrano) & Calles de Diseño",
+    "barrio": "Palermo",
+    "tipo": "actividad_y_gastronomia",
+    "archivo_foto": "palermo_plaza_cortazar.jpg",
+    "resumen": "El epicentro bohemio de Palermo Soho. Durante el día congrega ferias de diseño independiente y creadores textiles; al atardecer y de noche se transforma en el núcleo de bares al aire libre, terrazas cerveceras y arte callejero.",
+    "medios_de_pago": "Acceso libre a la plaza. Los bares y ferias admiten Efectivo, Tarjetas y Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Plaza y veredas 100% pet friendly con gran concurrencia canina",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Abundancia de opciones vegetarianas y veganas en los locales del contorno",
+    "caracteristicas": [
+      "Corazón social y peatonal de Palermo Soho",
+      "Feria de diseño de indumentaria y accesorios",
+      "Múltiples terrazas y cervecerías alrededor de la rotonda",
+      "Epicentro nocturno y de encuentro joven"
+    ]
+  },
+  {
+    "id": "palermo_jardin_japones",
+    "nombre": "Jardín Japonés de Buenos Aires",
+    "barrio": "Palermo",
+    "tipo": "actividad_y_gastronomia",
+    "archivo_foto": "palermo_jardin_japones.jpg",
+    "resumen": "El jardín de estilo japonés más grande fuera de Japón, inaugurado en 1967. Cuenta con lagos poblados de peces carpa koi, puentes tradicionales curvos de madera bermellón, bonsáis milenarios, casa de té y restaurante de sushi.",
+    "medios_de_pago": "Efectivo, Tarjetas de Débito y Crédito en boletería o compra web online",
+    "pet_friendly": false,
+    "pet_friendly_detalle": "No se permite el ingreso de mascotas para cuidar el hábitat de los peces y vegetación japonesa",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "La casa de té y el restaurante ofrecen rolls vegetarianos, tofu, fideos ramen vegetales y dulces tradicionales wagashi",
+    "caracteristicas": [
+      "Puente de Dios (Taiko Bashi) y Puente Zigzag",
+      "Alimentación de carpas Koi en los estanques",
+      "Vivero de bonsáis y cerezos sakura en flor",
+      "Ceremonia del té y gastronomía nipona"
+    ]
+  },
+  {
+    "id": "recoleta_ateneo_splendid",
+    "nombre": "El Ateneo Grand Splendid",
+    "barrio": "Recoleta",
+    "tipo": "actividad_y_gastronomia",
+    "archivo_foto": "recoleta_ateneo_splendid.jpg",
+    "resumen": "Calificada como la librería más hermosa del mundo por National Geographic. Ocupa el antiguo teatro Grand Splendid de 1919 conservando su cúpula pintada al óleo por Nazareno Orlandi, palcos con balcones dorados y el escenario transformado en café.",
+    "medios_de_pago": "Efectivo, Débito, Crédito (Visa, Mastercard, Amex), Mercado Pago",
+    "pet_friendly": false,
+    "pet_friendly_detalle": "No se permite el ingreso de mascotas al interior de la librería por preservación del patrimonio",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "El café del escenario cuenta con café, medialunas, tartas vegetarianas y pastelería",
+    "caracteristicas": [
+      "Antiguo teatro de 1919 preservado intacto",
+      "Cúpula con frescos alegóricos a la paz de la Primera Guerra Mundial",
+      "Café sobre el escenario original tras el telón de terciopelo",
+      "Palcos convertidos en salas de lectura privada"
+    ]
+  },
+  {
+    "id": "recoleta_bellas_artes",
+    "nombre": "Museo Nacional de Bellas Artes (MNBA)",
+    "barrio": "Recoleta",
+    "tipo": "actividad",
+    "archivo_foto": "recoleta_bellas_artes.jpg",
+    "resumen": "El museo de arte más importante de Argentina con más de 12.000 piezas. Exhibe obras maestras universales de Goya, Rembrandt, Van Gogh, Monet, Degas, Rodin y la colección pública de arte argentino más vasta (Quinquela Martín, Fader, Spilimbergo).",
+    "medios_de_pago": "Entrada libre y gratuita para residentes argentinos y extranjeros",
+    "pet_friendly": false,
+    "pet_friendly_detalle": "No se admiten animales (excepto perros guía)",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Espacio cultural sin comedor interno; cafeterías cercanas en el parque",
+    "caracteristicas": [
+      "Mayor patrimonio artístico público de Sudamérica",
+      "Obras originales impresionistas y renacentistas",
+      "Entrada gratuita permanente",
+      "Fachada monumental neoclásica remodelada por Alejandro Bustillo"
+    ]
+  },
+  {
+    "id": "recoleta_la_biela",
+    "nombre": "La Biela",
+    "barrio": "Recoleta",
+    "tipo": "gastronomia",
+    "archivo_foto": "recoleta_la_biela.jpg",
+    "resumen": "Mítico Bar Notable frente a Plaza Francia y bajo la sombra del centenario gomero de la Recoleta. Punto de reunión histórico de corredores de autos (Fangio), escritores (Borges y Bioy Casares, cuyas estatuas te reciben en una mesa) y personalidades internacionales.",
+    "medios_de_pago": "Efectivo, Débito, Crédito (Visa, Mastercard, Amex), Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Su enorme terraza al aire libre bajo los árboles es 100% pet friendly",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Pastas, ensaladas completas, tostados en pan de miga o pebete, pizzas y tartas",
+    "caracteristicas": [
+      "Bar Notable con mesas junto a las estatuas de Borges y Bioy Casares",
+      "Terraza arbolada frente a Plaza Francia y la Iglesia del Pilar",
+      "Historia del automovilismo con recuerdos y bielas de carrera",
+      "Café con medialunas tradicional porteño"
+    ]
+  },
+  {
+    "id": "recoleta_ccr",
+    "nombre": "Centro Cultural Recoleta (CCR)",
+    "barrio": "Recoleta",
+    "tipo": "actividad",
+    "archivo_foto": "recoleta_ccr.jpg",
+    "resumen": "Espacio cultural de referencia juvenil y de vanguardia que funciona en los claustros de un antiguo convento franciscano del siglo XVIII. Alberga patios de encuentro, muestras de artes visuales, terrazas con música, salas de dibujo y batallas de freestyle.",
+    "medios_de_pago": "Entrada general libre y gratuita; actividades especiales con reserva web previa",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Los patios descubiertos y terrazas permiten el ingreso con mascotas con correa",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "La cafetería del patio ofrece opciones vegetarianas, licuados y pastelería",
+    "caracteristicas": [
+      "Patios coloniales históricos intervenidos con arte urbano",
+      "Espacio de coworking público y salas de lectura",
+      "Terrazas con vista a Plaza Francia y recitales al aire libre",
+      "Agenda dinámica de danza, artes visuales y música joven"
+    ]
+  },
+  {
+    "id": "recoleta_cumana",
+    "nombre": "Cumaná",
+    "barrio": "Recoleta",
+    "tipo": "gastronomia",
+    "archivo_foto": "recoleta_cumana.jpg",
+    "resumen": "Clásico restaurante de cocina autóctona y regional del Noroeste argentino en pleno Recoleta. Famoso por su horno de barro a la vista, cazuelas de barro humeantes servidas con cuchara de madera, empanadas salteñas y mesas comunitarias con manteles de papel para dibujar con crayones.",
+    "medios_de_pago": "Efectivo, Débito y Mercado Pago",
+    "pet_friendly": false,
+    "pet_friendly_detalle": "Salón interior acogedor, no dispone de mesas de vereda habituales",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Locro vegetariano de calabaza y maíz, pastel de choclo, cazuela de vegetales al barro, empanadas de queso y humita en chala",
+    "caracteristicas": [
+      "Cocina criolla al horno de barro",
+      "Empanadas norteñas al corte y humita en chala",
+      "Crayones para dibujar en los manteles de papel mientras esperás",
+      "Excelente relación precio-calidad en Recoleta"
+    ]
+  },
+  {
+    "id": "recoleta_plaza_francia",
+    "nombre": "Plaza Francia & Cementerio de la Recoleta",
+    "barrio": "Recoleta",
+    "tipo": "actividad",
+    "archivo_foto": "recoleta_plaza_francia.jpg",
+    "resumen": "El conjunto paisajístico y patrimonial más famoso de Recoleta. Plaza Francia ofrece lomadas verdes y una histórica feria de artesanos los fines de semana, mientras que el Cementerio es un museo al aire libre con bóvedas neoclásicas y la tumba de Eva Perón.",
+    "medios_de_pago": "Plaza libre. Cementerio con entrada arancelada para turistas en boletería o web (gratuita para residentes argentinos con DNI)",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Plaza Francia es 100% pet friendly; en el interior del Cementerio no se admiten mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Entorno verde ideal para picnic con puestos de jugos naturales y snacks",
+    "caracteristicas": [
+      "Mausoleos monumentales de mármol y bronce con valor artístico mundial",
+      "Tumba histórica de Evita Perón",
+      "Feria artesanal tradicional de fines de semana",
+      "Monumento a Francia y lomadas arboladas"
+    ]
+  },
+  {
+    "id": "recoleta_duhau_patio",
+    "nombre": "Los Salones del Piano Nobile & Jardín del Palacio Duhau",
+    "barrio": "Recoleta",
+    "tipo": "gastronomia",
+    "archivo_foto": "recoleta_duhau_patio.jpg",
+    "resumen": "Palacio aristocrático de inspiración francesa neoclásica de 1934 sobre la distinguida Avenida Alvear (Park Hyatt). Sus salones del Piano Nobile y sus terrazas balconean sobre un magnífico jardín aterrazado con fuentes, donde se sirve uno de los servicios de té de la tarde más sofisticados de la ciudad.",
+    "medios_de_pago": "Efectivo, Tarjetas de Crédito internacionales (Visa, Mastercard, Amex), Débito",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "El hotel es pet friendly de lujo; se admiten mascotas en las terrazas exteriores del jardín",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Servicio de 'Afternoon Tea' con sandwiches vegetarianos refinados, scones y pastelería de autor",
+    "caracteristicas": [
+      "Palacio Belle Époque francés de 1934",
+      "Jardines aterrazados privados con fuentes y magnolias centenarias",
+      "Servicio de té de la tarde y pastelería francesa de alta gama",
+      "Paseo de arte subterráneo que conecta ambos edificios"
+    ]
+  },
+  {
+    "id": "recoleta_floralis_generica_parque_thays",
+    "nombre": "Floralis Genérica & Parque Thays",
+    "barrio": "Recoleta",
+    "tipo": "actividad",
+    "archivo_foto": "recoleta_floralis_generica_parque_thays.jpg",
+    "resumen": "Monumento escultórico de 20 metros de altura en acero inoxidable y aluminio donado por el arquitecto Eduardo Catalano. Emplazada en un estanque reflectante en la Plaza de las Naciones Unidas, sus pétalos se abren y cierran con la luz solar, junto a las amplias lomas verdes del Parque Thays.",
+    "medios_de_pago": "Acceso libre y gratuito",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "100% Pet Friendly al aire libre, parque ideal para pasear con perros",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Parque abierto para picnic",
+    "caracteristicas": [
+      "Escultura móvil gigante de acero inoxidable reflectante",
+      "Espejo de agua perimetral y lomadas verdes",
+      "Cercanía a la Facultad de Derecho y el puente peatonal",
+      "Punto fotográfico icónico del skyline de Buenos Aires"
+    ]
+  },
+  {
+    "id": "recoleta_presidente_bar",
+    "nombre": "Presidente Bar",
+    "barrio": "Recoleta",
+    "tipo": "gastronomia",
+    "archivo_foto": "recoleta_presidente_bar.jpg",
+    "resumen": "Casona señorial de época sobre la elegante Avenida Quintana, posicionada frecuentemente en The World's 50 Best Bars. Dirigida por el bartender Seba García ('El Cantinero'), destaca por su majestuosa barra de madera, un salón biblioteca oculto y cócteles impecables servidos en cristalería de época.",
+    "medios_de_pago": "Efectivo, Débito, Crédito (Visa, Mastercard, Amex), Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Mesas del jardín de invierno y vereda aptas para mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Tapeo gourmet vegetariano: tiraditos vegetarianos, croquetas de hongos y quesos seleccionados",
+    "caracteristicas": [
+      "Clasificado en The World's 50 Best Bars",
+      "Barra señorial clásica y salón oculto tras la biblioteca",
+      "Coctelería de autor encabezada por Seba García",
+      "Jardín de invierno y ambientación Belle Époque"
+    ]
+  },
+  {
+    "id": "recoleta_milion_bar",
+    "nombre": "Milión",
+    "barrio": "Recoleta",
+    "tipo": "gastronomia",
+    "archivo_foto": "recoleta_milion_bar.jpg",
+    "resumen": "Exquisita mansión señorial de 1913 de estilo francés con jardín arbolado escalonado en el fondo. Subir su imponente escalinata de mármol da acceso a diferentes salones temáticos con chimeneas, arte contemporáneo y barras de cócteles clásicos y cocina de autor.",
+    "medios_de_pago": "Efectivo, Débito, Crédito (Visa, Mastercard, Amex), Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "El jardín al aire libre en planta baja admite mascotas con correa",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Risotto de hongos, pastas artesanales, ensaladas de estación y tapas vegetarianas",
+    "caracteristicas": [
+      "Palacete de 1913 de arquitectura señorial",
+      "Jardín trasero escalonado con iluminación nocturna mágica",
+      "Escalinata monumental de mármol y salones con techos altos",
+      "Coctelería clásica y tapas en la casona"
+    ]
+  },
+  {
+    "id": "chacarita_sifon_soderia",
+    "nombre": "Sifón Sodería",
+    "barrio": "Chacarita",
+    "tipo": "gastronomia",
+    "archivo_foto": "chacarita_sifon_soderia.jpg",
+    "resumen": "Homenaje lúdico y contemporáneo a la cultura porteña de la soda y el sifón en una casa chorizo reciclada. Cuenta con una gran barra circular central, heladeras repletas de sifones de colores, patio descubierto con reposeras y comidas a la plancha para picar.",
+    "medios_de_pago": "Efectivo, Débito, Crédito, Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "El patio central interno descubierto y las mesas de vereda son muy pet friendly",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Queso a la chapa con miel, buñuelos de espinaca, papas bravas, empanadas de humita y verduras asadas",
+    "caracteristicas": [
+      "Sifones de soda clásicos de vidrio en cada mesa",
+      "Tragos servidos con vermut y soda tirada",
+      "Platos y raciones a la plancha de hierro",
+      "Patio central estilo PH con onda comunitaria"
+    ]
+  },
+  {
+    "id": "chacarita_la_fuerza",
+    "nombre": "Bar La Fuerza",
+    "barrio": "Chacarita",
+    "tipo": "gastronomia",
+    "archivo_foto": "chacarita_la_fuerza.jpg",
+    "resumen": "Esquina fundacional del renacimiento del vermut en Buenos Aires (elegido por la revista TIME entre los 100 mejores lugares del mundo). Producen su propio vermut con hierbas al pie de los Andes y lo sirven de grifo con soda fría, acompañado de clásicos de cantina y vereda popular.",
+    "medios_de_pago": "Efectivo, Débito, Crédito, Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Las amplias veredas en la ochava son un clásico de encuentro con perros",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Tortilla de papas babe, buñuelos de verdura con alioli, fainá rellena y conservas caseras",
+    "caracteristicas": [
+      "Vermut de grifo de elaboración propia (rojo y blanco)",
+      "Reconocido internacionalmente por la revista TIME",
+      "Vereda festiva sobre la Avenida Dorrego",
+      "Cocina de cantina porteña renovada"
+    ]
+  },
+  {
+    "id": "chacarita_georgies",
+    "nombre": "Georgie's",
+    "barrio": "Chacarita",
+    "tipo": "gastronomia",
+    "archivo_foto": "chacarita_georgies.jpg",
+    "resumen": "Taquería de culto de escala pequeña e informal en una esquina tranquila de Chacarita. Destaca por elaborar sus propias tortillas de maíz nixtamalizado in-house desde cero y combinarlas con rellenos creativos de carnes braseadas y verduras orgánicas.",
+    "medios_de_pago": "Efectivo, Débito y Mercado Pago / QR",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Mesas sobre la vereda aptas para comer con tu perro",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Tacos vegetarianos de tofu marinado, hongos asados, frijoles refritos y salsas artesanales",
+    "caracteristicas": [
+      "Tortillas de maíz nixtamalizado hechas en el día",
+      "Tacos de autor y salsas mexicanas picantes caseras",
+      "Ambiente informal y de culto en el barrio",
+      "Cervezas frescas y aguas frescas naturales"
+    ]
+  },
+  {
+    "id": "chacarita_donnet",
+    "nombre": "Donnet",
+    "barrio": "Chacarita",
+    "tipo": "gastronomia",
+    "archivo_foto": "chacarita_donnet.jpg",
+    "resumen": "Restaurante bohemio disruptivo creado por Manuela Donnet, enfocado casi con devoción en la cocina a base de hongos y fermentos vivos. En una antigua esquina reciclada, ofrece platos raw y cocciones lentas que sorprenden a comensales de todo el mundo.",
+    "medios_de_pago": "Efectivo, Débito y Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Mesas exteriores y ambiente relajado apto para mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "100% vegetariano, vegano y gluten free (todo el menú)",
+    "caracteristicas": [
+      "Carta 100% vegana y basada en hongos silvestres y cultivados",
+      "Laboratorio de fermentos caseros (kéfir, kombucha)",
+      "El famoso matambrito de gírgolas con limón",
+      "Espacio bohemio con mesas vintage y velas"
+    ]
+  },
+  {
+    "id": "chacarita_falena",
+    "nombre": "Falena Librería & Cava",
+    "barrio": "Chacarita",
+    "tipo": "actividad_y_gastronomia",
+    "archivo_foto": "chacarita_falena.jpg",
+    "resumen": "Librería secreta a puertas cerradas donde se debe tocar el timbre para ingresar. Casona de ladrillos a la vista con hogar a leña, sillones de terciopelo, patio con plantas, música de vinilo y una cava de vinos seleccionados y café de especialidad.",
+    "medios_de_pago": "Efectivo, Débito, Crédito y Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Mascotas tranquilas con correa son bienvenidas en el patio interno",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Vinos naturales, tés de hebras, café de especialidad y pastelería",
+    "caracteristicas": [
+      "Librería a puertas cerradas (se ingresa tocando timbre)",
+      "Chimenea encendida en invierno y patio verde en verano",
+      "Cava con etiquetas de vinos independientes",
+      "Atmósfera de living hogareño para lectores"
+    ]
+  },
+  {
+    "id": "chacarita_parque_los_andes",
+    "nombre": "Parque Los Andes",
+    "barrio": "Chacarita",
+    "tipo": "actividad",
+    "archivo_foto": "chacarita_parque_los_andes.jpg",
+    "resumen": "El gran pulmón verde de Chacarita, con amplias arboledas de tipas y plátanos centenarios. Los fines de semana se celebra una de las ferias de antigüedades, ropa vintage y curiosidades más grandes y genuinas de la ciudad.",
+    "medios_de_pago": "Acceso libre y gratuito. En la feria: efectivo y Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "100% Pet Friendly al aire libre, cuenta con canil para perros",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Puestos de jugos, frutas y opciones vegetarianas en ferias y locales adyacentes",
+    "caracteristicas": [
+      "Gran parque arbolado de dos tramos",
+      "Feria de antigüedades y objetos retro de fin de semana",
+      "Canil canino y sector de juegos infantiles",
+      "Punto de encuentro vecinal al salir del subte B"
+    ]
+  },
+  {
+    "id": "chacarita_circuito_murales_parque",
+    "nombre": "Paseo de Murales & Veredas de Chacarita",
+    "barrio": "Chacarita",
+    "tipo": "actividad",
+    "archivo_foto": "chacarita_circuito_murales_parque.jpg",
+    "resumen": "Recorrido a cielo abierto por las calles arboladas de Chacarita (Charlone, Newbery, Santos Dumont) donde fachadas de talleres mecánicos y casas bajas conviven con impactantes murales de artistas urbanos contemporáneos de renombre.",
+    "medios_de_pago": "Paseo urbano libre y gratuito",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "100% Pet Friendly para pasear caminando con perro",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Paseo urbano con múltiples cafés y paradas gastronómicas veggies en el camino",
+    "caracteristicas": [
+      "Circuito de arte callejero y graffiti de autor",
+      "Veredas anchas y calles empedradas tranquilas",
+      "Conexión con el nuevo polo gastronómico del barrio",
+      "Paseo fotográfico imperdible"
+    ]
+  },
+  {
+    "id": "colegiales_anafe",
+    "nombre": "Anafe",
+    "barrio": "Colegiales",
+    "tipo": "gastronomia",
+    "archivo_foto": "colegiales_anafe.jpg",
+    "resumen": "Restaurante de 'platitos' contemporáneos galardonado con el Bib Gourmand de la Guía Michelin y parte de 50 Best Discovery. Creado por Micaela Najmanovich y Nicolás Arcucci, fusiona raíces judías, mediterráneas y asiáticas en un salón moderno y luminoso.",
+    "medios_de_pago": "Efectivo, Débito, Crédito (Visa, Mastercard, Amex), Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "La terraza exterior y mesas al aire libre reciben mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Excepcional carta de vegetales de estación: paté de hongos con financier, labneh con zaatar y ensaladas tibias",
+    "caracteristicas": [
+      "Recomendado por la Guía Michelin (Bib Gourmand)",
+      "Formato de platitos para compartir al centro de la mesa",
+      "Carta de vinos de baja intervención y naturales",
+      "Salón luminoso con cocina abierta a la vista"
+    ]
+  },
+  {
+    "id": "colegiales_strange_brewing",
+    "nombre": "Strange Brewing",
+    "barrio": "Colegiales",
+    "tipo": "gastronomia",
+    "archivo_foto": "colegiales_strange_brewing.jpg",
+    "resumen": "Brewpub de culto fundado por cerveceros noruegos y argentinos en un antiguo taller de Colegiales. Referente sudamericano en cervezas ácidas (sours), IPAs complejas y lúpulos frescos, con una gran barra flanqueada por libros y fábrica de tanques a la vista.",
+    "medios_de_pago": "Efectivo, Débito, Crédito, Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Mesas de vereda comunitarias muy aptas para ir con perros",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Tacos vegetarianos, hamburguesas vegetarianas, papas fritas y snacks",
+    "caracteristicas": [
+      "Cervecería de autor de prestigio continental",
+      "Tanques de fermentación a la vista",
+      "Pizarra rotativa de NEIPAs, Wild Ales y Sours",
+      "Ambiente bohemio y música con velas"
+    ]
+  },
+  {
+    "id": "colegiales_santal_cafe",
+    "nombre": "Sântal Café & Listening Bar",
+    "barrio": "Colegiales",
+    "tipo": "gastronomia",
+    "archivo_foto": "colegiales_santal_cafe.jpg",
+    "resumen": "Elegante esquina de Colegiales (Virrey Loreto y Conde) que combina café de especialidad de autor durante el día con un exclusivo salón anexo de 'listening bar' equipado con sonido Hi-Fi y bandejas de vinilo en vivo.",
+    "medios_de_pago": "Efectivo, Débito, Crédito, Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Vereda arbolada con mesas amplias pet friendly",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Bowls de yogur y frutas, tostadas con palta y huevo poché, croissants, pastelería y opciones plant-based",
+    "caracteristicas": [
+      "Listening bar con sistema Hi-Fi y selección de vinilos",
+      "Cafetería de especialidad y brunch de nivel",
+      "Esquina residencial tranquila y verde de Colegiales",
+      "Diseño interior nórdico y minimalista"
+    ]
+  },
+  {
+    "id": "colegiales_tres_tostadores",
+    "nombre": "Tres Tostadores",
+    "barrio": "Colegiales",
+    "tipo": "gastronomia",
+    "archivo_foto": "colegiales_tres_tostadores.jpg",
+    "resumen": "Elegida como la mejor cafetería de la Argentina en el certamen federal The Best Coffee Shops. En Teodoro García frente a las vías del tren, combina microtostaduría vidriada con barra de catación y pastelería artesanal de excelencia.",
+    "medios_de_pago": "Efectivo, Débito, Crédito, Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Mesas sobre la vereda aptas para mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Tostones vegetarianos, pastelería armenia (baklava), cookies y leches vegetales",
+    "caracteristicas": [
+      "Premiada como Mejor Cafetería de Argentina",
+      "Micro-tostadero de granos trazables a la vista",
+      "Filtrados manuales impecables (V60, Chemex)",
+      "Diseño austero y luminoso junto a la estación"
+    ]
+  },
+  {
+    "id": "colegiales_mercado_pulgas",
+    "nombre": "Mercado de las Pulgas",
+    "barrio": "Colegiales",
+    "tipo": "actividad",
+    "archivo_foto": "colegiales_mercado_pulgas.jpg",
+    "resumen": "Enorme galpón techado inaugurado en 1988 donde anticuarios, carpinteros y restauradores venden muebles de estilo (art déco, vintage, provenzal), lámparas, vajilla antigua, carteles enlozados y curiosidades de colección.",
+    "medios_de_pago": "Efectivo, Débito, Crédito y Mercado Pago (según cada puesto individual)",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Se permite recorrer las naves y pasillos con mascotas con correa",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Cafeterías y locales gastronómicos vegetarianos en el perímetro de Dorrego",
+    "caracteristicas": [
+      "El mayor mercado de muebles y antigüedades bajo techo de la ciudad",
+      "Talleres de restauración y carpintería artesanal",
+      "Piezas únicas vintage y de colección de los años 50, 60 y 70",
+      "Recorrido cubierto ideal para días de lluvia"
+    ]
+  },
+  {
+    "id": "colegiales_plaza_mafalda_pasajes",
+    "nombre": "Plaza Mafalda & Pasajes de Colegiales",
+    "barrio": "Colegiales",
+    "tipo": "actividad",
+    "archivo_foto": "colegiales_plaza_mafalda_pasajes.jpg",
+    "resumen": "Plaza barrial nombrada en homenaje al querido personaje de Quino, rodeada de pasajes residenciales empedrados con casas bajas y vegetación (como el Pasaje General Martínez). Cuenta con murales de Mafalda y juegos infantiles.",
+    "medios_de_pago": "Acceso libre y gratuito",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "100% Pet Friendly con amplios sectores de césped y canil para perros",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Plaza pública ideal para mateadas y picnic",
+    "caracteristicas": [
+      "Homenaje urbano a la tira cómica Mafalda y Quino",
+      "Senderos arbolados y canil para mascotas",
+      "Cercanía a pasajes históricos peatonales con adoquines",
+      "Ambiente de barrio auténtico y apacible"
+    ]
+  },
+  {
+    "id": "belgrano_corte_comedor",
+    "nombre": "Corte Comedor",
+    "barrio": "Belgrano",
+    "tipo": "gastronomia",
+    "archivo_foto": "belgrano_corte_comedor.jpg",
+    "resumen": "Comedor contemporáneo y carnicería de pastura de altísima calidad seleccionado por la Guía Michelin. Salón de techos altos y diseño industrial luminoso con parrilla a leña de quebracho a la vista y embutidos de charcutería propia.",
+    "medios_de_pago": "Efectivo, Débito, Crédito (Visa, Mastercard, Amex), Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Mesas de vereda aptas para comer con mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Vegetales de estación asados a la leña, ensaladas de estación gourmets, papas fritas y quesos a la brasa",
+    "caracteristicas": [
+      "Restaurante recomendado por la Guía Michelin",
+      "Carnes de pastura con trazabilidad y charcutería artesanal",
+      "Parrilla de quebracho abierta al salón",
+      "Excelente selección de vinos de bodegas boutique"
+    ]
+  },
+  {
+    "id": "belgrano_via_viva_barrio_chino",
+    "nombre": "Paseo Vía Viva & Barrio Chino",
+    "barrio": "Belgrano",
+    "tipo": "actividad_y_gastronomia",
+    "archivo_foto": "belgrano_via_viva_barrio_chino.jpg",
+    "resumen": "Paseo peatonal y comercial contemporáneo bajo el viaducto del tren Mitre, que conecta con la histórica calle Arribeños y su arco tradicional. Alberga locales de comida callejera asiática (bubble tea, ramen, bao), tiendas de importación y manga.",
+    "medios_de_pago": "Efectivo, Tarjetas de Débito y Crédito, Mercado Pago / QR en casi la totalidad de locales",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "El paseo peatonal bajo el viaducto es 100% pet friendly al aire libre",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Incontables opciones: ramen vegano, bao de hongos y tofu, gyozas de vegetales, bubble tea y pastelería oriental",
+    "caracteristicas": [
+      "Arco monumental del Barrio Chino y nuevo viaducto Vía Viva",
+      "Polo de street food oriental contemporáneo",
+      "Supermercados asiáticos con ingredientes exóticos",
+      "Paseo peatonal techado y moderno"
+    ]
+  },
+  {
+    "id": "belgrano_museo_larreta",
+    "nombre": "Museo de Arte Español Enrique Larreta",
+    "barrio": "Belgrano",
+    "tipo": "actividad",
+    "archivo_foto": "belgrano_museo_larreta.jpg",
+    "resumen": "Antigua residencia del escritor Enrique Larreta de estilo neocolonial español. Alberga una colección de arte renacentista y barroco español, armas y mobiliario histórico, y un deslumbrante jardín andaluz de estilo morisco con laberinto de mirtos y glicinas.",
+    "medios_de_pago": "Entrada arancelada accesible en boletería o web (gratuita los días miércoles)",
+    "pet_friendly": false,
+    "pet_friendly_detalle": "No se permite el ingreso con mascotas al museo ni al jardín andaluz",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "El restaurante y café del jardín ('Croque Madame') dispone de ensaladas, pastas y tartas vegetarianas",
+    "caracteristicas": [
+      "Auténtico jardín andaluz con fuentes moriscas y laberinto verde",
+      "Colección de arte español de los Siglos de Oro",
+      "Café Croque Madame en el jardín",
+      "Casona señorial histórica en el corazón de Belgrano"
+    ]
+  },
+  {
+    "id": "belgrano_barrancas_glorieta",
+    "nombre": "Barrancas de Belgrano & Glorieta de Tango",
+    "barrio": "Belgrano",
+    "tipo": "actividad",
+    "archivo_foto": "belgrano_barrancas_glorieta.jpg",
+    "resumen": "Paseo histórico en pendiente diseñado por el paisajista Charles Thays. Coronadas por una réplica en miniatura de la Estatua de la Libertad y una famosa glorieta centenaria ('Antonio Malvagni') donde se baila tango y milonga popular todas las tardes.",
+    "medios_de_pago": "Acceso libre y gratuito. En la milonga de la glorieta: contribución a la gorra",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "100% Pet Friendly con amplios senderos y canil para perros",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Parque público ideal para mate y descanso",
+    "caracteristicas": [
+      "Milonga popular 'La Glorieta' al aire libre al caer la tarde",
+      "Barranca verde con ombúes, palmeras y tipas centenarias",
+      "Estatua de la Libertad en bronce de Bartholdi",
+      "Hito de encuentro social del barrio"
+    ]
+  },
+  {
+    "id": "belgrano_el_torreon",
+    "nombre": "El Torreón de Belgrano R",
+    "barrio": "Belgrano",
+    "tipo": "actividad_y_gastronomia",
+    "archivo_foto": "belgrano_el_torreon.jpg",
+    "resumen": "Casona histórica de estilo pintoresquista inglés adyacente a la estación de tren Belgrano R. Evoca el pasado ferroviario británico del barrio con sus calles empedradas, farolas de gas originales y cafeterías tradicionales alrededor.",
+    "medios_de_pago": "Efectivo, Débito, Crédito, Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "Mesas de vereda y entorno de la plaza apto para mascotas",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Cafetería clásica, medialunas, sándwiches de queso y ensaladas",
+    "caracteristicas": [
+      "Arquitectura ferroviaria de inspiración Tudor e inglesa",
+      "Entorno empedrado y arbolado de Belgrano R",
+      "Cercanía inmediata a la estación y plazas del barrio",
+      "Punto fotográfico de gran serenidad"
+    ]
+  },
+  {
+    "id": "belgrano_pizzeria_burgio",
+    "nombre": "Pizzería Burgio",
+    "barrio": "Belgrano",
+    "tipo": "gastronomia",
+    "archivo_foto": "belgrano_pizzeria_burgio.jpg",
+    "resumen": "Fundada en 1932 sobre la Avenida Cabildo, es la última gran pizzería de mostrador tradicional de Belgrano. Conserva su horno a leña de quebracho, barra de acero inoxidable, paredes de venecitas y su célebre pizza al molde de muzzarella chorreante comida de parado con una copa de moscato.",
+    "medios_de_pago": "Efectivo, Débito, Mercado Pago",
+    "pet_friendly": false,
+    "pet_friendly_detalle": "Pizzería tradicional cerrada sin mesas de vereda; no apto para mascotas en el salón",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Pizza de muzzarella al molde, fugazzeta rellena, porciones de fainá crocante y empanadas de verdura",
+    "caracteristicas": [
+      "Pizzería de culto de mostrador fundada en 1932",
+      "Horno histórico a leña",
+      "Clásica pizza al molde y fainá servida al corte",
+      "Moscato, vermut de la casa y mística de hinchas de fútbol"
+    ]
+  },
+  {
+    "id": "belgrano_plaza_castelli_estacion",
+    "nombre": "Plaza Castelli & Pasaje Estación Belgrano R",
+    "barrio": "Belgrano",
+    "tipo": "actividad_y_gastronomia",
+    "archivo_foto": "belgrano_plaza_castelli_estacion.jpg",
+    "resumen": "Tranquila plaza de aires residenciales frente a la estación de tren Belgrano R. Rodeada de centenarias casonas de estilo inglés, farolas antiguas, heladerías artesanales y veredas arboladas con mesas de café al aire libre.",
+    "medios_de_pago": "Plaza de acceso libre. Cafés del contorno admiten Efectivo, Tarjetas y Mercado Pago",
+    "pet_friendly": true,
+    "pet_friendly_detalle": "100% Pet Friendly, plaza muy concurrida por vecinos con sus perros",
+    "apto_vegetarianos": true,
+    "apto_vegetarianos_detalle": "Múltiples opciones vegetarianas en los cafés, delis y heladerías sobre la calle Conde",
+    "caracteristicas": [
+      "Espacio verde sereno en el corazón de Belgrano R",
+      "Polo gastronómico tranquilo y de calidad alrededor",
+      "Atmósfera señorial de barrio inglés",
+      "Estación de tren con reloj histórico"
+    ]
+  }
+]

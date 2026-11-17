@@ -1,0 +1,158 @@
+{
+  "g_c0d17e59f5400a8a": {
+    "id": "g_c0d17e59f5400a8a",
+    "auth_provider": "google",
+    "token": "tok_b0f605e63fce4606a6ad13412a755c9a",
+    "neighborhood": "San Telmo",
+    "pet_friendly": true,
+    "vegetarian_friendly": true,
+    "budget_preference": "$$$",
+    "saved_plans": [
+      {
+        "id": "ronda_test_123",
+        "title": "Una ronda por San Telmo.",
+        "neighborhood": "San Telmo",
+        "schedule": [
+          {
+            "place_name": "Pulpería Quilapán",
+            "time_slot": "13:00 - 14:30"
+          }
+        ],
+        "saved_at": "12/11/2026 02:23"
+      }
+    ],
+    "favorite_place_ids": [
+      "santelmo_bar_el_federal"
+    ],
+    "created_at": "2026-11-12T02:23:39.050022"
+  },
+  "g_efd8247e9e27fce8": {
+    "id": "g_efd8247e9e27fce8",
+    "auth_provider": "google",
+    "token": "tok_63469c28ae454f2b969044b60d5f1238",
+    "neighborhood": "Colegiales",
+    "pet_friendly": false,
+    "vegetarian_friendly": false,
+    "budget_preference": "$$",
+    "saved_plans": [],
+    "favorite_place_ids": [],
+    "created_at": "2026-11-12T02:40:20.990284"
+  },
+  "g_3ecf6ea49a2722a5": {
+    "id": "g_3ecf6ea49a2722a5",
+    "auth_provider": "google",
+    "token": "tok_822c55933f3349c3be3ad564ed9805b3",
+    "neighborhood": "Colegiales",
+    "pet_friendly": false,
+    "vegetarian_friendly": false,
+    "budget_preference": "$$",
+    "saved_plans": [
+      {
+        "plan": {
+          "id": "ronda_198c4c97",
+          "title": "Una ronda por Colegiales.",
+          "neighborhood": "Colegiales",
+          "mood": "amigos",
+          "estimated_cost": "$$",
+          "narrative_summary": "Un plan diseñado con precisión para disfrutar la vibra de Colegiales saliendo a partir de las 00:25. Cada parada está conectada a pie respetando los tiempos auténticos porteños.",
+          "schedule": [
+            {
+              "time_slot": "00:25 - 01:40",
+              "place_name": "Strange Brewing",
+              "address": "Delgado 658",
+              "activity_type": "Coctelería de autor & Música nocturna",
+              "duration_minutes": 75,
+              "porteño_tip": "Pedir alguna de sus sour de fermentación mixta o su clásica Hazy IPA servida directo de las barricas de roble.",
+              "lat": -34.5804,
+              "lng": -58.4509,
+              "description": "Brewpub de culto fundado por cerveceros noruegos y argentinos en un antiguo taller de Colegiales. Referente sudamericano en cervezas ácidas (sours), IPAs complejas y lúpulos frescos, con una gran barra flanqueada por libros y fábrica de tanques a la vista.",
+              "activities": [
+                "Degustar IPAs y cervezas artesanales de estilos experimentales recién pinchadas",
+                "Pedir hamburguesas caseras o tacos elaborados con ingredientes de primera",
+                "Charlar con los maestros cerveceros sobre sus recetas de lúpulo y levaduras",
+                "Compartir una mesa comunal vibrando con la música y el espíritu del barrio"
+              ],
+              "image_url": "/places/colegiales_strange_brewing.jpg",
+              "about": "Brewpub de culto fundado por cerveceros noruegos y argentinos en un antiguo taller de Colegiales. Referente sudamericano en cervezas ácidas (sours), IPAs complejas y lúpulos frescos, con una gran barra flanqueada por libros y fábrica de tanques a la vista.",
+              "payment_methods": "Efectivo, Débito, Crédito, Mercado Pago",
+              "pet_friendly": true,
+              "pet_friendly_details": "Mesas de vereda comunitarias muy aptas para ir con perros",
+              "vegetarian_friendly": true,
+              "vegetarian_details": "Tacos vegetarianos, hamburguesas vegetarianas, papas fritas y snacks",
+              "features": [
+                "Cervecería de autor de prestigio continental",
+                "Tanques de fermentación a la vista",
+                "Pizarra rotativa de NEIPAs, Wild Ales y Sours",
+                "Ambiente bohemio y música con velas"
+              ],
+              "transit_to_next": {
+                "mode": "a pie",
+                "duration_minutes": 8,
+                "notes": "Caminata tranquila de 8 min por el barrio."
+              }
+            },
+            {
+              "time_slot": "01:48 - 03:18",
+              "place_name": "Anafe",
+              "address": "Virrey Avilés 3383",
+              "activity_type": "Trasnoche & Tapeo porteño",
+              "duration_minutes": 90,
+              "porteño_tip": "Imprescindible el paté de ave sobre financier de frutos secos y el arroz meloso de mar.",
+              "lat": -34.5772,
+              "lng": -58.4552,
+              "description": "Restaurante de 'platitos' contemporáneos galardonado con el Bib Gourmand de la Guía Michelin y parte de 50 Best Discovery. Creado por Micaela Najmanovich y Nicolás Arcucci, fusiona raíces judías, mediterráneas y asiáticas en un salón moderno y luminoso.",
+              "activities": [
+                "Probar los profiteroles rellenos de paté con crocante de azúcar",
+                "Pedir la pesca del día curada o el arroz persa crocante",
+                "Disfrutar de una carta de vinos naturales y de pequeños productores seleccionados",
+                "Guardar lugar imprescindible para el postre de tres leches de la casa"
+              ],
+              "image_url": "/places/colegiales_anafe.jpg",
+              "about": "Restaurante de 'platitos' contemporáneos galardonado con el Bib Gourmand de la Guía Michelin y parte de 50 Best Discovery. Creado por Micaela Najmanovich y Nicolás Arcucci, fusiona raíces judías, mediterráneas y asiáticas en un salón moderno y luminoso.",
+              "payment_methods": "Efectivo, Débito, Crédito (Visa, Mastercard, Amex), Mercado Pago",
+              "pet_friendly": true,
+              "pet_friendly_details": "La terraza exterior y mesas al aire libre reciben mascotas",
+              "vegetarian_friendly": true,
+              "vegetarian_details": "Excepcional carta de vegetales de estación: paté de hongos con financier, labneh con zaatar y ensaladas tibias",
+              "features": [
+                "Recomendado por la Guía Michelin (Bib Gourmand)",
+                "Formato de platitos para compartir al centro de la mesa",
+                "Carta de vinos de baja intervención y naturales",
+                "Salón luminoso con cocina abierta a la vista"
+              ],
+              "transit_to_next": null
+            }
+          ],
+          "suggested_activity": {
+            "id": "mercado_pulgas_colegiales",
+            "title": "Caza de Tesoros en el Mercado de las Pulgas",
+            "category": "feria",
+            "days": "Martes a domingos de 10:00 a 19:00 hs",
+            "location": "Av. Álvarez Thomas y Concepción Arenal",
+            "photo": "/actividades/mercado_pulgas_colegiales.jpg",
+            "description": "Galpón histórico techado con anticuarios, muebles de época y lámparas Art Decó.",
+            "tips": "Salvavidas perfecto para un día de lluvia: 100% bajo techo.",
+            "is_free": true,
+            "weather": "indoor"
+          },
+          "saved_at": null
+        },
+        "saved_at": "12/11/2026 03:07"
+      }
+    ],
+    "favorite_place_ids": [],
+    "created_at": "2026-11-12T02:43:28.382398"
+  },
+  "g_41d20952924ebd6a": {
+    "id": "g_41d20952924ebd6a",
+    "auth_provider": "google",
+    "token": "tok_2048bb504330414b9a80776124bd25b2",
+    "neighborhood": "San Telmo",
+    "pet_friendly": false,
+    "vegetarian_friendly": false,
+    "budget_preference": "$$",
+    "saved_plans": [],
+    "favorite_place_ids": [],
+    "created_at": "2026-11-16T20:49:35.777745"
+  }
+}

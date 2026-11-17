@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LugaresSchema",
+  "description": "Esquema de validación para lugares en Ronda CABA",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "nombre",
+      "barrio",
+      "categoria",
+      "momentos",
+      "techado",
+      "duracion_min",
+      "costo_por_persona_ars",
+      "horarios",
+      "direccion",
+      "fuente_url",
+      "verificar"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Identificador único en minúsculas y snake_case"
+      },
+      "nombre": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Nombre comercial o público del lugar"
+      },
+      "barrio": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Barrio de la Ciudad Autónoma de Buenos Aires"
+      },
+      "categoria": {
+        "type": "string",
+        "enum": [
+          "desayuno_merienda",
+          "almuerzo",
+          "actividad",
+          "cena_bar",
+          "recorrido"
+        ],
+        "description": "Categoría principal de la experiencia"
+      },
+      "momentos": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "enum": [
+            "manana",
+            "mediodia",
+            "tarde",
+            "noche"
+          ]
+        },
+        "uniqueItems": true,
+        "description": "Franjas del día recomendadas para visitar"
+      },
+      "techado": {
+        "type": "string",
+        "enum": [
+          "si",
+          "no",
+          "mixto"
+        ],
+        "description": "Condición de resguardo frente al clima"
+      },
+      "duracion_min": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Tiempo promedio de permanencia en minutos"
+      },
+      "costo_por_persona_ars": {
+        "type": ["integer", "null"],
+        "minimum": 0,
+        "description": "Gasto estimado por persona en pesos argentinos o null si es gratuito/variable"
+      },
+      "horarios": {
+        "type": ["string", "null"],
+        "description": "Rango de horarios habituales o null si es espacio abierto continuo"
+      },
+      "direccion": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Dirección física en CABA"
+      },
+      "fuente_url": {
+        "type": "string",
+        "description": "Enlace de verificación web, Instagram oficial o Google Maps"
+      },
+      "verificar": {
+        "type": "boolean",
+        "description": "Indica si el lugar requiere verificación manual de campo"
+      }
+    },
+    "additionalProperties": false
+  }
+}

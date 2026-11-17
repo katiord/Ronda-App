@@ -1,0 +1,1001 @@
+{
+  "palermo_lab_cafe": {
+    "name": "LAB Tostadores de Café",
+    "neighborhood": "Palermo",
+    "category": "cafe",
+    "candidates": []
+  },
+  "palermo_cuervo_cafe": {
+    "name": "Cuervo Café",
+    "neighborhood": "Palermo",
+    "category": "cafe",
+    "candidates": [
+      {
+        "title": "File:Café gijón.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Caf%C3%A9_gij%C3%B3n.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 640,
+        "height": 480,
+        "desc": "Café gijón  - via www.twitxr.com/vaquita/updates/123566 - Location: Paseo de recoletos, madrid"
+      }
+    ]
+  },
+  "palermo_libros_pasaje": {
+    "name": "Libros del Pasaje",
+    "neighborhood": "Palermo",
+    "category": "bookstore",
+    "candidates": [
+      {
+        "title": "File:Pasaje de los Alarcón 02.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Pasaje_de_los_Alarc%C3%B3n_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3000,
+        "height": 4000,
+        "desc": "Fotografía del Pasaje de los Alarcón"
+      },
+      {
+        "title": "File:Pasaje de los Alarcón 03.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/8/89/Pasaje_de_los_Alarc%C3%B3n_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2448,
+        "height": 3264,
+        "desc": "Fotografía del Pasaje de los Alarcón"
+      },
+      {
+        "title": "File:Pasaje de los Alarcón 01.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Pasaje_de_los_Alarc%C3%B3n_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4000,
+        "height": 3000,
+        "desc": "Fotografía del Pasaje de los Alarcón"
+      }
+    ]
+  },
+  "palermo_jardin_botanico": {
+    "name": "Jardín Botánico Carlos Thays",
+    "neighborhood": "Palermo",
+    "category": "park",
+    "candidates": [
+      {
+        "title": "File:Weather device at the Buenos Aires Botanical Gardens.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Weather_device_at_the_Buenos_Aires_Botanical_Gardens.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1240,
+        "height": 1195,
+        "desc": "A weather indicator, designed by José Marcovich and donated by the Austro-Hungarian community of Buenos Aires (1910)"
+      },
+      {
+        "title": "File:Jardín Botánico Carlos Thays.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Jard%C3%ADn_Bot%C3%A1nico_Carlos_Thays.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 640,
+        "height": 480,
+        "desc": "Buenos Aires Botanical Garden"
+      },
+      {
+        "title": "File:Yerba mate Jardín Botánico Carlos Thays.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/36/Yerba_mate_Jard%C3%ADn_Bot%C3%A1nico_Carlos_Thays.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 834,
+        "height": 617,
+        "desc": "Carlos Thays observando sus plantas de yeba mate en el Jardín Botánico de Buenos Aires (hoy llamado \"Carlos Thays\")."
+      }
+    ]
+  },
+  "palermo_rosedal": {
+    "name": "El Rosedal de Palermo",
+    "neighborhood": "Palermo",
+    "category": "park",
+    "candidates": [
+      {
+        "title": "File:El Rosedal, Palermo 02.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/44/El_Rosedal%2C_Palermo_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4047,
+        "height": 1968,
+        "desc": "El Rosedal, Parque Tres de Febrero, Palermo, Buenos Aires, Argentina."
+      },
+      {
+        "title": "File:El Rosedal, Palermo 01.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/94/El_Rosedal%2C_Palermo_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2036,
+        "height": 1533,
+        "desc": "El Rosedal, Parque Tres de Febrero, Palermo, Buenos Aires, Argentina."
+      },
+      {
+        "title": "File:El Rosedal, Palermo 03.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b4/El_Rosedal%2C_Palermo_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4558,
+        "height": 3141,
+        "desc": "El Rosedal, Parque Tres de Febrero, Palermo, Buenos Aires, Argentina."
+      }
+    ]
+  },
+  "palermo_nino_gordo": {
+    "name": "Niño Gordo",
+    "neighborhood": "Palermo",
+    "category": "dining",
+    "candidates": [
+      {
+        "title": "File:ECH 1328 80 - Juan el gordo.djvu",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/4e/ECH_1328_80_-_Juan_el_gordo.djvu?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2557,
+        "height": 1928,
+        "desc": "Article of the category Folklore from the Enciclopedia Chilena project, done by the Chilean Library of Congress"
+      },
+      {
+        "title": "File:Fat Man and Little Boy (6608635269).jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Fat_Man_and_Little_Boy_%286608635269%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 576,
+        "height": 720,
+        "desc": "Models of the two atomic bombs dropped on Japan during World War II. The near one is 'Little Boy', a bomb using Uranium 235 as its chain reaction fuel"
+      }
+    ]
+  },
+  "palermo_tres_monos": {
+    "name": "Tres Monos Bar",
+    "neighborhood": "Palermo",
+    "category": "nightlife",
+    "candidates": [
+      {
+        "title": "File:El sombrero de tres picos (1901).djvu",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/f/ff/El_sombrero_de_tres_picos_%281901%29.djvu?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1790,
+        "height": 2913,
+        "desc": "El sombrero de tres picos"
+      }
+    ]
+  },
+  "palermo_bar_878": {
+    "name": "Bar 878",
+    "neighborhood": "Palermo",
+    "category": "nightlife",
+    "candidates": [
+      {
+        "title": "File:2018-10-11 Gymnastics at 2018 Summer Youth Olympics – Boys' Artistic Gymnastics – All-around final – Parallel bars (Martin Rulsch) 878.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b6/2018-10-11_Gymnastics_at_2018_Summer_Youth_Olympics_%E2%80%93_Boys%27_Artistic_Gymnastics_%E2%80%93_All-around_final_%E2%80%93_Parallel_bars_%28Martin_Rulsch%29_878.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2186,
+        "height": 2544,
+        "desc": "Parallel bars all-around final of the boys' artistic gymnastics at the 2018 Summer Youth Olympics in Buenos Aires on 11 October 2018. Depicted: Yin De"
+      },
+      {
+        "title": "File:2018-10-15 Gymnastics at 2018 Summer Youth Olympics – Boys' Artistic Gymnastics – Apparatus finals – Parallel bars (Martin Rulsch) 878.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b5/2018-10-15_Gymnastics_at_2018_Summer_Youth_Olympics_%E2%80%93_Boys%27_Artistic_Gymnastics_%E2%80%93_Apparatus_finals_%E2%80%93_Parallel_bars_%28Martin_Rulsch%29_878.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4003,
+        "height": 3090,
+        "desc": "Parallel bars apparatus final of the boys' artistic gymnastics at the 2018 Summer Youth Olympics in Buenos Aires on 15 October 2018. Depicted: Adam To"
+      },
+      {
+        "title": "File:Schistomitra (10.3897-zookeys.878.35364) Figures 9–17.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Schistomitra_%2810.3897-zookeys.878.35364%29_Figures_9%E2%80%9317.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1472,
+        "height": 2165,
+        "desc": "Figures 9–17; Male genitalia of Schistomitra spp 9–11 holotype of Schistomitra joelmineti sp. nov. 12–14 paratype of Schistomitra joelmineti sp. nov.,"
+      }
+    ]
+  },
+  "palermo_obrador_florida": {
+    "name": "Obrador Florida",
+    "neighborhood": "Palermo",
+    "category": "dining",
+    "candidates": [
+      {
+        "title": "File:Jochs Florals de Barcelona en 1875.djvu",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Jochs_Florals_de_Barcelona_en_1875.djvu?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2500,
+        "height": 3909,
+        "desc": "\nBook digitized by Google from the library of Oxford University and uploaded to the Internet Archive by user tpb."
+      },
+      {
+        "title": "File:Jochs Florals de Barcelona en 1903.djvu",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Jochs_Florals_de_Barcelona_en_1903.djvu?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3955,
+        "height": 6040,
+        "desc": "\nBook digitized by Google from the library of Harvard University and uploaded to the Internet Archive by user tpb."
+      },
+      {
+        "title": "File:Jochs Florals de Barcelona en 1896.djvu",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/8/89/Jochs_Florals_de_Barcelona_en_1896.djvu?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3492,
+        "height": 5434,
+        "desc": "\nJochs Florals de Barcelona en 1896"
+      }
+    ]
+  },
+  "palermo_plaza_cortazar": {
+    "name": "Plaza Cortázar (Serrano) & Calles de Diseño",
+    "neighborhood": "Palermo",
+    "category": "culture",
+    "candidates": []
+  },
+  "santelmo_mercado": {
+    "name": "Mercado de San Telmo",
+    "neighborhood": "San Telmo",
+    "category": "culture",
+    "candidates": [
+      {
+        "title": "File:Mercado San Telmo 0020087.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Mercado_San_Telmo_0020087.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4288,
+        "height": 2848,
+        "desc": "The San Telmo Market, Buenos Aires."
+      },
+      {
+        "title": "File:Mercado San Telmo.JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Mercado_San_Telmo.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1744,
+        "height": 1287,
+        "desc": "Vista de los accesos al Mercado San Telmo en la esquina de las calles Bolívar y Carlos Calvo."
+      },
+      {
+        "title": "File:Mercado San Telmo (interior).JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Mercado_San_Telmo_%28interior%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1536,
+        "height": 2048,
+        "desc": "Interior del cuerpo central del Mercado San Telmo, en el cruce de las calles Bolívar y Carlos Calvo. Estructura de 1897."
+      }
+    ]
+  },
+  "santelmo_bar_britanico": {
+    "name": "Bar Británico",
+    "neighborhood": "San Telmo",
+    "category": "cafe",
+    "candidates": [
+      {
+        "title": "File:Henninger Turm 2006 - Team Barloworld.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Henninger_Turm_2006_-_Team_Barloworld.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2173,
+        "height": 1304,
+        "desc": "Henninger Turm 2006 - Team Barloworld"
+      },
+      {
+        "title": "File:Bar Britanico Buenos Aires.JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/92/Bar_Britanico_Buenos_Aires.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4608,
+        "height": 3456,
+        "desc": "Entrance to Bar Británico, on Brasil 399, San Telmo, Buenos Aires. Established in 1928, the bar served as a location for numerous Argentine films such"
+      },
+      {
+        "title": "File:Bar Británico Un emprendimiento familiar.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/50/Bar_Brit%C3%A1nico_Un_emprendimiento_familiar.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1502,
+        "height": 1398,
+        "desc": "This is a photo of an Argentine monument identified by the ID"
+      }
+    ]
+  },
+  "santelmo_bar_el_federal": {
+    "name": "El Federal",
+    "neighborhood": "San Telmo",
+    "category": "nightlife",
+    "candidates": [
+      {
+        "title": "File:Bar El Federal. Carlos Calvo y Perú..jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/6/65/Bar_El_Federal._Carlos_Calvo_y_Per%C3%BA..jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1920,
+        "height": 2560,
+        "desc": "Bar El Federal. Carlos Calvo y Perú, barrio San Telmo, Buenos Aires."
+      },
+      {
+        "title": "File:President Barack Obama Visits El Reno Federal Correctional Institution - DPLA - 9ebc0c3b25c433859cff6f3cda5205cc.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b8/President_Barack_Obama_Visits_El_Reno_Federal_Correctional_Institution_-_DPLA_-_9ebc0c3b25c433859cff6f3cda5205cc.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 5760,
+        "height": 3840,
+        "desc": "\nPresident Barack Obama holds a discussion with prison inmates at El Reno Federal Correctional Institution in El Reno, Oklahoma, July 16, 2015. Partic"
+      },
+      {
+        "title": "File:Bar El Federal 1200.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/55/Bar_El_Federal_1200.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1200,
+        "height": 489,
+        "desc": "Bar El Federal, ubicado en el barrio de San Telmo, Buenos Aires"
+      }
+    ]
+  },
+  "santelmo_mamba": {
+    "name": "Museo de Arte Moderno (MAMBA)",
+    "neighborhood": "San Telmo",
+    "category": "culture",
+    "candidates": [
+      {
+        "title": "File:FachadaModerno.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b8/FachadaModerno.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 650,
+        "height": 433,
+        "desc": "Foto de la fachada del Museo de Arte Moderno de Buenos Aires"
+      },
+      {
+        "title": "File:Nueva sala mamba.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/39/Nueva_sala_mamba.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4032,
+        "height": 3024,
+        "desc": "nueva sala en el mamba"
+      },
+      {
+        "title": "File:Programa mamba.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Programa_mamba.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4032,
+        "height": 3024,
+        "desc": "programa mamba"
+      }
+    ]
+  },
+  "santelmo_parque_lezama": {
+    "name": "Parque Lezama",
+    "neighborhood": "San Telmo",
+    "category": "park",
+    "candidates": [
+      {
+        "title": "File:Parque Lezama, 2017.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/92/Parque_Lezama%2C_2017.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 724,
+        "height": 966,
+        "desc": "Public Bike in Lezama Park, Buenos Aires, Argentina, may 2017"
+      },
+      {
+        "title": "File:Parque Lezama, escalera, grutesco.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Parque_Lezama%2C_escalera%2C_grutesco.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4432,
+        "height": 3164,
+        "desc": "Escalera estilo grutesco, en Parque Lezama, Buenos Aires,Argentina."
+      },
+      {
+        "title": "File:Parque Lezama, vaso decorativo y base.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Parque_Lezama%2C_vaso_decorativo_y_base.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2018,
+        "height": 2707,
+        "desc": "Vaso decorativo en Parque Lezama, San Telmo, Buenos Aires, Argentina."
+      }
+    ]
+  },
+  "santelmo_pulperia_quilapan": {
+    "name": "Pulpería Quilapán",
+    "neighborhood": "San Telmo",
+    "category": "dining",
+    "candidates": [
+      {
+        "title": "File:PrimerencuentroWMAR2024.1.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/d/d5/PrimerencuentroWMAR2024.1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 6000,
+        "height": 4000,
+        "desc": "Primer encuentro de la comunidad de Wikimedia Argentina en 2024, Pulpería Quilapán, Buenos Aires, Argentina"
+      },
+      {
+        "title": "File:PrimerencuentroWMAR2024.4.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/40/PrimerencuentroWMAR2024.4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 6000,
+        "height": 4000,
+        "desc": "Primer encuentro de la comunidad de Wikimedia Argentina en 2024, Pulpería Quilapán, Buenos Aires, Argentina"
+      },
+      {
+        "title": "File:PrimerencuentroWMAR2024.5.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/5a/PrimerencuentroWMAR2024.5.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 6000,
+        "height": 4000,
+        "desc": "Primer encuentro de la comunidad de Wikimedia Argentina en 2024, Pulpería Quilapán, Buenos Aires, Argentina"
+      }
+    ]
+  },
+  "santelmo_la_brigada": {
+    "name": "Parrilla La Brigada",
+    "neighborhood": "San Telmo",
+    "category": "dining",
+    "candidates": []
+  },
+  "santelmo_pasaje_defensa": {
+    "name": "Pasaje de la Defensa (Casa de los Ezeiza)",
+    "neighborhood": "San Telmo",
+    "category": "culture",
+    "candidates": [
+      {
+        "title": "File:Casa de los Ezeiza.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/51/Casa_de_los_Ezeiza.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1536,
+        "height": 2048,
+        "desc": "Antigua casa de la familia Ezeiza, en la calle Defensa nº 1179, luego escuela de sordomudos, y en 1980 galería comercial. Construida hacia 1876, hoy e"
+      },
+      {
+        "title": "File:Pasaje de la Defensa (ex Casa de los Ezeiza).JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/40/Pasaje_de_la_Defensa_%28ex_Casa_de_los_Ezeiza%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3296,
+        "height": 2472,
+        "desc": "Ex Casa de los Ezeiza, actual galería \"Pasaje de la Defensa\". \nResidencia de 1880 de estilo italiano. En calle Defensa al 1179, en el barrio de San Te"
+      },
+      {
+        "title": "File:Pasaje de la Defensa (ex Casa de los Ezeiza) II.JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Pasaje_de_la_Defensa_%28ex_Casa_de_los_Ezeiza%29_II.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3296,
+        "height": 2472,
+        "desc": "Ex Casa de los Ezeiza, actual galería \"Pasaje de la Defensa\". Residencia de 1880 de estilo italiano. En calle Defensa al 1179, en el barrio de San Tel"
+      }
+    ]
+  },
+  "recoleta_ateneo_splendid": {
+    "name": "El Ateneo Grand Splendid",
+    "neighborhood": "Recoleta",
+    "category": "bookstore",
+    "candidates": [
+      {
+        "title": "File:El Ateneo buenos aires.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/e9/El_Ateneo_buenos_aires.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1600,
+        "height": 900,
+        "desc": "The former Grand Splendid Theatre, today El Ateneo booksellers, Buenos Aires."
+      },
+      {
+        "title": "File:Yenny Ateneo Grand Splendid.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/ac/Yenny_Ateneo_Grand_Splendid.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2718,
+        "height": 2034,
+        "desc": "Frente de la  librería Ateneo Grand Splendid, Avenida Santa Fe 1860 (vereda sur), en Recoleta, Buenos Aires."
+      },
+      {
+        "title": "File:Buenos Aires - El Ateneo 164.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Buenos_Aires_-_El_Ateneo_164.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3312,
+        "height": 4416,
+        "desc": "El Ateneo bookstore, Buenos Aires"
+      }
+    ]
+  },
+  "recoleta_bellas_artes": {
+    "name": "Museo Nacional de Bellas Artes (MNBA)",
+    "neighborhood": "Recoleta",
+    "category": "culture",
+    "candidates": [
+      {
+        "title": "File:Rep atlas de las bellas artes, en el Museo Nacional de Bellas Artes (13884461093).jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Rep_atlas_de_las_bellas_artes%2C_en_el_Museo_Nacional_de_Bellas_Artes_%2813884461093%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4542,
+        "height": 3028,
+        "desc": "Ciudad de Buenos Aires, 15 de abril de 2014.- Se inauguró la muestra “Rep: atlas de las bellas artes” en el Museo Nacional de Bellas Artes. Estuvieron"
+      },
+      {
+        "title": "File:Rep atlas de las bellas artes, en el Museo Nacional de Bellas Artes (13884365005).jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/24/Rep_atlas_de_las_bellas_artes%2C_en_el_Museo_Nacional_de_Bellas_Artes_%2813884365005%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4608,
+        "height": 3072,
+        "desc": "Ciudad de Buenos Aires, 15 de abril de 2014.- Se inauguró la muestra “Rep: atlas de las bellas artes” en el Museo Nacional de Bellas Artes. Estuvieron"
+      },
+      {
+        "title": "File:Rep atlas de las bellas artes, en el Museo Nacional de Bellas Artes (13884737714).jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Rep_atlas_de_las_bellas_artes%2C_en_el_Museo_Nacional_de_Bellas_Artes_%2813884737714%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4385,
+        "height": 2923,
+        "desc": "Ciudad de Buenos Aires, 15 de abril de 2014.- Se inauguró la muestra “Rep: atlas de las bellas artes” en el Museo Nacional de Bellas Artes. Estuvieron"
+      }
+    ]
+  },
+  "recoleta_la_biela": {
+    "name": "La Biela",
+    "neighborhood": "Recoleta",
+    "category": "cafe",
+    "candidates": [
+      {
+        "title": "File:La Biela.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/99/La_Biela.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1000,
+        "height": 667,
+        "desc": "La Biela Coffee, in the middle of Recoleta. One of the most traditional coffees."
+      },
+      {
+        "title": "File:La Biela Recoleta.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/0/05/La_Biela_Recoleta.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4272,
+        "height": 2848,
+        "desc": "This is a photo of an Argentine monument identified by the ID"
+      },
+      {
+        "title": "File:La Biela 1060142.JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/a2/La_Biela_1060142.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2400,
+        "height": 1800,
+        "desc": "This is a photo of an Argentine monument identified by the ID"
+      }
+    ]
+  },
+  "recoleta_ccr": {
+    "name": "Centro Cultural Recoleta (CCR)",
+    "neighborhood": "Recoleta",
+    "category": "culture",
+    "candidates": [
+      {
+        "title": "File:CCR patio 1.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/55/CCR_patio_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4320,
+        "height": 2880,
+        "desc": "This is a photo of an Argentine monument identified by the ID"
+      }
+    ]
+  },
+  "recoleta_cumana": {
+    "name": "Cumaná",
+    "neighborhood": "Recoleta",
+    "category": "dining",
+    "candidates": [
+      {
+        "title": "File:Playa de Cumaná.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Playa_de_Cuman%C3%A1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1024,
+        "height": 768,
+        "desc": "This photo is licensed under a Creative Commons license. If you use this photo within the terms of the license or make special arrangements to use the"
+      },
+      {
+        "title": "File:Cumaná-0.JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/8/82/Cuman%C3%A1-0.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 889,
+        "height": 554,
+        "desc": "vista del noreste de la ciudad de cumaná estado sucre"
+      },
+      {
+        "title": "File:Iglesia Santa Inés de Cumaná..jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/95/Iglesia_Santa_In%C3%A9s_de_Cuman%C3%A1..jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4288,
+        "height": 3216,
+        "desc": "Sucre, Venezuela"
+      }
+    ]
+  },
+  "recoleta_plaza_francia": {
+    "name": "Plaza Francia & Cementerio de la Recoleta",
+    "neighborhood": "Recoleta",
+    "category": "culture",
+    "candidates": []
+  },
+  "recoleta_duhau_patio": {
+    "name": "Los Salones del Piano Nobile & Jardín del Palacio Duhau",
+    "neighborhood": "Recoleta",
+    "category": "dining",
+    "candidates": []
+  },
+  "chacarita_sifon_soderia": {
+    "name": "Sifón Sodería",
+    "neighborhood": "Chacarita",
+    "category": "nightlife",
+    "candidates": []
+  },
+  "chacarita_la_fuerza": {
+    "name": "Bar La Fuerza",
+    "neighborhood": "Chacarita",
+    "category": "nightlife",
+    "candidates": [
+      {
+        "title": "File:Stiftorompilo.JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Stiftorompilo.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2646,
+        "height": 2503,
+        "desc": "Bolzensprenger"
+      },
+      {
+        "title": "File:Stiftorompilo1.svg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/26/Stiftorompilo1.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3267,
+        "height": 1865,
+        "desc": "Tyndal's bar breaker: (1) Frame, (2) heated extension rod, (3) bar to be broken by experiment, (4) tightener wedge"
+      },
+      {
+        "title": "File:Bandera de la Fuerza Aérea Expedicionaria Mexicana en el Bar Legión Americana.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/57/Bandera_de_la_Fuerza_A%C3%A9rea_Expedicionaria_Mexicana_en_el_Bar_Legi%C3%B3n_Americana.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 5184,
+        "height": 3456,
+        "desc": "Flag of the Mexican Expeditionary Air Force, Group 58 fight at the American Legion Bar. Located in Celaya #25, Colonia Condesa. Mexico City."
+      }
+    ]
+  },
+  "chacarita_georgies": {
+    "name": "Georgie's",
+    "neighborhood": "Chacarita",
+    "category": "dining",
+    "candidates": [
+      {
+        "title": "File:Georgie Henley.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/e2/Georgie_Henley.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2048,
+        "height": 1365,
+        "desc": "Georgie Henley"
+      },
+      {
+        "title": "File:Abudelauri valley under clouds, early summer, Georgia.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/93/Abudelauri_valley_under_clouds%2C_early_summer%2C_Georgia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4912,
+        "height": 3264,
+        "desc": "Abudelauri valley under clouds, early summer, Georgia."
+      },
+      {
+        "title": "File:Georgia (country) Ireland Locator.png",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Georgia_%28country%29_Ireland_Locator.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2278,
+        "height": 1374,
+        "desc": "Map showing locations of Georgia (country) and the Republic of Ireland"
+      }
+    ]
+  },
+  "chacarita_donnet": {
+    "name": "Donnet",
+    "neighborhood": "Chacarita",
+    "category": "dining",
+    "candidates": [
+      {
+        "title": "File:Donnet-Denhaut DD.8.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Donnet-Denhaut_DD.8.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2001,
+        "height": 552,
+        "desc": "Donnet-Denhaut DD.8 flying boat"
+      },
+      {
+        "title": "File:Donnet-Zedel 1925.JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b2/Donnet-Zedel_1925.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3648,
+        "height": 2736,
+        "desc": "Donnet-Zedel 1925"
+      },
+      {
+        "title": "File:Matias Donnet Club Atletico Union de Santa Fe 69.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/47/Matias_Donnet_Club_Atletico_Union_de_Santa_Fe_69.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3264,
+        "height": 2448,
+        "desc": "Club Atlético Unión de Santa Fe - Fotos del período 2009-2012"
+      }
+    ]
+  },
+  "chacarita_falena": {
+    "name": "Falena Librería & Cava",
+    "neighborhood": "Chacarita",
+    "category": "culture",
+    "candidates": []
+  },
+  "chacarita_parque_los_andes": {
+    "name": "Parque Los Andes",
+    "neighborhood": "Chacarita",
+    "category": "park",
+    "candidates": [
+      {
+        "title": "File:Parque Los Andes, Chacarita.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Parque_Los_Andes%2C_Chacarita.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2717,
+        "height": 1816,
+        "desc": "Parque Los Andes, Chacarita, Buenos Aires."
+      },
+      {
+        "title": "File:Casa Colectiva Parque Los Andes 08.JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Casa_Colectiva_Parque_Los_Andes_08.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4576,
+        "height": 3424,
+        "desc": "Parque Los Andes House Collective, a micro neighborhood built by the City of Buenos Aires between 1926 and 1928 in Chacarita, Buenos Aires, Argentina."
+      },
+      {
+        "title": "File:Casa Colectiva Parque Los Andes 13.JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Casa_Colectiva_Parque_Los_Andes_13.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4526,
+        "height": 3298,
+        "desc": "Parque Los Andes House Collective, a micro neighborhood built by the City of Buenos Aires between 1926 and 1928 in Chacarita, Buenos Aires, Argentina."
+      }
+    ]
+  },
+  "colegiales_anafe": {
+    "name": "Anafe",
+    "neighborhood": "Colegiales",
+    "category": "dining",
+    "candidates": [
+      {
+        "title": "File:Casablanca - Morocco 008.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Casablanca_-_Morocco_008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 800,
+        "height": 600,
+        "desc": "Overview of Casablanca, with the Casablanca Marina under construction in the right."
+      },
+      {
+        "title": "File:Au centre de Casablanca (8177200639).jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/74/Au_centre_de_Casablanca_%288177200639%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3264,
+        "height": 1968,
+        "desc": "В центре Касабланки."
+      },
+      {
+        "title": "File:Tribunal de Dar El Beida محكمة الدار البيضاء.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Tribunal_de_Dar_El_Beida_%D9%85%D8%AD%D9%83%D9%85%D8%A9_%D8%A7%D9%84%D8%AF%D8%A7%D8%B1_%D8%A7%D9%84%D8%A8%D9%8A%D8%B6%D8%A7%D8%A1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3000,
+        "height": 2001,
+        "desc": "Tribunal de Dar El Beida, Alger\nمحكمة الدار البيضاء - الجزائر"
+      }
+    ]
+  },
+  "colegiales_strange_brewing": {
+    "name": "Strange Brewing",
+    "neighborhood": "Colegiales",
+    "category": "nightlife",
+    "candidates": [
+      {
+        "title": "File:Strange Brew Coffeeshop Greenwood, Indiana.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/48/Strange_Brew_Coffeeshop_Greenwood%2C_Indiana.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2304,
+        "height": 1728,
+        "desc": "Strange Brew Coffeeshop, Greenwood, Indiana. Interior."
+      },
+      {
+        "title": "File:A Practical Treatise on Brewing (4th ed.).djvu",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/8/86/A_Practical_Treatise_on_Brewing_%284th_ed.%29.djvu?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 881,
+        "height": 1408,
+        "desc": "William Black's \"A Practical Treatise on Brewing\"; 4th edition, published 1849."
+      },
+      {
+        "title": "File:Strange Brew - panoramio.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Strange_Brew_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2592,
+        "height": 1944,
+        "desc": "Strange Brew"
+      }
+    ]
+  },
+  "colegiales_santal_cafe": {
+    "name": "Sântal Café & Listening Bar",
+    "neighborhood": "Colegiales",
+    "category": "cafe",
+    "candidates": []
+  },
+  "colegiales_tres_tostadores": {
+    "name": "Tres Tostadores",
+    "neighborhood": "Colegiales",
+    "category": "cafe",
+    "candidates": []
+  },
+  "colegiales_mercado_pulgas": {
+    "name": "Mercado de las Pulgas",
+    "neighborhood": "Colegiales",
+    "category": "culture",
+    "candidates": [
+      {
+        "title": "File:Mercado de las Pulgas Colegiales.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/11/Mercado_de_las_Pulgas_Colegiales.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2848,
+        "height": 1899,
+        "desc": "Mercado de las Pulgas, en Colegiales, Buenos Aires, Argentina."
+      },
+      {
+        "title": "File:Mercado de las Pulgas, Colegiales entrada.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Mercado_de_las_Pulgas%2C_Colegiales_entrada.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2848,
+        "height": 1900,
+        "desc": "Mercado de las Pulgas, en Colegiales, Buenos Aires, Argentina."
+      },
+      {
+        "title": "File:Mercado de Pulgas de Buenos Aires.JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/38/Mercado_de_Pulgas_de_Buenos_Aires.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2592,
+        "height": 1944,
+        "desc": "The Buenos Aires Flea Market, in the Colegiales section of the city. The Colegiales Urban Complex (1986) is visible behind it."
+      }
+    ]
+  },
+  "belgrano_corte_comedor": {
+    "name": "Corte Comedor",
+    "neighborhood": "Belgrano",
+    "category": "dining",
+    "candidates": [
+      {
+        "title": "File:Comedor Solidario 421 en Barrio Puerto, Valparaíso.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Comedor_Solidario_421_en_Barrio_Puerto%2C_Valpara%C3%ADso.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3024,
+        "height": 4032,
+        "desc": "El Comedor Solidario 421 es coordinado por la Corporación \"La Matriz\" y está ubicado en la calle Santo Domingo al costado de la Iglesia de la Matriz. "
+      },
+      {
+        "title": "File:Madrid Congreso SF.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/6/67/Madrid_Congreso_SF.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1597,
+        "height": 1028,
+        "desc": "Postal del comedor del Congreso de los Diputados. Madrid"
+      }
+    ]
+  },
+  "belgrano_via_viva_barrio_chino": {
+    "name": "Paseo Vía Viva & Barrio Chino",
+    "neighborhood": "Belgrano",
+    "category": "culture",
+    "candidates": []
+  },
+  "belgrano_museo_larreta": {
+    "name": "Museo de Arte Español Enrique Larreta",
+    "neighborhood": "Belgrano",
+    "category": "culture",
+    "candidates": [
+      {
+        "title": "File:Museo de Arte Español Enrique Larreta esquina.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/8/84/Museo_de_Arte_Espa%C3%B1ol_Enrique_Larreta_esquina.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2664,
+        "height": 1774,
+        "desc": "Museo de Arte Español Enrique Larreta, entrada. En Avenida Juramento, barrio de Belgrano, Buenos Aires, Argentina."
+      },
+      {
+        "title": "File:Museo de Arte Español Enrique Larreta Jardín andaluz cerco boj.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Museo_de_Arte_Espa%C3%B1ol_Enrique_Larreta_Jard%C3%ADn_andaluz_cerco_boj.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2134,
+        "height": 2848,
+        "desc": "Museo de Arte Español Enrique Larreta, en Avenida Juramento, barrio de Belgrano, Buenos Aires, Argentina: cerco de boj que conduce a la fuente."
+      },
+      {
+        "title": "File:Museo de Arte Español Enrique Larreta jardín andaluz.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/25/Museo_de_Arte_Espa%C3%B1ol_Enrique_Larreta_jard%C3%ADn_andaluz.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2848,
+        "height": 2134,
+        "desc": "Museo de Arte Español Enrique Larreta, en Avenida Juramento, barrio de Belgrano, Buenos Aires, Argentina: Jardín andaluz y parte trasera de la casa de"
+      }
+    ]
+  },
+  "belgrano_barrancas_glorieta": {
+    "name": "Barrancas de Belgrano & Glorieta de Tango",
+    "neighborhood": "Belgrano",
+    "category": "park",
+    "candidates": []
+  },
+  "belgrano_el_torreon": {
+    "name": "El Torreón de Belgrano R",
+    "neighborhood": "Belgrano",
+    "category": "cafe",
+    "candidates": []
+  },
+  "belgrano_pizzeria_burgio": {
+    "name": "Pizzería Burgio",
+    "neighborhood": "Belgrano",
+    "category": "dining",
+    "candidates": []
+  },
+  "santelmo_cafe_rivas": {
+    "name": "Café Rivas",
+    "neighborhood": "San Telmo",
+    "category": "cafe",
+    "candidates": [
+      {
+        "title": "File:Ralph Curtis - Café on the Riva degli Schiavoni.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/48/Ralph_Curtis_-_Caf%C3%A9_on_the_Riva_degli_Schiavoni.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 1690,
+        "height": 1201,
+        "desc": "Café on the Riva degli Schiavoni"
+      },
+      {
+        "title": "File:\"Cafe Rivas\".jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/c7/%22Cafe_Rivas%22.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4160,
+        "height": 3120,
+        "desc": "Una fotografía del Café Rivas. Estados Unidos 302, Ciudad Autonoma de Buenos Aires."
+      },
+      {
+        "title": "File:Rivas-Vaciamadrid - 51990409314.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/31/Rivas-Vaciamadrid_-_51990409314.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4896,
+        "height": 3264,
+        "desc": "Calle de San Isidro. Rivas-Vaciamadrid."
+      }
+    ]
+  },
+  "palermo_jardin_japones": {
+    "name": "Jardín Japonés de Buenos Aires",
+    "neighborhood": "Palermo",
+    "category": "park",
+    "candidates": [
+      {
+        "title": "File:Buenos Aires - Jardín Japonés - 200806a.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/af/Buenos_Aires_-_Jard%C3%ADn_Japon%C3%A9s_-_200806a.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3872,
+        "height": 2228,
+        "desc": "Japanese garden, Buenos Aires, Argentina."
+      },
+      {
+        "title": "File:Jardín Japonés de Buenos Aires 01.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/99/Jard%C3%ADn_Japon%C3%A9s_de_Buenos_Aires_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3705,
+        "height": 2772,
+        "desc": "Jardín Japonés de Buenos Aires , Argentina"
+      },
+      {
+        "title": "File:Jardín Japonés de Buenos Aires 03.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Jard%C3%ADn_Japon%C3%A9s_de_Buenos_Aires_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4570,
+        "height": 2833,
+        "desc": "Jardín Japonés de Buenos Aires , Argentina"
+      }
+    ]
+  },
+  "santelmo_pasaje_san_lorenzo_casa_minima": {
+    "name": "Pasaje San Lorenzo & La Casa Mínima",
+    "neighborhood": "San Telmo",
+    "category": "culture",
+    "candidates": [
+      {
+        "title": "File:Buenos Aires - San Telmo - La Casa Mínima.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/23/Buenos_Aires_-_San_Telmo_-_La_Casa_M%C3%ADnima.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2444,
+        "height": 3668,
+        "desc": "La Casa Mínima, conocida como la casa más angosta de Buenos Aires. Pasaje San Lorenzo 380, barrio de San Telmo, Buenos Aires, Argentina."
+      },
+      {
+        "title": "File:San Telmo Casa Mínima.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/23/San_Telmo_Casa_M%C3%ADnima.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2134,
+        "height": 2848,
+        "desc": "La Casa Mínima, conocida como la casa más angosta de Buenos Aires. Pasaje San Lorenzo 380, barrio de San Telmo, Buenos Aires, Argentina."
+      }
+    ]
+  },
+  "recoleta_floralis_generica_parque_thays": {
+    "name": "Floralis Genérica & Parque Thays",
+    "neighborhood": "Recoleta",
+    "category": "park",
+    "candidates": []
+  },
+  "chacarita_circuito_murales_parque": {
+    "name": "Paseo de Murales & Veredas de Chacarita",
+    "neighborhood": "Chacarita",
+    "category": "culture",
+    "candidates": []
+  },
+  "colegiales_plaza_mafalda_pasajes": {
+    "name": "Plaza Mafalda & Pasajes de Colegiales",
+    "neighborhood": "Colegiales",
+    "category": "park",
+    "candidates": []
+  },
+  "belgrano_plaza_castelli_estacion": {
+    "name": "Plaza Castelli & Pasaje Estación Belgrano R",
+    "neighborhood": "Belgrano",
+    "category": "park",
+    "candidates": [
+      {
+        "title": "File:Trabajos del 4to Congreso Científico - Volumen 19.djvu",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Trabajos_del_4to_Congreso_Cient%C3%ADfico_-_Volumen_19.djvu?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2369,
+        "height": 3103,
+        "desc": "\nTrabajos del cuarto Congreso Científico (1º Pan-Americano)"
+      }
+    ]
+  },
+  "recoleta_presidente_bar": {
+    "name": "Presidente Bar",
+    "neighborhood": "Recoleta",
+    "category": "nightlife",
+    "candidates": [
+      {
+        "title": "File:Bar Brahma Prudente.JPG",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Bar_Brahma_Prudente.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 4608,
+        "height": 2592,
+        "desc": "Quiosque Bar Brahma Prudente"
+      },
+      {
+        "title": "File:(2014-11-22) Bar João Porquinho - Presidente Prudente - Tripla Romerito Pontes (15682471388).jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/7e/%282014-11-22%29_Bar_Jo%C3%A3o_Porquinho_-_Presidente_Prudente_-_Tripla_Romerito_Pontes_%2815682471388%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3000,
+        "height": 2000,
+        "desc": "[2014-11-22] Bar João Porquinho - Presidente Prudente - Tripla_Romerito Pontes"
+      },
+      {
+        "title": "File:Jose Dalmau Presidente (cropped).jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Jose_Dalmau_Presidente_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 600,
+        "height": 750,
+        "desc": "Presidente del Senado"
+      }
+    ]
+  },
+  "recoleta_milion_bar": {
+    "name": "Milión",
+    "neighborhood": "Recoleta",
+    "category": "nightlife",
+    "candidates": [
+      {
+        "title": "File:Miles Davis 23.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/92/Miles_Davis_23.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 884,
+        "height": 1536,
+        "desc": "Miles Davis, photo taken between 1989 and 1991\n\n35 mm SLR Pentax - Tri X rated at 1600 ASA - 120mm lens set at f:4.5, speed 1/25 sec"
+      },
+      {
+        "title": "File:Vanellus miles miles.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/79/Vanellus_miles_miles.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 3100,
+        "height": 2400,
+        "desc": "A bird from the northern subspecies of the Masked Lapwing (Vanellus miles miles) on the sandy foreshore of Cairns, Queensland, Australia. The northern"
+      },
+      {
+        "title": "File:Thimphu and Watsa milestone.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/75/Thimphu_and_Watsa_milestone.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "width": 2720,
+        "height": 3808,
+        "desc": "Thimphu and Watsa milestone on Phuentsholing-Thimphu highway (AH-48), Bhutan"
+      }
+    ]
+  }
+}
