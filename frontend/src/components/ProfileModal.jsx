@@ -192,7 +192,8 @@ export default function ProfileModal({
   allPlaces = [],
   onOpenPlaceDetail,
   onPlanFromHere,
-  theme = 'light'
+  theme = 'light',
+  authPromptMessage = ''
 }) {
   if (!isOpen) return null;
 
@@ -531,27 +532,45 @@ export default function ProfileModal({
         className="ronda-card border rounded-3xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl relative max-h-[92vh] overflow-y-auto animate-scale-up transition-colors"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Botón Cerrar */}
-        <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full ronda-text-muted hover:bg-black/5 dark:hover:bg-white/10 hover:text-[var(--text-main)] transition cursor-pointer z-20"
-          title="Cerrar ventana"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
         {/* ======================================================== */}
         {/* CASO 1: USUARIO NO LOGUEADO (OPCIÓN A: GOOGLE FIRST)     */}
         {/* ======================================================== */}
         {!currentUser ? (
           <div>
-            {/* Banner Editorial de Pasaporte Porteño (Adaptado a Claro/Oscuro sin exceso de contraste) */}
+            {/* Barra superior con botón cerrar sin superponerse */}
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#E06D28] flex items-center gap-1.5">
+                <Compass className="w-4 h-4" />
+                <span>Mi Cuenta en Ronda</span>
+              </span>
+              <button 
+                type="button"
+                onClick={onClose}
+                className="p-1.5 rounded-full ronda-text-muted hover:bg-black/5 dark:hover:bg-white/10 hover:text-[var(--text-main)] transition cursor-pointer"
+                title="Cerrar ventana"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Sugerencia contextual cuando el usuario intentó tocar "Ya fui", "Favorito" o "Guardar ronda" sin sesión */}
+            {authPromptMessage && (
+              <div className="mb-4 p-3.5 rounded-2xl bg-[#E06D28]/12 border border-[#E06D28]/40 flex items-start gap-2.5 animate-fade-in">
+                <Sparkles className="w-4 h-4 text-[#E06D28] shrink-0 mt-0.5" />
+                <div className="text-xs text-[var(--text-main)] leading-relaxed">
+                  <p className="font-bold text-[#E06D28] mb-0.5">Iniciá sesión o creá tu cuenta</p>
+                  <p>{authPromptMessage}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Banner Editorial de Pasaporte Porteño */}
             <div className="ronda-card-inner border rounded-2xl p-5 mb-4 shadow-xs relative overflow-hidden">
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#E06D28] flex items-center gap-1.5 bg-[#E06D28]/10 border border-[#E06D28]/30 px-2.5 py-1 rounded-full">
                   <Compass className="w-3.5 h-3.5" /> Pasaporte de Viajero Porteño
                 </span>
-                <span className="text-[10px] ronda-text-muted font-mono ronda-card border px-2 py-0.5 rounded-full">
+                <span className="text-[10px] ronda-text-muted font-mono ronda-card border px-2.5 py-0.5 rounded-full">
                   CABA · 11 Barrios
                 </span>
               </div>
@@ -754,43 +773,29 @@ export default function ProfileModal({
                 </div>
               )}
             </div>
-
-            {/* Sello de Privacidad Manos Limpias (Zero-PII) */}
-            <div className="pt-3 mt-2 border-t ronda-border flex items-start gap-2 text-[11px] ronda-text-muted leading-relaxed">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-              <p>
-                <strong>Privacidad Manos Limpias:</strong> Tus datos se validan en tu navegador y viajan como un código anónimo irreversible.
-              </p>
-            </div>
           </div>
         ) : (
           /* ======================================================== */
           /* CASO 2: USUARIO LOGUEADO (PASAPORTE & CENTRO DE COMANDO)  */
           /* ======================================================== */
           <div>
-            {/* ENCABEZADO DEL PERFIL */}
+            {/* ENCABEZADO DEL PERFIL (Sin badge 'Sesión activa' y con botones Cerrar Sesión + Cerrar Ventana separados) */}
             <div className="flex items-center justify-between gap-3 pb-4 border-b ronda-border mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-[#14241F] dark:bg-[#1E3328] text-white flex items-center justify-center font-bold text-base shadow-xs border ronda-border">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-11 h-11 rounded-2xl bg-[#14241F] dark:bg-[#1E3328] text-white flex items-center justify-center font-bold text-base shadow-xs border ronda-border shrink-0">
                   {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'R'}
                 </div>
-                <div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-editorial text-xl font-bold text-[var(--text-main)] leading-tight">
-                      {currentUser.name || 'Viajero Porteño'}
-                    </h3>
-                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded-full">
-                      <GoogleLogoSvg className="w-3 h-3" />
-                      <span>Sesión activa</span>
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-[10px] font-semibold text-[var(--text-main)] ronda-card-inner px-2 py-0.5 rounded-full border flex items-center gap-1">
+                <div className="min-w-0">
+                  <h3 className="font-editorial text-xl font-bold text-[var(--text-main)] leading-tight truncate">
+                    {currentUser.name || 'Viajero Porteño'}
+                  </h3>
+                  <div className="flex items-center gap-2 mt-1 flex-wrap">
+                    <span className="text-[10px] font-semibold text-[var(--text-main)] ronda-card-inner px-2 py-0.5 rounded-full border flex items-center gap-1 shrink-0">
                       <MapPin className="w-3 h-3 text-[#E06D28]" />
                       <span>{currentUser.neighborhood || 'San Telmo'}</span>
                     </span>
                     {currentUser.email && (
-                      <span className="text-xs ronda-text-muted truncate max-w-[130px] sm:max-w-[200px]">
+                      <span className="text-xs ronda-text-muted truncate max-w-[140px] sm:max-w-[220px]">
                         {currentUser.email}
                       </span>
                     )}
@@ -798,14 +803,26 @@ export default function ProfileModal({
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={onLogout}
-                className="p-2 rounded-xl ronda-text-muted hover:text-red-500 hover:bg-red-500/10 transition cursor-pointer"
-                title="Cerrar sesión"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={onLogout}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold ronda-card-inner border ronda-text-muted hover:text-red-500 hover:border-red-500/40 hover:bg-red-500/10 transition cursor-pointer"
+                  title="Cerrar sesión"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Salir</span>
+                </button>
+
+                <button 
+                  type="button"
+                  onClick={onClose}
+                  className="p-2 rounded-xl ronda-text-muted hover:bg-black/5 dark:hover:bg-white/10 hover:text-[var(--text-main)] transition cursor-pointer"
+                  title="Cerrar ventana"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {/* PESTAÑAS PRINCIPALES DEL PERFIL */}

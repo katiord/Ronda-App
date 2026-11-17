@@ -549,6 +549,64 @@ function ActivePlanSuggestion({ plan, onClick, mobileNavVisible, configView }) {
 }
 
 // ==========================================
+// COMPONENTE: Cartel de Sugerencia para Iniciar Sesión o Crear Cuenta
+// ==========================================
+function AuthSuggestionModal({ isOpen, message, onClose, onConfirmLogin }) {
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] bg-black/55 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="ronda-card border rounded-3xl p-5 sm:p-6 max-w-sm w-full shadow-2xl relative animate-scale-up"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-3.5 right-3.5 p-1.5 rounded-full ronda-text-muted hover:bg-black/5 dark:hover:bg-white/10 hover:text-[var(--text-main)] transition cursor-pointer"
+          title="Cerrar"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
+        <div className="w-11 h-11 rounded-2xl bg-[#E06D28]/15 border border-[#E06D28]/30 text-[#E06D28] flex items-center justify-center mb-3.5">
+          <User className="w-5 h-5" />
+        </div>
+
+        <h4 className="font-editorial text-xl font-bold text-[var(--text-main)] mb-1.5 leading-snug">
+          Iniciá sesión o creá tu cuenta
+        </h4>
+
+        <p className="text-xs sm:text-sm ronda-text-muted leading-relaxed mb-5">
+          {message || 'Conectá tu cuenta con Google o con tu correo para guardar tus lugares favoritos, marcar los que ya visitaste y guardar tus rondas.'}
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-2">
+          <button
+            type="button"
+            onClick={onConfirmLogin}
+            className="flex-1 bg-[#E06D28] hover:bg-[#C95B1D] text-white font-semibold text-xs py-3 px-4 rounded-xl transition shadow-sm cursor-pointer btn-latido flex items-center justify-center gap-1.5"
+          >
+            <span>Iniciar sesión / Crear cuenta</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="ronda-card-inner border text-[var(--text-main)] hover:bg-[var(--bg-card)] font-semibold text-xs py-3 px-4 rounded-xl transition cursor-pointer"
+          >
+            Ahora no
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ==========================================
 // COMPONENTE: Modal Carta Translúcida con Detalle del Lugar y Actividades
 // ==========================================
 function PlaceDetailModal({ place, onClose, getPlaceGoogleMapsUrl, onPlanFromHere, isFavorite, onToggleFavorite, isVisited, onToggleVisited }) {
@@ -1166,6 +1224,19 @@ export default function App() {
   const [planSavedToast, setPlanSavedToast] = useState(false);
   const [authToast, setAuthToast] = useState(null);
   const [favoriteBurstId, setFavoriteBurstId] = useState(null);
+  const [authPromptMessage, setAuthPromptMessage] = useState('');
+  const [showAuthSuggestion, setShowAuthSuggestion] = useState(false);
+
+  const promptLoginForAction = (msg) => {
+    setAuthPromptMessage(msg);
+    setShowAuthSuggestion(true);
+  };
+
+  const handleConfirmLoginFromSuggestion = () => {
+    setShowAuthSuggestion(false);
+    setSelectedPlaceModal(null);
+    setShowProfileModal(true);
+  };
 
   // Estados de configuración de la ronda
   const [neighborhood, setNeighborhood] = useState('Cualquiera');
@@ -1640,6 +1711,8 @@ export default function App() {
       setPriceTier(budget);
     }
     setShowProfileModal(false);
+    setShowAuthSuggestion(false);
+    setAuthPromptMessage('');
     setAuthToast({
       title: `¡Hola, ${finalUser.name.split(' ')[0]}!`,
       message: `Pasaporte Porteño conectado.`
@@ -1713,7 +1786,7 @@ export default function App() {
 
     const token = localStorage.getItem('ronda_token');
     if (!token || !currentUser) {
-      setShowProfileModal(true);
+      promptLoginForAction('Para guardar este recorrido en tu perfil y consultarlo cuando quieras, iniciá sesión o creá tu cuenta.');
       return;
     }
 
@@ -1823,7 +1896,7 @@ export default function App() {
 
     const token = localStorage.getItem('ronda_token');
     if (!token || !currentUser) {
-      setShowProfileModal(true);
+      promptLoginForAction('Para guardar tus lugares favoritos en tu perfil, iniciá sesión o creá tu cuenta.');
       return;
     }
 
@@ -1862,7 +1935,7 @@ export default function App() {
 
     const token = localStorage.getItem('ronda_token');
     if (!token || !currentUser) {
-      setShowProfileModal(true);
+      promptLoginForAction('Para marcar lugares con "✓ Ya fui" y sumar progreso en tus insignias, iniciá sesión o creá tu cuenta.');
       return;
     }
 
@@ -2604,10 +2677,12 @@ export default function App() {
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setFavoriteBurstId(pid);
+                                if (currentUser) {
+                                  setFavoriteBurstId(pid);
+                                  setTimeout(() => setFavoriteBurstId(null), 400);
+                                }
                                 triggerHaptic(14);
                                 handleToggleFavorite(pid);
-                                setTimeout(() => setFavoriteBurstId(null), 400);
                               }}
                               className={`p-1.5 rounded-full transition cursor-pointer relative btn-latido ${
                                 isFav
@@ -3041,7 +3116,7 @@ export default function App() {
       {/* MODAL DE PERFIL / INICIAR SESIÓN / REGISTRO */}
       <ProfileModal
         isOpen={showProfileModal}
-        onClose={() => setShowProfileModal(false)}
+        onClose={() => { setShowProfileModal(false); setAuthPromptMessage(''); }}
         currentUser={currentUser}
         onGoogleLogin={handleGoogleLogin}
         onLogout={handleLogout}
@@ -3053,6 +3128,15 @@ export default function App() {
         onOpenPlaceDetail={(place) => openPlaceModal(place)}
         onPlanFromHere={handlePlanFromHere}
         theme={theme}
+        authPromptMessage={authPromptMessage}
+      />
+
+      {/* Cartel de sugerencia cuando el usuario toca Favorito / Ya fui / Guardar sin cuenta */}
+      <AuthSuggestionModal
+        isOpen={showAuthSuggestion}
+        message={authPromptMessage}
+        onClose={() => setShowAuthSuggestion(false)}
+        onConfirmLogin={handleConfirmLoginFromSuggestion}
       />
 
       {/* Toast Flotante de Ronda Guardada */}
@@ -3163,7 +3247,7 @@ export default function App() {
         {/* Modal de perfil / autenticación */}
         <ProfileModal
           isOpen={showProfileModal}
-          onClose={() => setShowProfileModal(false)}
+          onClose={() => { setShowProfileModal(false); setAuthPromptMessage(''); }}
           currentUser={currentUser}
           onGoogleLogin={handleGoogleLogin}
           onLogout={handleLogout}
@@ -3175,6 +3259,15 @@ export default function App() {
           onOpenPlaceDetail={(place) => openPlaceModal(place)}
           onPlanFromHere={handlePlanFromHere}
           theme={theme}
+          authPromptMessage={authPromptMessage}
+        />
+
+        {/* Cartel de sugerencia cuando el usuario toca Favorito / Ya fui sin cuenta */}
+        <AuthSuggestionModal
+          isOpen={showAuthSuggestion}
+          message={authPromptMessage}
+          onClose={() => setShowAuthSuggestion(false)}
+          onConfirmLogin={handleConfirmLoginFromSuggestion}
         />
 
         {/* Modal Translúcido de Detalle del Lugar y Actividades */}
@@ -3907,7 +4000,7 @@ export default function App() {
       {/* MODAL DE PERFIL / INICIAR SESIÓN / REGISTRO */}
       <ProfileModal
         isOpen={showProfileModal}
-        onClose={() => setShowProfileModal(false)}
+        onClose={() => { setShowProfileModal(false); setAuthPromptMessage(''); }}
         currentUser={currentUser}
         onGoogleLogin={handleGoogleLogin}
         onLogout={handleLogout}
@@ -3919,6 +4012,15 @@ export default function App() {
         onOpenPlaceDetail={(place) => openPlaceModal(place)}
         onPlanFromHere={handlePlanFromHere}
         theme={theme}
+        authPromptMessage={authPromptMessage}
+      />
+
+      {/* Cartel de sugerencia cuando el usuario toca Favorito / Ya fui / Guardar sin cuenta */}
+      <AuthSuggestionModal
+        isOpen={showAuthSuggestion}
+        message={authPromptMessage}
+        onClose={() => setShowAuthSuggestion(false)}
+        onConfirmLogin={handleConfirmLoginFromSuggestion}
       />
 
       {/* Toast Flotante de Ronda Guardada */}
