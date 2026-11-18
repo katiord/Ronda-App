@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/((?!places/|actividades/|barrios/|assets/|favicon|icons).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
