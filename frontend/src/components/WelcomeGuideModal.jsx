@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Compass,
   MapPin,
@@ -30,6 +30,14 @@ export default function WelcomeGuideModal({
   onStartRonda = null
 }) {
   const [currentStep, setCurrentStep] = useState(0);
+  const scrollContainerRef = useRef(null);
+
+  // Scroll automático hacia arriba cada vez que cambia el paso
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [currentStep]);
 
   // Cerrar con Escape
   useEffect(() => {
@@ -74,7 +82,8 @@ export default function WelcomeGuideModal({
       aria-labelledby="welcome-guide-title"
     >
       <div 
-        className="ronda-card border border-[var(--border-main)] rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-y-auto shadow-2xl flex flex-col relative transition-all duration-300"
+        ref={scrollContainerRef}
+        className="ronda-card border border-[var(--border-main)] rounded-3xl w-full max-w-2xl lg:max-w-3xl max-h-[92vh] overflow-y-auto shadow-2xl flex flex-col relative transition-all duration-300"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Cabecera del modal con botón de cierre */}
@@ -138,52 +147,50 @@ export default function WelcomeGuideModal({
                 <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] block mb-3 text-center sm:text-left">
                   Así funciona un circuito típico
                 </span>
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-2">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 items-stretch">
                   {/* Parada 1 */}
-                  <div className="flex-1 ronda-card border rounded-xl p-3.5 flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
-                      <Coffee className="w-5 h-5" />
+                  <div className="ronda-card border rounded-2xl p-3 flex items-center gap-2.5 relative">
+                    <div className="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                      <Coffee className="w-4 h-4" />
                     </div>
-                    <div className="min-w-0">
-                      <span className="text-[10px] font-bold text-[#E06D28] block">PARADA 1</span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="text-[10px] font-bold text-[#E06D28]">PARADA 1</span>
+                        <span className="text-[9px] font-semibold text-[var(--text-muted)] flex items-center gap-0.5">
+                          <Footprints className="w-3 h-3 text-[#E06D28]" /> ~6 min
+                        </span>
+                      </div>
                       <p className="text-xs font-bold text-[var(--text-main)] truncate">Café de culto</p>
-                      <p className="text-[10px] text-[var(--text-muted)]">Especialidad & mesas</p>
+                      <p className="text-[10px] text-[var(--text-muted)] truncate">Especialidad & mesas</p>
                     </div>
-                  </div>
-
-                  {/* Flechita / caminata */}
-                  <div className="flex sm:flex-col items-center justify-center py-1 sm:py-0 px-2 text-[var(--text-muted)] text-[10px] font-semibold gap-1">
-                    <Footprints className="w-3.5 h-3.5 text-[#E06D28]" />
-                    <span className="whitespace-nowrap">~6 min</span>
                   </div>
 
                   {/* Parada 2 */}
-                  <div className="flex-1 ronda-card border rounded-xl p-3.5 flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                      <Landmark className="w-5 h-5" />
+                  <div className="ronda-card border rounded-2xl p-3 flex items-center gap-2.5 relative">
+                    <div className="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                      <Landmark className="w-4 h-4" />
                     </div>
-                    <div className="min-w-0">
-                      <span className="text-[10px] font-bold text-[#E06D28] block">PARADA 2</span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="text-[10px] font-bold text-[#E06D28]">PARADA 2</span>
+                        <span className="text-[9px] font-semibold text-[var(--text-muted)] flex items-center gap-0.5">
+                          <Footprints className="w-3 h-3 text-[#E06D28]" /> ~8 min
+                        </span>
+                      </div>
                       <p className="text-xs font-bold text-[var(--text-main)] truncate">Pasaje o Cultura</p>
-                      <p className="text-[10px] text-[var(--text-muted)]">Rincón histórico</p>
+                      <p className="text-[10px] text-[var(--text-muted)] truncate">Rincón histórico</p>
                     </div>
-                  </div>
-
-                  {/* Flechita / caminata */}
-                  <div className="flex sm:flex-col items-center justify-center py-1 sm:py-0 px-2 text-[var(--text-muted)] text-[10px] font-semibold gap-1">
-                    <Footprints className="w-3.5 h-3.5 text-[#E06D28]" />
-                    <span className="whitespace-nowrap">~8 min</span>
                   </div>
 
                   {/* Parada 3 */}
-                  <div className="flex-1 ronda-card border rounded-xl p-3.5 flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
-                      <Utensils className="w-5 h-5" />
+                  <div className="ronda-card border rounded-2xl p-3 flex items-center gap-2.5 relative">
+                    <div className="w-8 h-8 rounded-xl bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+                      <Utensils className="w-4 h-4" />
                     </div>
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <span className="text-[10px] font-bold text-[#E06D28] block">PARADA 3</span>
                       <p className="text-xs font-bold text-[var(--text-main)] truncate">Bodegón o Vermut</p>
-                      <p className="text-[10px] text-[var(--text-muted)]">Platitos & sobremesa</p>
+                      <p className="text-[10px] text-[var(--text-muted)] truncate">Platitos & sobremesa</p>
                     </div>
                   </div>
                 </div>
@@ -261,11 +268,9 @@ export default function WelcomeGuideModal({
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="truncate">{barrio.name}</span>
-                        {barrio.highlight ? (
-                          <span className="text-[10px] text-[#E06D28] font-bold">✓ Iluminado</span>
-                        ) : (
-                          <span className="text-[10px] opacity-40">Por explorar</span>
+                        <span className="font-semibold truncate text-[var(--text-main)]">{barrio.name}</span>
+                        {barrio.highlight && (
+                          <span className="w-2 h-2 rounded-full bg-[#E06D28] shrink-0" title="Activo"></span>
                         )}
                       </div>
                       <span className="text-[10px] block opacity-75 font-normal truncate">{barrio.desc}</span>
@@ -292,7 +297,7 @@ export default function WelcomeGuideModal({
               <div className="text-center sm:text-left">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-600 dark:text-amber-400 mb-3">
                   <Award className="w-3.5 h-3.5" />
-                  <span>Gamificación & Reconocimiento</span>
+                  <span>Reconocimiento</span>
                 </span>
                 <h2 className="font-editorial text-3xl sm:text-4xl font-bold text-[var(--text-main)] leading-tight mb-2">
                   Insignias de Culto y Niveles<span className="text-[#E06D28]">.</span>

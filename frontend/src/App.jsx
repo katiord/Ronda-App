@@ -1319,10 +1319,11 @@ export default function App() {
 
   const [timeOfDay, setTimeOfDay] = useState('night');
   const [mood, setMood] = useState('amigos'); // 'tranquilo' | 'foodie' | 'cultural' | 'amigos'
+  const [stopsCount, setStopsCount] = useState(2); // 2 (Ronda Clásica · Default) | 3 (Ronda Extendida)
   const [showCustomPrefs, setShowCustomPrefs] = useState(false);
   const [selectedExtras, setSelectedExtras] = useState(['drinks']);
   const [customActivityNote, setCustomActivityNote] = useState('');
-  const [allowNeighboringBarrio, setAllowNeighboringBarrio] = useState(false);
+  const [allowNeighboringBarrio, setAllowNeighboringBarrio] = useState(true);
   const [selectedBudget, setSelectedBudget] = useState('clasico');
   const [priceTier, setPriceTier] = useState('$$');
   const [copied, setCopied] = useState(false);
@@ -2254,8 +2255,8 @@ export default function App() {
     return neighborhood;
   };
 
-  const budgetSummary = currentBudgetObj.amount === 'Clásico Porteño' ? '$ 25.000' : currentBudgetObj.amount;
-  const selectedSummaryText = `${getSelectedMomentSummary()} · ${getSelectedNeighborhoodSummary()} · ${budgetSummary}`;
+  const rhythmSummary = stopsCount === 3 ? '3 paradas' : '2 paradas';
+  const selectedSummaryText = `${getSelectedMomentSummary()} · ${getSelectedNeighborhoodSummary()} · ${rhythmSummary} · ${budgetSummary}`;
 
   const handleGeneratePlan = async (overrideSlot = null) => {
     const activeSlot = overrideSlot || selectedSlot;
@@ -2282,6 +2283,12 @@ export default function App() {
       contextNotes.push('Momento de Desayuno & Mañana');
     } else if (activeSlot === 'other_day') {
       contextNotes.push(`Planificado para la fecha ${otherDayDate}`);
+    }
+
+    if (stopsCount === 3) {
+      contextNotes.push('Ritmo de salida: Ronda Extendida de 3 paradas');
+    } else {
+      contextNotes.push('Ritmo de salida: Ronda Clásica de 2 paradas');
     }
 
     if (extraLabels.length > 0) {
@@ -2352,7 +2359,8 @@ export default function App() {
       start_time: calculatedStartTime,
       is_now: isNowVal,
       day_of_week: currentDayOfWeek,
-      allow_neighboring_barrio: allowNeighboringBarrio
+      allow_neighboring_barrio: allowNeighboringBarrio,
+      stops_count: stopsCount
     };
 
     const minAnimationPromise = new Promise(resolve => setTimeout(resolve, 1400));
@@ -2445,35 +2453,52 @@ export default function App() {
 
       let p1 = null;
       let p2 = null;
+      let p3 = null;
 
       if (effectiveSlot === 'night') {
         p1 = openBarrioPlaces.find(p => p.category === 'dining' || (p.subcategories || []).includes('bodegon')) ||
              openBarrioPlaces.find(p => p.category === 'nightlife') || openBarrioPlaces[0];
         p2 = openBarrioPlaces.find(p => p.id !== p1.id && (p.category === 'nightlife' || (p.subcategories || []).includes('cocteleria'))) ||
              openBarrioPlaces.find(p => p.id !== p1.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
+        if (stopsCount === 3 && openBarrioPlaces.length >= 3) {
+          p3 = openBarrioPlaces.find(p => p.id !== p1.id && p.id !== p2.id && ((p.subcategories || []).includes('juegos_pool') || p.category === 'nightlife' || p.category === 'dining')) ||
+               openBarrioPlaces.find(p => p.id !== p1.id && p.id !== p2.id) || openBarrioPlaces[2 % openBarrioPlaces.length];
+        }
       } else if (effectiveSlot === 'lunch') {
         p1 = openBarrioPlaces.find(p => p.category === 'dining' || (p.subcategories || []).includes('bodegon')) || openBarrioPlaces[0];
         p2 = openBarrioPlaces.find(p => p.id !== p1.id && (p.category === 'cafe' || p.category === 'park' || p.category === 'culture')) ||
              openBarrioPlaces.find(p => p.id !== p1.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
+        if (stopsCount === 3 && openBarrioPlaces.length >= 3) {
+          p3 = openBarrioPlaces.find(p => p.id !== p1.id && p.id !== p2.id && (p.category === 'culture' || p.category === 'bookstore' || p.category === 'nightlife' || p.category === 'dining')) ||
+               openBarrioPlaces.find(p => p.id !== p1.id && p.id !== p2.id) || openBarrioPlaces[2 % openBarrioPlaces.length];
+        }
       } else if (effectiveSlot === 'afternoon') {
         p1 = openBarrioPlaces.find(p => p.category === 'cafe') || openBarrioPlaces[0];
         p2 = openBarrioPlaces.find(p => p.id !== p1.id && (p.category === 'bookstore' || p.category === 'culture' || p.category === 'park' || p.category === 'nightlife')) ||
              openBarrioPlaces.find(p => p.id !== p1.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
+        if (stopsCount === 3 && openBarrioPlaces.length >= 3) {
+          p3 = openBarrioPlaces.find(p => p.id !== p1.id && p.id !== p2.id && (p.category === 'nightlife' || p.category === 'dining' || (p.subcategories || []).includes('bodegon'))) ||
+               openBarrioPlaces.find(p => p.id !== p1.id && p.id !== p2.id) || openBarrioPlaces[2 % openBarrioPlaces.length];
+        }
       } else {
         // morning
         p1 = openBarrioPlaces.find(p => p.category === 'cafe') || openBarrioPlaces[0];
         p2 = openBarrioPlaces.find(p => p.id !== p1.id && (p.category === 'culture' || p.category === 'park' || p.category === 'bookstore')) ||
              openBarrioPlaces.find(p => p.id !== p1.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
+        if (stopsCount === 3 && openBarrioPlaces.length >= 3) {
+          p3 = openBarrioPlaces.find(p => p.id !== p1.id && p.id !== p2.id && (p.category === 'dining' || (p.subcategories || []).includes('bodegon'))) ||
+               openBarrioPlaces.find(p => p.id !== p1.id && p.id !== p2.id) || openBarrioPlaces[2 % openBarrioPlaces.length];
+        }
       }
 
-      const dur1 = p1.typical_duration_minutes || 75;
+      const dur1 = p1.typical_duration_minutes || (effectiveSlot === 'morning' ? 45 : 75);
       const end1 = new Date(startDt.getTime() + dur1 * 60000);
       const slot1 = `${fmt(startDt)} - ${fmt(end1)}`;
 
       const distKm = calculateDistanceKm(p1.lat, p1.lng, p2.lat, p2.lng) || 0.5;
       const transitMins = Math.max(5, Math.min(15, Math.round(distKm * 10)));
       const start2 = new Date(end1.getTime() + transitMins * 60000);
-      const dur2 = p2.typical_duration_minutes || 75;
+      const dur2 = p2.typical_duration_minutes || (effectiveSlot === 'morning' ? 45 : 75);
       const end2 = new Date(start2.getTime() + dur2 * 60000);
       const slot2 = `${fmt(start2)} - ${fmt(end2)}`;
 
@@ -2483,7 +2508,7 @@ export default function App() {
           time_slot: slot1,
           place_name: p1.name,
           address: p1.address,
-          activity_type: effectiveSlot === 'night' ? (isLateNight ? 'Coctelería de autor' : 'Cena Porteña') : effectiveSlot === 'lunch' ? 'Almuerzo Porteño' : 'Café & Merienda',
+          activity_type: effectiveSlot === 'night' ? (isLateNight ? 'Coctelería de autor' : 'Cena Porteña') : effectiveSlot === 'lunch' ? 'Almuerzo Porteño' : 'Café & Desayuno',
           duration_minutes: dur1,
           porteño_tip: p1.highlight || 'Disfrutar la atmósfera única del lugar y pedir la recomendación de la casa.',
           lat: p1.lat,
@@ -2499,9 +2524,9 @@ export default function App() {
           time_slot: slot2,
           place_name: p2.name,
           address: p2.address,
-          activity_type: effectiveSlot === 'night' ? 'Tragos & Sobremesa' : effectiveSlot === 'afternoon' ? 'Paseo & Cultura' : 'Sobremesa & Recorrido',
+          activity_type: effectiveSlot === 'night' ? 'Tragos & Sobremesa' : effectiveSlot === 'afternoon' ? 'Paseo & Cultura' : effectiveSlot === 'morning' ? 'Paseo & Pasaje Histórico' : 'Sobremesa & Recorrido',
           duration_minutes: dur2,
-          porteño_tip: p2.highlight || 'Relajarse y coronar la ronda a tu propio ritmo.',
+          porteño_tip: p2.highlight || 'Relajarse y recorrer el barrio a tu propio ritmo.',
           lat: p2.lat,
           lng: p2.lng,
           description: p2.description,
@@ -2511,6 +2536,32 @@ export default function App() {
           category: p2.category
         }
       ];
+
+      if (stopsCount === 3 && p3) {
+        const dist2_3 = calculateDistanceKm(p2.lat, p2.lng, p3.lat, p3.lng) || 0.6;
+        const transit2_3 = Math.max(5, Math.min(15, Math.round(dist2_3 * 10)));
+        const start3 = new Date(end2.getTime() + transit2_3 * 60000);
+        const dur3 = p3.typical_duration_minutes || 75;
+        const end3 = new Date(start3.getTime() + dur3 * 60000);
+        const slot3 = `${fmt(start3)} - ${fmt(end3)}`;
+
+        rawFallbackSchedule.push({
+          id: p3.id,
+          time_slot: slot3,
+          place_name: p3.name,
+          address: p3.address,
+          activity_type: effectiveSlot === 'morning' ? 'Almuerzo de Bodegón' : effectiveSlot === 'lunch' ? 'Helado & Café de Culto' : effectiveSlot === 'afternoon' ? 'Tapeo & Vermut' : 'Partida de Pool & Brindis',
+          duration_minutes: dur3,
+          porteño_tip: p3.highlight || 'Coronar la ronda con mística porteña y buena sobremesa.',
+          lat: p3.lat,
+          lng: p3.lng,
+          description: p3.description,
+          activities: p3.activities || [],
+          image_url: p3.image_url,
+          about: p3.about,
+          category: p3.category
+        });
+      }
 
       const fallbackSchedule = updateScheduleTransits(rawFallbackSchedule);
 
@@ -4122,92 +4173,105 @@ export default function App() {
                   );
                 })}
               </div>
-
-              {/* Toggle para conectar con barrio vecino */}
-              {neighborhood !== 'Cualquiera' && (
-                <div className="mt-4 pt-3.5 border-t border-[var(--border-card)]">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      triggerHaptic(8);
-                      setAllowNeighboringBarrio(prev => !prev);
-                    }}
-                    className={`w-full flex items-center justify-between p-3.5 rounded-2xl border transition cursor-pointer text-left ${
-                      allowNeighboringBarrio
-                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#14241F] dark:border-[#385C4A] shadow-md ring-2 ring-[#E06D28]/40'
-                        : 'ronda-card border text-[var(--text-main)] hover:border-[#E06D28] shadow-xs'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg">🔄</span>
-                      <div>
-                        <div className="text-xs sm:text-sm font-bold flex items-center gap-2">
-                          <span>Permitir conectar con barrio vecino</span>
-                          {allowNeighboringBarrio && (
-                            <span className="text-[10px] bg-[#E06D28] text-white px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
-                              Activo
-                            </span>
-                          )}
-                        </div>
-                        <p className={`text-[11px] mt-0.5 ${allowNeighboringBarrio ? 'text-white/80' : 'ronda-text-muted'}`}>
-                          Si enriquece el recorrido, conecta la 3ra parada con un rincón imperdible de un barrio lindero a pie.
-                        </p>
-                      </div>
-                    </div>
-                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-xs shrink-0 ${
-                      allowNeighboringBarrio ? 'border-[#E06D28] bg-[#E06D28] text-white font-bold' : 'border-stone-400'
-                    }`}>
-                      {allowNeighboringBarrio ? '✓' : ''}
-                    </div>
-                  </button>
-                </div>
-              )}
             </section>
 
-            {/* SECCIÓN 3: VIBE & PRESUPUESTO (UNIFICADO Y MINIMALISTA) */}
+            {/* SECCIÓN 3: RITMO & PRESUPUESTO (DECISIÓN DE EXTENSIÓN Y ESCALA) */}
             <section className="ronda-card border rounded-3xl p-5 sm:p-7 shadow-xs">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#E06D28] block mb-0.5">
-                    Paso 3 · Vibe & Presupuesto
+                    Paso 3 · Ritmo & Presupuesto
                   </span>
                   <h2 className="text-base sm:text-lg font-bold text-[var(--text-main)]">
-                    ¿Qué onda buscás?
+                    ¿Cuánto tiempo tenés para tu salida?
                   </h2>
                 </div>
               </div>
 
-              {/* 4 Vibes principales */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-5">
-                {[
-                  { id: 'tranquilo', label: 'Tranqui', icon: '✨', desc: 'Cafés, lectura & calma' },
-                  { id: 'foodie', label: 'Foodie', icon: '🍴', desc: 'Bodegón & sobremesa' },
-                  { id: 'cultural', label: 'Cultura', icon: '🏛️', desc: 'Arquitectura & galerías' },
-                  { id: 'amigos', label: 'Tragos', icon: '🍸', desc: 'Bares notables & noche' }
-                ].map((v) => {
-                  const isSelected = mood === v.id;
-                  return (
+              {/* Selector de Ritmo y Cantidad de Paradas */}
+              {(() => {
+                const previewSlotKey = selectedSlot === 'now'
+                  ? (currentHour >= 20 || currentHour < 6 ? 'night' : currentHour >= 16 ? 'afternoon' : currentHour >= 12 ? 'lunch' : 'morning')
+                  : (selectedSlot === 'other_day' ? subSlot : selectedSlot);
+
+                const rhythmDetails = {
+                  morning: {
+                    desc2: 'Café de culto o medialunas ➔ Paseo por pasajes o parque',
+                    desc3: 'Desayuno de especialidad ➔ Paseo con historia ➔ Almuerzo de bodegón'
+                  },
+                  lunch: {
+                    desc2: 'Bodegón clásico o pastas ➔ Helado artesanal o café al sol',
+                    desc3: 'Almuerzo de bodegón ➔ Sobremesa & helado ➔ Museo o caminata'
+                  },
+                  afternoon: {
+                    desc2: 'Café de especialidad & pastelería ➔ Librería o rincón histórico',
+                    desc3: 'Merienda de autor ➔ Galería o libros ➔ Tapeo & vermut al atardecer'
+                  },
+                  night: {
+                    desc2: 'Bodegón o cena porteña ➔ Barra de cócteles o vermut',
+                    desc3: 'Cena porteña ➔ Cócteles de autor ➔ Partida de pool, bowling o noche'
+                  }
+                }[previewSlotKey] || {
+                  desc2: 'Café de culto ➔ Paseo con mística',
+                  desc3: 'Desayuno ➔ Paseo ➔ Almuerzo de bodegón'
+                };
+
+                return (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+                    {/* Opción 1: Ronda Clásica (2 paradas · Default) */}
                     <button
-                      key={v.id}
                       type="button"
-                      onClick={() => { triggerHaptic(8); setMood(v.id); }}
-                      className={`p-3.5 rounded-2xl text-left transition border cursor-pointer flex flex-col justify-between min-h-[82px] ${
-                        isSelected
+                      onClick={() => { triggerHaptic(8); setStopsCount(2); }}
+                      className={`p-4 rounded-2xl text-left transition border cursor-pointer flex flex-col justify-between ${
+                        stopsCount === 2
                           ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#14241F] dark:border-[#385C4A] shadow-md ring-2 ring-[#E06D28]/40'
                           : 'ronda-card border text-[var(--text-main)] hover:border-[#E06D28] shadow-xs'
                       }`}
                     >
-                      <span className="text-lg">{v.icon}</span>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xl">⚡</span>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                          stopsCount === 2 ? 'bg-[#E06D28] text-white' : 'ronda-tag'
+                        }`}>
+                          2 Paradas · Recomendado
+                        </span>
+                      </div>
                       <div>
-                        <div className="font-bold text-xs sm:text-sm">{v.label}</div>
-                        <div className={`text-[10px] truncate ${isSelected ? 'text-white/80' : 'ronda-text-muted'}`}>
-                          {v.desc}
-                        </div>
+                        <div className="font-bold text-sm sm:text-base">Ronda Clásica (~2 hs)</div>
+                        <p className={`text-xs mt-1 leading-snug ${stopsCount === 2 ? 'text-white/80' : 'ronda-text-muted'}`}>
+                          {rhythmDetails.desc2}
+                        </p>
                       </div>
                     </button>
-                  );
-                })}
-              </div>
+
+                    {/* Opción 2: Ronda Extendida (3 paradas) */}
+                    <button
+                      type="button"
+                      onClick={() => { triggerHaptic(8); setStopsCount(3); }}
+                      className={`p-4 rounded-2xl text-left transition border cursor-pointer flex flex-col justify-between ${
+                        stopsCount === 3
+                          ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#14241F] dark:border-[#385C4A] shadow-md ring-2 ring-[#E06D28]/40'
+                          : 'ronda-card border text-[var(--text-main)] hover:border-[#E06D28] shadow-xs'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xl">🚀</span>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                          stopsCount === 3 ? 'bg-[#E06D28] text-white' : 'ronda-tag'
+                        }`}>
+                          3 Paradas · Circuito completo
+                        </span>
+                      </div>
+                      <div>
+                        <div className="font-bold text-sm sm:text-base">Ronda Extendida (~3.5 hs)</div>
+                        <p className={`text-xs mt-1 leading-snug ${stopsCount === 3 ? 'text-white/80' : 'ronda-text-muted'}`}>
+                          {rhythmDetails.desc3}
+                        </p>
+                      </div>
+                    </button>
+                  </div>
+                );
+              })()}
 
               {/* Presupuesto */}
               <div className="border-t border-[var(--border-card)] pt-4 mb-4">
