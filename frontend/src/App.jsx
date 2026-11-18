@@ -47,6 +47,7 @@ import {
 import RondaMap from './components/RondaMap';
 import RecommendedScreen from './components/RecommendedScreen';
 import ProfileModal from './components/ProfileModal';
+import WelcomeGuideModal from './components/WelcomeGuideModal';
 import LOCAL_PLACES_CATALOG from './data/places_caba.json';
 
 const API_BASE_URL = (() => {
@@ -330,7 +331,7 @@ function SparkleBurst({ active }) {
 // ==========================================
 // COMPONENTE: Menú lateral de escritorio (se abre al pasar el cursor)
 // ==========================================
-function DesktopSidebar({ isOpen, setIsOpen, screen, onNavigate, setShowProfileModal, currentUser }) {
+function DesktopSidebar({ isOpen, setIsOpen, screen, onNavigate, setShowProfileModal, currentUser, onOpenGuide }) {
   return (
     <>
       {/* Telón sutil para cerrar al hacer clic afuera y evitar superposición */}
@@ -398,6 +399,14 @@ function DesktopSidebar({ isOpen, setIsOpen, screen, onNavigate, setShowProfileM
             >
               <Sparkles className={`w-4 h-4 ${screen === 'recommended' ? 'text-[#E06D28]' : 'ronda-text-muted'}`} />
               <span>Recomendados</span>
+            </button>
+            <button 
+              type="button"
+              onClick={() => { triggerHaptic(8); if (onOpenGuide) onOpenGuide(); setIsOpen(false); }}
+              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl font-semibold text-sm cursor-pointer transition btn-latido ronda-text-muted hover:text-[var(--text-main)] hover:bg-black/5 dark:hover:bg-white/5"
+            >
+              <Sparkles className="w-4 h-4 text-[#E06D28]" />
+              <span>¿Cómo funciona?</span>
             </button>
           </nav>
         </div>
@@ -1222,6 +1231,7 @@ export default function App() {
 
   // Modal de perfil / Login / Usuario
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showWelcomeGuideModal, setShowWelcomeGuideModal] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [planSavedToast, setPlanSavedToast] = useState(false);
   const [authToast, setAuthToast] = useState(null);
@@ -1720,6 +1730,17 @@ export default function App() {
       message: `Pasaporte Porteño conectado.`
     });
     setTimeout(() => setAuthToast(null), 4000);
+
+    // Si es la primera vez que se loguea o no vio la guía, desplegamos el Pasaporte & Guía de Bienvenida
+    const guideKey = `ronda_guide_seen_${finalUser.id || 'user'}`;
+    const alreadySeen = localStorage.getItem(guideKey) || localStorage.getItem('ronda_guide_seen');
+    if (!alreadySeen) {
+      setTimeout(() => {
+        setShowWelcomeGuideModal(true);
+        localStorage.setItem(guideKey, 'true');
+        localStorage.setItem('ronda_guide_seen', 'true');
+      }, 600);
+    }
   };
 
   const handleLogout = () => {
@@ -2500,6 +2521,7 @@ export default function App() {
           onNavigate={handleNavigate} 
           setShowProfileModal={setShowProfileModal} 
           currentUser={currentUser}
+          onOpenGuide={() => setShowWelcomeGuideModal(true)}
         />
 
         {/* Contenido principal del itinerario */}
@@ -3131,6 +3153,19 @@ export default function App() {
         onPlanFromHere={handlePlanFromHere}
         theme={theme}
         authPromptMessage={authPromptMessage}
+        onOpenGuide={() => setShowWelcomeGuideModal(true)}
+      />
+
+      {/* MODAL DE BIENVENIDA / GUÍA DE RONDA */}
+      <WelcomeGuideModal
+        isOpen={showWelcomeGuideModal}
+        onClose={() => setShowWelcomeGuideModal(false)}
+        currentUser={currentUser}
+        onOpenProfile={() => setShowProfileModal(true)}
+        onStartRonda={() => {
+          setShowWelcomeGuideModal(false);
+          setScreen('config');
+        }}
       />
 
       {/* Cartel de sugerencia cuando el usuario toca Favorito / Ya fui / Guardar sin cuenta */}
@@ -3198,6 +3233,7 @@ export default function App() {
           onNavigate={handleNavigate} 
           setShowProfileModal={setShowProfileModal} 
           currentUser={currentUser}
+          onOpenGuide={() => setShowWelcomeGuideModal(true)}
         />
 
         {/* Botón flotante 'r.' para abrir el menú en desktop al pasar el cursor */}
@@ -3262,6 +3298,19 @@ export default function App() {
           onPlanFromHere={handlePlanFromHere}
           theme={theme}
           authPromptMessage={authPromptMessage}
+          onOpenGuide={() => setShowWelcomeGuideModal(true)}
+        />
+
+        {/* MODAL DE BIENVENIDA / GUÍA DE RONDA */}
+        <WelcomeGuideModal
+          isOpen={showWelcomeGuideModal}
+          onClose={() => setShowWelcomeGuideModal(false)}
+          currentUser={currentUser}
+          onOpenProfile={() => setShowProfileModal(true)}
+          onStartRonda={() => {
+            setShowWelcomeGuideModal(false);
+            handleNavigate('config', 'quick');
+          }}
         />
 
         {/* Cartel de sugerencia cuando el usuario toca Favorito / Ya fui sin cuenta */}
@@ -3328,6 +3377,7 @@ export default function App() {
         onNavigate={handleNavigate} 
         setShowProfileModal={setShowProfileModal} 
         currentUser={currentUser}
+        onOpenGuide={() => setShowWelcomeGuideModal(true)}
       />
 
       {/* Contenido Principal */}
@@ -3438,9 +3488,30 @@ export default function App() {
           </div>
         )}
 
-        <h1 className="font-editorial text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-main)] leading-tight mb-8">
-          Empieza por acá<span className="text-[#E06D28]">..</span>
-        </h1>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#E06D28]/15 text-[#E06D28] uppercase tracking-wider mb-2">
+              <Compass className="w-3.5 h-3.5" />
+              <span>Circuitos a pie por CABA</span>
+            </div>
+            <h1 className="font-editorial text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-main)] leading-tight">
+              Buenos Aires no se camina al azar<span className="text-[#E06D28]">.</span>
+            </h1>
+            <p className="text-sm sm:text-base text-[var(--text-muted)] mt-2 max-w-2xl leading-relaxed">
+              Ronda arma recorridos curados de 2 a 3 paradas a pie: café de autor, rincones con historia y bodegones según tu momento, la hora y el clima.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => { triggerHaptic(8); setShowWelcomeGuideModal(true); }}
+            className="inline-flex items-center gap-2 ronda-card border hover:border-[#E06D28] text-[var(--text-main)] px-4 py-2.5 rounded-2xl text-xs font-semibold transition cursor-pointer shadow-2xs self-start sm:self-auto shrink-0 btn-latido"
+            title="Conocé cómo funciona Ronda, el mapa porteño y las insignias"
+          >
+            <Sparkles className="w-4 h-4 text-[#E06D28]" />
+            <span>¿Cómo funciona Ronda?</span>
+          </button>
+        </div>
 
         {weather.isRain && (
           <div className="mb-8 bg-blue-50/80 dark:bg-sky-950/40 border border-blue-200/80 dark:border-sky-800/50 rounded-2xl p-4 flex items-center gap-3 text-blue-900 dark:text-sky-200 text-sm">
@@ -3466,6 +3537,36 @@ export default function App() {
                 <div className="hidden sm:flex items-center gap-1.5 ronda-tag border px-3.5 py-1.5 rounded-full text-xs font-semibold">
                   <Sparkles className="w-4 h-4 text-[#E06D28]" />
                   <span>Listo en 1 clic</span>
+                </div>
+              </div>
+
+              {/* Micro-preview visual: ¿Qué es una ronda? */}
+              <div className="ronda-card-inner border rounded-2xl p-3.5 sm:p-4 mb-6 shadow-2xs">
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-1.5">
+                    <Footprints className="w-3.5 h-3.5 text-[#E06D28]" />
+                    <span>Tu circuito en 3 paradas a pie</span>
+                  </span>
+                  <span className="text-[10px] font-semibold text-[#E06D28]">
+                    Conectadas sin traslados largos
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="ronda-card border rounded-xl p-2.5 flex flex-col items-center">
+                    <span className="text-base sm:text-lg mb-0.5">☕</span>
+                    <span className="text-[11px] font-bold text-[var(--text-main)] leading-tight truncate w-full">1. Café de culto</span>
+                    <span className="text-[9px] text-[var(--text-muted)] mt-0.5 truncate w-full">Especialidad & mesas</span>
+                  </div>
+                  <div className="ronda-card border rounded-xl p-2.5 flex flex-col items-center relative">
+                    <span className="text-base sm:text-lg mb-0.5">🏛️</span>
+                    <span className="text-[11px] font-bold text-[var(--text-main)] leading-tight truncate w-full">2. Rincón o Paseo</span>
+                    <span className="text-[9px] text-[#E06D28] font-medium mt-0.5 truncate w-full">~6 min a pie</span>
+                  </div>
+                  <div className="ronda-card border rounded-xl p-2.5 flex flex-col items-center">
+                    <span className="text-base sm:text-lg mb-0.5">🍝</span>
+                    <span className="text-[11px] font-bold text-[var(--text-main)] leading-tight truncate w-full">3. Bodegón o Bar</span>
+                    <span className="text-[9px] text-[var(--text-muted)] mt-0.5 truncate w-full">Platos o vermut</span>
+                  </div>
                 </div>
               </div>
 
@@ -4015,6 +4116,19 @@ export default function App() {
         onPlanFromHere={handlePlanFromHere}
         theme={theme}
         authPromptMessage={authPromptMessage}
+        onOpenGuide={() => setShowWelcomeGuideModal(true)}
+      />
+
+      {/* MODAL DE BIENVENIDA / GUÍA DE RONDA */}
+      <WelcomeGuideModal
+        isOpen={showWelcomeGuideModal}
+        onClose={() => setShowWelcomeGuideModal(false)}
+        currentUser={currentUser}
+        onOpenProfile={() => setShowProfileModal(true)}
+        onStartRonda={() => {
+          setShowWelcomeGuideModal(false);
+          setScreen('config');
+        }}
       />
 
       {/* Cartel de sugerencia cuando el usuario toca Favorito / Ya fui / Guardar sin cuenta */}

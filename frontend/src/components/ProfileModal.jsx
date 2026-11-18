@@ -193,7 +193,8 @@ export default function ProfileModal({
   onOpenPlaceDetail,
   onPlanFromHere,
   theme = 'light',
-  authPromptMessage = ''
+  authPromptMessage = '',
+  onOpenGuide = null
 }) {
   if (!isOpen) return null;
 
@@ -956,6 +957,21 @@ export default function ProfileModal({
                       <span>Insignias ({badges.filter(b => b.unlocked).length}/6)</span>
                     </button>
                   </div>
+
+                  {/* Acceso a la guía explicativa del mapa e insignias */}
+                  {onOpenGuide && (
+                    <div className="mt-2.5 flex items-center justify-end px-1">
+                      <button
+                        type="button"
+                        onClick={onOpenGuide}
+                        className="inline-flex items-center gap-1.5 text-xs text-[#E06D28] hover:underline font-semibold cursor-pointer py-1"
+                        title="Ver guía del mapa porteño y sistema de insignias"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>¿Cómo funciona el mapa y las insignias?</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* VISTA 1: MAPA DE BARRIOS DE CABA (CONTRASTE SUAVIZADO DÍA / NOCHE) */}
