@@ -621,15 +621,16 @@ function AuthSuggestionModal({ isOpen, message, onClose, onConfirmLogin }) {
 // COMPONENTE: Modal Carta Translúcida con Detalle del Lugar y Actividades
 // ==========================================
 function PlaceDetailModal({ place, onClose, getPlaceGoogleMapsUrl, onPlanFromHere, isFavorite, onToggleFavorite, isVisited, onToggleVisited }) {
-  if (!place) return null;
-
   useEffect(() => {
+    if (!place) return;
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  }, [place, onClose]);
+
+  if (!place) return null;
 
   // Si no viene image_url en el item del itinerario, intentar inferir del ID o nombre
   const placePhotoUrl = place.image_url || (place.id ? `/places/${place.id}.jpg` : null);
