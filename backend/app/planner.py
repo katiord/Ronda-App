@@ -1047,7 +1047,18 @@ def generate_fallback_plan(request: PlanRequest, candidates: List[Place]) -> Pla
         if cur_h_cont < 6.0: cur_h_cont += 24.0
         candidates = [p for p in ALL_PLACES if is_place_open_and_feasible(p, cur_h_cont, day_val, min_buffer_hours=0.75)]
         if not candidates:
-            candidates = ALL_PLACES[:4]
+            logger.warning(f"No hay lugares abiertos factibles en CABA a las {start_dt.strftime('%H:%M')} hs.")
+            return PlanResponse(
+                id=f"ronda_sleeping_{uuid.uuid4().hex[:8]}",
+                title=f"{request.neighborhood} está durmiendo",
+                neighborhood=request.neighborhood,
+                theme="Trasnoche en Buenos Aires",
+                estimated_duration_minutes=0,
+                estimated_total_price_ars=0,
+                narrative_summary=f"A las {start_dt.strftime('%H:%M')} hs los locales del barrio ya cerraron sus cocinas. Próximamente se sumarán más opciones nocturnas a Ronda.",
+                schedule=[],
+                suggested_activity=None
+            )
 
     allow_adjacent = getattr(request, "allow_neighboring_barrio", False)
     selected = select_diverse_itinerary(

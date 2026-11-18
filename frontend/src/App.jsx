@@ -1042,6 +1042,53 @@ function calculateDistanceKm(lat1, lon1, lat2, lon2) {
   return Math.hypot(dLat, dLon);
 }
 
+// Verifica con rigor factico si un lugar está abierto y disponible para una visita (con margen de permanencia mínimo)
+function isPlaceOpenAtTime(place, dateObj, minBufferMinutes = 45) {
+  if (!place) return false;
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const dayKey = days[dateObj.getDay()];
+
+  if (Array.isArray(place.days_open) && !place.days_open.includes(dayKey)) {
+    return false;
+  }
+
+  const sched = place.schedule_by_day?.[dayKey];
+  if (sched && sched.is_closed) {
+    return false;
+  }
+
+  let openH = sched?.open_hour ?? place.open_hour;
+  let closeH = sched?.close_hour ?? (
+    (dateObj.getDay() === 5 || dateObj.getDay() === 6) && place.close_hour_weekend !== undefined
+      ? place.close_hour_weekend
+      : place.close_hour
+  );
+
+  if (openH === undefined || closeH === undefined || openH === null || closeH === null) {
+    return true; // Espacios abiertos o sin horario de cierre explícito
+  }
+
+  let normClose = closeH <= 7 ? closeH + 24 : closeH;
+  let normOpen = (openH <= 7 && normClose > 24) ? openH + 24 : openH;
+
+  let curH = dateObj.getHours() + (dateObj.getMinutes() / 60);
+  if (curH < 6.0) {
+    curH += 24.0;
+  }
+
+  const bufferH = minBufferMinutes / 60;
+
+  if (curH < (normOpen - 0.25)) {
+    return false;
+  }
+
+  if ((curH + bufferH) > normClose) {
+    return false;
+  }
+
+  return true;
+}
+
 // Recalcula los tránsitos y minutos a pie o en auto con distancias físicas exactas
 function updateScheduleTransits(schedule) {
   if (!schedule || schedule.length === 0) return schedule;
@@ -1199,8 +1246,10 @@ export default function App() {
     document.body.classList.toggle('dark', isDark);
   };
 
-  // Estados de navegación: 'config' | 'loading' | 'itinerary'
+  // Estados de navegación: 'config' | 'loading' | 'itinerary' | 'sleeping'
   const [screen, setScreen] = useState('config');
+  // Aviso de barrio durmiendo / fuera de horario
+  const [sleepingNotice, setSleepingNotice] = useState(null);
   // Sub-vista en pantalla de configuración: 'quick' (Plan primero) | 'adjust' (Decisiones detalladas)
   const [configView, setConfigView] = useState('quick');
 
@@ -1222,6 +1271,13 @@ export default function App() {
         setIsNavigating(false);
       }, 350);
     }, 550);
+  };
+
+  const handleScheduleFromSleeping = (targetSlot) => {
+    triggerHaptic(10);
+    setSelectedSlot(targetSlot);
+    setConfigView('quick');
+    handleGeneratePlan(targetSlot);
   };
 
   // Menú colapsable en desktop (se abre al pasar el cursor)
@@ -1323,14 +1379,28 @@ export default function App() {
     // Obtener nombres ya en la ronda para NUNCA duplicar lugares
     const currentScheduleNames = new Set((plan.schedule || []).map((s) => (s.place_name || '').toLowerCase()));
 
-    // Solo lugares con play_category que abran hoy y NO estén ya en la ronda
+    // Estimar hora en que comenzaría el alargue para validar estricta apertura
+    let alargueTimeDt = new Date();
+    if (lastStop && lastStop.time_slot && lastStop.time_slot.includes('-')) {
+      const parts = lastStop.time_slot.split('-');
+      const endTimeStr = parts[1]?.trim();
+      if (endTimeStr && endTimeStr.includes(':')) {
+        const [eh, em] = endTimeStr.split(':').map(Number);
+        if (!isNaN(eh) && !isNaN(em)) {
+          alargueTimeDt.setHours(eh, em, 0, 0);
+        }
+      }
+    }
+
+    // Solo lugares con play_category que abran hoy, estén REALMENTE ABIERTOS en ese horario y NO estén ya en la ronda
     const openPlayful = sourceList.filter(
       (p) =>
         p.play_category &&
         p.play_category.length > 0 &&
         p.days_open &&
         p.days_open.includes(alargueDayKey) &&
-        !currentScheduleNames.has((p.name || '').toLowerCase())
+        !currentScheduleNames.has((p.name || '').toLowerCase()) &&
+        isPlaceOpenAtTime(p, alargueTimeDt, 40)
     );
 
     // Mismo barrio primero
@@ -2187,7 +2257,8 @@ export default function App() {
   const budgetSummary = currentBudgetObj.amount === 'Clásico Porteño' ? '$ 25.000' : currentBudgetObj.amount;
   const selectedSummaryText = `${getSelectedMomentSummary()} · ${getSelectedNeighborhoodSummary()} · ${budgetSummary}`;
 
-  const handleGeneratePlan = async () => {
+  const handleGeneratePlan = async (overrideSlot = null) => {
+    const activeSlot = overrideSlot || selectedSlot;
     setScreen('loading');
     setError(null);
 
@@ -2205,11 +2276,11 @@ export default function App() {
     });
 
     let contextNotes = [];
-    if (selectedSlot === 'lunch' || (selectedSlot === 'other_day' && subSlot === 'lunch')) {
+    if (activeSlot === 'lunch' || (activeSlot === 'other_day' && subSlot === 'lunch')) {
       contextNotes.push('Momento de Almuerzo & Mediodía porteño');
-    } else if (selectedSlot === 'morning' || (selectedSlot === 'other_day' && subSlot === 'morning')) {
+    } else if (activeSlot === 'morning' || (activeSlot === 'other_day' && subSlot === 'morning')) {
       contextNotes.push('Momento de Desayuno & Mañana');
-    } else if (selectedSlot === 'other_day') {
+    } else if (activeSlot === 'other_day') {
       contextNotes.push(`Planificado para la fecha ${otherDayDate}`);
     }
 
@@ -2245,7 +2316,7 @@ export default function App() {
     let isNowVal = false;
     let effectiveTimeOfDay = timeOfDay;
 
-    if (selectedSlot === 'now') {
+    if (activeSlot === 'now') {
       isNowVal = true;
       calculatedStartTime = currentTimeFormatted;
       const h = now.getHours();
@@ -2257,15 +2328,15 @@ export default function App() {
       } else {
         effectiveTimeOfDay = 'morning';
       }
-    } else if (selectedSlot === 'morning') {
+    } else if (activeSlot === 'morning') {
       calculatedStartTime = '10:00';
-    } else if (selectedSlot === 'lunch') {
+    } else if (activeSlot === 'lunch') {
       calculatedStartTime = '13:00';
-    } else if (selectedSlot === 'afternoon') {
+    } else if (activeSlot === 'afternoon') {
       calculatedStartTime = '16:30';
-    } else if (selectedSlot === 'night') {
+    } else if (activeSlot === 'night') {
       calculatedStartTime = '20:45';
-    } else if (selectedSlot === 'other_day') {
+    } else if (activeSlot === 'other_day') {
       calculatedStartTime = subSlot === 'morning' ? '10:00' : subSlot === 'lunch' ? '13:00' : subSlot === 'afternoon' ? '16:30' : '20:45';
     }
 
@@ -2300,6 +2371,16 @@ export default function App() {
       }
 
       const data = await response.json();
+      if (data.error_code === 'NO_PLACES_OPEN_LATE_NIGHT' || !data.schedule || data.schedule.length < 2) {
+        setSleepingNotice({
+          neighborhood,
+          currentTime: currentTimeFormatted
+        });
+        setScreen('sleeping');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
       setPlan(data);
       setScreen('itinerary');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2323,19 +2404,19 @@ export default function App() {
       const fmt = (d) => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 
       let startDt = new Date();
-      if (selectedSlot === 'now') {
+      if (activeSlot === 'now') {
         startDt.setMinutes(startDt.getMinutes() + 15);
         const rem = startDt.getMinutes() % 5;
         if (rem !== 0) startDt.setMinutes(startDt.getMinutes() + (5 - rem));
-      } else if (selectedSlot === 'morning') {
+      } else if (activeSlot === 'morning') {
         startDt.setHours(10, 0, 0, 0);
-      } else if (selectedSlot === 'lunch') {
+      } else if (activeSlot === 'lunch') {
         startDt.setHours(12, 45, 0, 0);
-      } else if (selectedSlot === 'afternoon') {
+      } else if (activeSlot === 'afternoon') {
         startDt.setHours(16, 30, 0, 0);
-      } else if (selectedSlot === 'night') {
+      } else if (activeSlot === 'night') {
         startDt.setHours(20, 30, 0, 0);
-      } else if (selectedSlot === 'other_day') {
+      } else if (activeSlot === 'other_day') {
         if (subSlot === 'morning') startDt.setHours(10, 0, 0, 0);
         else if (subSlot === 'lunch') startDt.setHours(12, 45, 0, 0);
         else if (subSlot === 'afternoon') startDt.setHours(16, 30, 0, 0);
@@ -2344,31 +2425,45 @@ export default function App() {
 
       const curH = startDt.getHours();
       const isLateNight = curH >= 0 && curH < 6;
-      const effectiveSlot = selectedSlot === 'now' 
+      const effectiveSlot = activeSlot === 'now' 
         ? (isLateNight || curH >= 20 ? 'night' : curH >= 16 ? 'afternoon' : curH >= 12 ? 'lunch' : 'morning')
-        : (selectedSlot === 'other_day' ? subSlot : selectedSlot);
+        : (activeSlot === 'other_day' ? subSlot : activeSlot);
+
+      // VALIDACIÓN ESTRICTA DE HORARIOS: lugares que REALMENTE están abiertos con permanencia
+      const openBarrioPlaces = safePool.filter(p => isPlaceOpenAtTime(p, startDt, 45));
+
+      // Si no hay al menos 2 paradas abiertas en el barrio a esta hora, avisar con pantalla de trasnoche
+      if (openBarrioPlaces.length < 2) {
+        setSleepingNotice({
+          neighborhood: fallbackNeighborhood,
+          currentTime: fmt(startDt)
+        });
+        setScreen('sleeping');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
 
       let p1 = null;
       let p2 = null;
 
       if (effectiveSlot === 'night') {
-        p1 = safePool.find(p => p.category === 'dining' || (p.subcategories || []).includes('bodegon')) ||
-             safePool.find(p => p.category === 'nightlife') || safePool[0];
-        p2 = safePool.find(p => p.id !== p1.id && (p.category === 'nightlife' || (p.subcategories || []).includes('cocteleria'))) ||
-             safePool.find(p => p.id !== p1.id) || safePool[1 % safePool.length];
+        p1 = openBarrioPlaces.find(p => p.category === 'dining' || (p.subcategories || []).includes('bodegon')) ||
+             openBarrioPlaces.find(p => p.category === 'nightlife') || openBarrioPlaces[0];
+        p2 = openBarrioPlaces.find(p => p.id !== p1.id && (p.category === 'nightlife' || (p.subcategories || []).includes('cocteleria'))) ||
+             openBarrioPlaces.find(p => p.id !== p1.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
       } else if (effectiveSlot === 'lunch') {
-        p1 = safePool.find(p => p.category === 'dining' || (p.subcategories || []).includes('bodegon')) || safePool[0];
-        p2 = safePool.find(p => p.id !== p1.id && (p.category === 'cafe' || p.category === 'park' || p.category === 'culture')) ||
-             safePool.find(p => p.id !== p1.id) || safePool[1 % safePool.length];
+        p1 = openBarrioPlaces.find(p => p.category === 'dining' || (p.subcategories || []).includes('bodegon')) || openBarrioPlaces[0];
+        p2 = openBarrioPlaces.find(p => p.id !== p1.id && (p.category === 'cafe' || p.category === 'park' || p.category === 'culture')) ||
+             openBarrioPlaces.find(p => p.id !== p1.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
       } else if (effectiveSlot === 'afternoon') {
-        p1 = safePool.find(p => p.category === 'cafe') || safePool[0];
-        p2 = safePool.find(p => p.id !== p1.id && (p.category === 'bookstore' || p.category === 'culture' || p.category === 'park' || p.category === 'nightlife')) ||
-             safePool.find(p => p.id !== p1.id) || safePool[1 % safePool.length];
+        p1 = openBarrioPlaces.find(p => p.category === 'cafe') || openBarrioPlaces[0];
+        p2 = openBarrioPlaces.find(p => p.id !== p1.id && (p.category === 'bookstore' || p.category === 'culture' || p.category === 'park' || p.category === 'nightlife')) ||
+             openBarrioPlaces.find(p => p.id !== p1.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
       } else {
         // morning
-        p1 = safePool.find(p => p.category === 'cafe') || safePool[0];
-        p2 = safePool.find(p => p.id !== p1.id && (p.category === 'culture' || p.category === 'park' || p.category === 'bookstore')) ||
-             safePool.find(p => p.id !== p1.id) || safePool[1 % safePool.length];
+        p1 = openBarrioPlaces.find(p => p.category === 'cafe') || openBarrioPlaces[0];
+        p2 = openBarrioPlaces.find(p => p.id !== p1.id && (p.category === 'culture' || p.category === 'park' || p.category === 'bookstore')) ||
+             openBarrioPlaces.find(p => p.id !== p1.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
       }
 
       const dur1 = p1.typical_duration_minutes || 75;
@@ -2990,7 +3085,7 @@ export default function App() {
                       className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-bold bg-[#E06D28] hover:bg-[#C95B1D] text-white rounded-xl transition cursor-pointer shadow-md btn-latido"
                     >
                       <Plus className="w-4 h-4 text-white" />
-                      <span>+ Sumar a mi ronda</span>
+                      <span>Sumar a mi ronda</span>
                     </button>
                   )}
 
@@ -3213,6 +3308,151 @@ export default function App() {
     </div>
   );
 }
+
+  // ==========================================
+  // PANTALLA: EL BARRIO ESTÁ DURMIENDO / TRASNOCHE
+  // ==========================================
+  if (screen === 'sleeping') {
+    const barrioName = sleepingNotice?.neighborhood || neighborhood || 'Buenos Aires';
+    const displayBarrio = barrioName === 'Cualquiera' ? 'Buenos Aires' : barrioName;
+    const timeStr = sleepingNotice?.currentTime || currentTimeStr;
+
+    return (
+      <div className="min-h-screen ronda-canvas flex flex-col relative transition-colors duration-300">
+        <DesktopSidebar 
+          isOpen={desktopMenuOpen} 
+          setIsOpen={setDesktopMenuOpen} 
+          screen={screen} 
+          onNavigate={handleNavigate} 
+          setShowProfileModal={setShowProfileModal} 
+          currentUser={currentUser}
+          onOpenGuide={() => setShowWelcomeGuideModal(true)}
+        />
+
+        {/* Encabezado simple */}
+        <header className="ronda-header backdrop-blur-md border-b sticky top-0 z-30 transition-colors">
+          <div className="max-w-4xl mx-auto px-5 h-16 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => setScreen('config')}
+                className="flex items-center gap-1.5 text-sm font-medium text-[var(--text-main)] hover:text-[#E06D28] transition cursor-pointer"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                <span>Volver al inicio</span>
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="p-2 rounded-xl text-[var(--text-main)] hover:bg-black/5 dark:hover:bg-white/10 transition cursor-pointer"
+                title={theme === 'dark' ? "Modo día" : "Modo noche"}
+              >
+                {theme === 'dark' ? <Sun className="w-4 h-4 text-[#F07E34]" /> : <Moon className="w-4 h-4 text-[var(--text-main)]" />}
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main className="flex-1 max-w-2xl w-full mx-auto px-5 py-10 sm:py-16 flex flex-col justify-center">
+          <div className="ronda-card border rounded-3xl p-6 sm:p-10 shadow-lg text-center space-y-6">
+            {/* Ícono de luna nocturna */}
+            <div className="w-16 h-16 rounded-3xl bg-[#182A24] dark:bg-[#243B30] text-[#E06D28] border border-[#2F493B] flex items-center justify-center mx-auto shadow-md">
+              <Moon className="w-8 h-8 fill-current" />
+            </div>
+
+            <div>
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-[#E06D28]/15 text-[#E06D28] uppercase tracking-wider mb-3">
+                <span>Trasnoche en Buenos Aires</span>
+              </span>
+              <h1 className="font-editorial text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--text-main)] leading-tight">
+                {displayBarrio} está durmiendo<span className="text-[#E06D28]">.</span>
+              </h1>
+              <p className="text-sm sm:text-base text-[var(--text-muted)] mt-3 leading-relaxed max-w-lg mx-auto">
+                A las <strong>{timeStr} hs</strong>, los cafetines notables, bodegones y paseos de este rincón ya bajaron sus persianas para descansar.
+              </p>
+            </div>
+
+            {/* Mensaje de expansión solicitado por el usuario */}
+            <div className="p-4 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 text-xs text-[var(--text-muted)] leading-relaxed text-left sm:text-center">
+              💡 <em>Próximamente se sumarán más opciones y rincones de trasnoche a Ronda para que nunca te quedes sin plan a ninguna hora.</em>
+            </div>
+
+            <div className="pt-2 border-t ronda-border text-left">
+              <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-main)] block mb-3 text-center sm:text-left">
+                Lo ideal: arrancá tu ronda cuando la ciudad vuelva a vibrar
+              </span>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => handleScheduleFromSleeping('morning')}
+                  className="ronda-card-inner border hover:border-[#E06D28] rounded-2xl p-4 text-left transition cursor-pointer group shadow-2xs btn-latido"
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-lg">🥐</span>
+                    <span className="text-[10px] font-bold text-[#E06D28] group-hover:translate-x-1 transition">Elegir ➔</span>
+                  </div>
+                  <h4 className="text-sm font-bold text-[var(--text-main)]">Desayuno & Mañana</h4>
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5">09:30 a 12:00 hs · Medialunas y cafés de culto</p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleScheduleFromSleeping('lunch')}
+                  className="ronda-card-inner border hover:border-[#E06D28] rounded-2xl p-4 text-left transition cursor-pointer group shadow-2xs btn-latido"
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-lg">🍝</span>
+                    <span className="text-[10px] font-bold text-[#E06D28] group-hover:translate-x-1 transition">Elegir ➔</span>
+                  </div>
+                  <h4 className="text-sm font-bold text-[var(--text-main)]">Almuerzo de Bodegón</h4>
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5">12:30 a 15:30 hs · Pastas caseras y sobremesa</p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleScheduleFromSleeping('afternoon')}
+                  className="ronda-card-inner border hover:border-[#E06D28] rounded-2xl p-4 text-left transition cursor-pointer group shadow-2xs btn-latido"
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-lg">☕</span>
+                    <span className="text-[10px] font-bold text-[#E06D28] group-hover:translate-x-1 transition">Elegir ➔</span>
+                  </div>
+                  <h4 className="text-sm font-bold text-[var(--text-main)]">Merienda & Paseo</h4>
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5">16:00 a 19:30 hs · Especialidad y librerías</p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleScheduleFromSleeping('night')}
+                  className="ronda-card-inner border hover:border-[#E06D28] rounded-2xl p-4 text-left transition cursor-pointer group shadow-2xs btn-latido"
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-lg">🍷</span>
+                    <span className="text-[10px] font-bold text-[#E06D28] group-hover:translate-x-1 transition">Elegir ➔</span>
+                  </div>
+                  <h4 className="text-sm font-bold text-[var(--text-main)]">Próxima Noche & Cena</h4>
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5">20:30 a 23:30 hs · Bares notables y vermut</p>
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setScreen('config')}
+                className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--text-main)] transition cursor-pointer py-2 px-4 rounded-xl hover:bg-black/5 dark:hover:bg-white/5"
+              >
+                <Compass className="w-4 h-4" />
+                <span>Volver y cambiar de barrio</span>
+              </button>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   // ==========================================
   // PANTALLA 4: RECOMENDADOS (CATÁLOGO & AGENDA)
