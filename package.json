@@ -7,6 +7,9 @@
     "build": "npm --prefix frontend install && npm --prefix frontend run build",
     "check": "node scripts/check.js"
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "devDependencies": {
     "puppeteer": "^25.16.0"
   }
