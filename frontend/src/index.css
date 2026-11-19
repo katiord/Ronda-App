@@ -168,7 +168,97 @@
 }
 
 /* ======================================================== */
-/* 5. LEAFLET MAP & POPUP (SOPORTE ELEGANTE DARK / NOCHE)  */
+/* 5. EFECTOS CINEMÁTICOS DE MODALES & REVELADO HERO        */
+/* ======================================================== */
+@keyframes modal-spring-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.93) translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-spring {
+  animation: modal-spring-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes backdrop-smooth-fade {
+  0% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+  }
+}
+
+.animate-backdrop-smooth {
+  animation: backdrop-smooth-fade 0.28s ease-out forwards;
+}
+
+@keyframes hero-title-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-title {
+  animation: hero-title-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes punto-latido-once {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+    filter: drop-shadow(0 0 0px rgba(224, 109, 40, 0));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.6);
+    filter: drop-shadow(0 0 12px rgba(224, 109, 40, 0.9));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 4px rgba(224, 109, 40, 0.45));
+  }
+}
+
+.animate-punto-destello {
+  display: inline-block;
+  animation: punto-latido-once 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both;
+  will-change: transform, opacity;
+}
+
+@keyframes hero-sub-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-sub {
+  animation: hero-sub-reveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  will-change: transform, opacity;
+}
+
+/* ======================================================== */
+/* 6. LEAFLET MAP & POPUP (SOPORTE ELEGANTE DARK / NOCHE)  */
 /* ======================================================== */
 .dark .leaflet-tile-pane {
   filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(90%);

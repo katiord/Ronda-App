@@ -567,11 +567,11 @@ function AuthSuggestionModal({ isOpen, message, onClose, onConfirmLogin }) {
 
   return (
     <div
-      className="fixed inset-0 z-[60] bg-black/55 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in"
+      className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-backdrop-smooth"
       onClick={onClose}
     >
       <div
-        className="ronda-card border rounded-3xl p-5 sm:p-6 max-w-sm w-full shadow-2xl relative animate-scale-up"
+        className="ronda-card border rounded-3xl p-5 sm:p-6 max-w-sm w-full shadow-2xl relative animate-modal-spring"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -637,11 +637,11 @@ function PlaceDetailModal({ place, onClose, getPlaceGoogleMapsUrl, onPlanFromHer
 
   return (
     <div 
-      className="fixed inset-0 z-50 bg-black/55 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 transition-all duration-300"
+      className="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 transition-all duration-300 animate-backdrop-smooth"
       onClick={onClose}
     >
       <div 
-        className="ronda-card border backdrop-blur-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] rounded-3xl p-5 sm:p-7 max-w-lg w-full relative max-h-[92vh] overflow-y-auto transition-colors"
+        className="ronda-card border backdrop-blur-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] rounded-3xl p-5 sm:p-7 max-w-lg w-full relative max-h-[92vh] overflow-y-auto transition-colors animate-modal-spring"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Botón Cerrar Flotante */}
@@ -4167,14 +4167,10 @@ export default function App() {
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#E06D28]/15 text-[#E06D28] uppercase tracking-wider mb-2">
-              <Compass className="w-3.5 h-3.5" />
-              <span>Circuitos a pie por CABA</span>
-            </div>
-            <h1 className="font-editorial text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-main)] leading-tight">
-              Buenos Aires no se camina al azar<span className="text-[#E06D28]">.</span>
+            <h1 className="font-editorial text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-main)] leading-tight animate-hero-title">
+              Buenos Aires no se camina al azar<span className="text-[#E06D28] animate-punto-destello">.</span>
             </h1>
-            <p className="text-sm sm:text-base text-[var(--text-muted)] mt-2 max-w-2xl leading-relaxed">
+            <p className="text-sm sm:text-base text-[var(--text-muted)] mt-2 max-w-2xl leading-relaxed animate-hero-sub">
               Ronda arma recorridos curados de 2 a 3 paradas a pie: café de autor, rincones con historia y bodegones según tu momento, la hora y el clima.
             </p>
           </div>
@@ -4210,10 +4206,6 @@ export default function App() {
                   <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-[var(--text-main)]">
                     Ronda sugerida para este momento
                   </h2>
-                </div>
-                <div className="hidden sm:flex items-center gap-1.5 ronda-tag border px-3.5 py-1.5 rounded-full text-xs font-semibold">
-                  <Sparkles className="w-4 h-4 text-[#E06D28]" />
-                  <span>Listo en 1 clic</span>
                 </div>
               </div>
 

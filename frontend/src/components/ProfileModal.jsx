@@ -526,11 +526,11 @@ export default function ProfileModal({
       role="dialog"
       aria-modal="true"
       aria-label="Perfil y Pasaporte Porteño"
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-fade-in"
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-backdrop-smooth"
       onClick={onClose}
     >
       <div 
-        className="ronda-card border rounded-3xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl relative max-h-[92vh] overflow-y-auto animate-scale-up transition-colors"
+        className="ronda-card border rounded-3xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl relative max-h-[92vh] overflow-y-auto animate-modal-spring transition-colors"
         onClick={(e) => e.stopPropagation()}
       >
         {/* ======================================================== */}

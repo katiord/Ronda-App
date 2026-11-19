@@ -73,7 +73,7 @@ export default function WelcomeGuideModal({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md transition-opacity duration-300 animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md transition-opacity duration-300 animate-backdrop-smooth"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -83,7 +83,7 @@ export default function WelcomeGuideModal({
     >
       <div 
         ref={scrollContainerRef}
-        className="ronda-card border border-[var(--border-main)] rounded-3xl w-full max-w-2xl lg:max-w-3xl max-h-[92vh] overflow-y-auto shadow-2xl flex flex-col relative transition-all duration-300"
+        className="ronda-card border border-[var(--border-main)] rounded-3xl w-full max-w-2xl lg:max-w-3xl max-h-[92vh] overflow-y-auto shadow-2xl flex flex-col relative transition-all duration-300 animate-modal-spring"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Cabecera del modal con botón de cierre */}
