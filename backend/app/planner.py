@@ -870,10 +870,23 @@ def select_diverse_itinerary(
 
     # Si el ancla va al final y aún no está en selected
     if anchor_place and anchor_position == "end" and anchor_place not in selected:
-        selected.append(anchor_place)
+        if is_place_open_and_feasible(anchor_place, current_time_runner, day_req, min_buffer_hours=0.5):
+            selected.append(anchor_place)
+        else:
+            # REPOSICIONAMIENTO AUTOMÁTICO AL INICIO:
+            # Si para la hora final ya está cerrado (ej. Jobs cierra 01:00 AM), lo colocamos al inicio
+            selected.insert(0, anchor_place)
+            for c in valid_candidates:
+                if c in selected or c.id == anchor_place.id:
+                    continue
+                if any(has_subtype_duplication(s, c) for s in selected):
+                    continue
+                if is_place_open_and_feasible(c, current_time_runner, day_req, min_buffer_hours=0.5):
+                    selected.append(c)
+                    break
 
     if anchor_place:
-        return selected
+        return selected[:effective_max]
 
     optimized = optimize_route_anti_zigzag(selected)
     return optimized
@@ -1136,11 +1149,8 @@ def generate_fallback_plan(request: PlanRequest, candidates: List[Place]) -> Pla
     schedule: List[PlanItem] = []
     for idx, place in enumerate(selected):
         duration = max(35, min(place.typical_duration_minutes, 105))
-        end_dt = current_dt + timedelta(minutes=duration)
-        slot_time = f"{current_dt.strftime('%H:%M')} - {end_dt.strftime('%H:%M')}"
-        default_act = get_activity_label_for_time(place, current_dt.hour)
-
-        # Chequeo de aviso "Cierra pronto"
+        
+        # Chequeo de aviso "Cierra pronto" y Techo Duro (Hard Stop)
         day_sched = get_place_day_schedule(place, day_val)
         close_h_val = day_sched.get("close_hour")
         is_closing_soon = False
@@ -1152,9 +1162,18 @@ def generate_fallback_plan(request: PlanRequest, candidates: List[Place]) -> Pla
             arrival_h = current_dt.hour + (current_dt.minute / 60.0)
             if arrival_h < 6.0: arrival_h += 24.0
             diff_hours = close_h_val - arrival_h
-            if 0.75 <= diff_hours <= 1.25:
+            if 0.5 <= diff_hours <= 1.25:
                 is_closing_soon = True
                 closing_warning = f"⚠️ Cierra a las {closes_at_str} hs · Te conviene entrar ya"
+            # Techo Duro: la permanencia no puede exceder el horario de cierre del local
+            if diff_hours > 0:
+                max_mins_to_close = int(diff_hours * 60)
+                if duration > max_mins_to_close:
+                    duration = max(25, max_mins_to_close)
+
+        end_dt = current_dt + timedelta(minutes=duration)
+        slot_time = f"{current_dt.strftime('%H:%M')} - {end_dt.strftime('%H:%M')}"
+        default_act = get_activity_label_for_time(place, current_dt.hour)
 
         is_last = idx == len(selected) - 1
         transit = None

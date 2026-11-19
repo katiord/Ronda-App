@@ -2484,7 +2484,11 @@ export default function App() {
       const foundAnchor = anchorPlace ? (allPool.find(p => p.id === anchorPlace.id) || anchorPlace) : null;
 
       if (foundAnchor) {
-        if (anchorPosition === 'end') {
+        // Estimar la hora de llegada al cierre según la cantidad de paradas
+        const estEndArrival = new Date(startDt.getTime() + (stopsCount === 3 ? 165 : 85) * 60000);
+        const anchorCanBeEnd = isPlaceOpenAtTime(foundAnchor, estEndArrival, 30);
+
+        if (anchorPosition === 'end' && anchorCanBeEnd) {
           // El ancla va como parada de cierre
           if (stopsCount === 3) {
             p1 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && (p.category === 'dining' || (p.subcategories || []).includes('bodegon'))) ||
@@ -2498,15 +2502,18 @@ export default function App() {
             p2 = foundAnchor;
           }
         } else {
-          // El ancla va como punto de inicio
+          // REPOSICIONAMIENTO AUTOMÁTICO AL INICIO:
+          // Si el usuario eligió 'start' O si para la hora de cierre ya cerró (ej. Jobs cierra 01:00 AM y la parada 3 es a la 01:45 AM)
           p1 = foundAnchor;
           if (stopsCount === 3) {
             p2 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && (p.category === 'dining' || (p.subcategories || []).includes('bodegon'))) ||
                  openBarrioPlaces.find(p => p.id !== foundAnchor.id) || openBarrioPlaces[0];
-            p3 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p2.id && ((p.subcategories || []).includes('cocteleria') || p.category === 'nightlife' || p.category === 'culture')) ||
+            // Para la parada 3 buscar un lugar que aguante abierto hasta tarde
+            p3 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p2.id && isPlaceOpenAtTime(p, estEndArrival, 30) && ((p.subcategories || []).includes('cocteleria') || p.category === 'nightlife' || p.category === 'culture')) ||
+                 openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p2.id && isPlaceOpenAtTime(p, estEndArrival, 30)) ||
                  openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p2.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
           } else {
-            p2 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && (p.category === 'dining' || p.category === 'nightlife' || (p.subcategories || []).includes('bodegon'))) ||
+            p2 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && isPlaceOpenAtTime(p, estEndArrival, 30) && (p.category === 'dining' || p.category === 'nightlife' || (p.subcategories || []).includes('bodegon'))) ||
                  openBarrioPlaces.find(p => p.id !== foundAnchor.id) || openBarrioPlaces[0];
           }
         }
@@ -2546,25 +2553,47 @@ export default function App() {
         }
       }
 
-      const dur1 = p1.typical_duration_minutes || (effectiveSlot === 'morning' ? 45 : 75);
-      const end1 = new Date(startDt.getTime() + dur1 * 60000);
-      const slot1 = `${fmt(startDt)} - ${fmt(end1)}`;
+      // Helper para calcular horario con Techo Duro (Hard Stop) respecto al cierre real del local
+      const formatSlotWithHardCap = (startObj, durMins, place) => {
+        const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+        const dayKey = days[startObj.getDay()];
+        const sched = place.schedule_by_day?.[dayKey];
+        let closeH = sched?.close_hour ?? place.close_hour;
+        
+        let effDur = durMins;
+        if (closeH !== undefined && closeH !== null) {
+          if (closeH <= 7) closeH += 24;
+          let arrivalContH = startObj.getHours() + (startObj.getMinutes() / 60);
+          if (arrivalContH < 6.0 && startDt.getHours() >= 18) arrivalContH += 24.0;
+          
+          const diffMins = Math.round((closeH - arrivalContH) * 60);
+          if (diffMins > 0 && diffMins < effDur) {
+            effDur = Math.max(25, diffMins);
+          }
+        }
+        const endObj = new Date(startObj.getTime() + effDur * 60000);
+        return {
+          slotStr: `${fmt(startObj)} - ${fmt(endObj)}`,
+          dur: effDur,
+          endObj
+        };
+      };
+
+      const s1 = formatSlotWithHardCap(startDt, p1.typical_duration_minutes || (effectiveSlot === 'morning' ? 45 : 75), p1);
 
       const distKm = calculateDistanceKm(p1.lat, p1.lng, p2.lat, p2.lng) || 0.5;
       const transitMins = Math.max(5, Math.min(15, Math.round(distKm * 10)));
-      const start2 = new Date(end1.getTime() + transitMins * 60000);
-      const dur2 = p2.typical_duration_minutes || (effectiveSlot === 'morning' ? 45 : 75);
-      const end2 = new Date(start2.getTime() + dur2 * 60000);
-      const slot2 = `${fmt(start2)} - ${fmt(end2)}`;
+      const start2 = new Date(s1.endObj.getTime() + transitMins * 60000);
+      const s2 = formatSlotWithHardCap(start2, p2.typical_duration_minutes || (effectiveSlot === 'morning' ? 45 : 75), p2);
 
       const rawFallbackSchedule = [
         {
           id: p1.id,
-          time_slot: slot1,
+          time_slot: s1.slotStr,
           place_name: p1.name,
           address: p1.address,
-          activity_type: effectiveSlot === 'night' ? (isLateNight ? 'Coctelería de autor' : 'Cena Porteña') : effectiveSlot === 'lunch' ? 'Almuerzo Porteño' : 'Café & Desayuno',
-          duration_minutes: dur1,
+          activity_type: effectiveSlot === 'night' ? (isLateNight ? 'Coctelería de autor' : ((p1.subcategories || []).includes('pool') ? 'Partida de Pool & Brindis' : 'Cena Porteña')) : effectiveSlot === 'lunch' ? 'Almuerzo Porteño' : 'Café & Desayuno',
+          duration_minutes: s1.dur,
           porteño_tip: p1.highlight || 'Disfrutar la atmósfera única del lugar y pedir la recomendación de la casa.',
           lat: p1.lat,
           lng: p1.lng,
@@ -2576,11 +2605,11 @@ export default function App() {
         },
         {
           id: p2.id,
-          time_slot: slot2,
+          time_slot: s2.slotStr,
           place_name: p2.name,
           address: p2.address,
-          activity_type: effectiveSlot === 'night' ? 'Tragos & Sobremesa' : effectiveSlot === 'afternoon' ? 'Paseo & Cultura' : effectiveSlot === 'morning' ? 'Paseo & Pasaje Histórico' : 'Sobremesa & Recorrido',
-          duration_minutes: dur2,
+          activity_type: effectiveSlot === 'night' ? ((p2.subcategories || []).includes('pool') ? 'Partida de Pool & Brindis' : 'Tragos & Sobremesa') : effectiveSlot === 'afternoon' ? 'Paseo & Cultura' : effectiveSlot === 'morning' ? 'Paseo & Pasaje Histórico' : 'Sobremesa & Recorrido',
+          duration_minutes: s2.dur,
           porteño_tip: p2.highlight || 'Relajarse y recorrer el barrio a tu propio ritmo.',
           lat: p2.lat,
           lng: p2.lng,
@@ -2595,18 +2624,16 @@ export default function App() {
       if (stopsCount === 3 && p3) {
         const dist2_3 = calculateDistanceKm(p2.lat, p2.lng, p3.lat, p3.lng) || 0.6;
         const transit2_3 = Math.max(5, Math.min(15, Math.round(dist2_3 * 10)));
-        const start3 = new Date(end2.getTime() + transit2_3 * 60000);
-        const dur3 = p3.typical_duration_minutes || 75;
-        const end3 = new Date(start3.getTime() + dur3 * 60000);
-        const slot3 = `${fmt(start3)} - ${fmt(end3)}`;
+        const start3 = new Date(s2.endObj.getTime() + transit2_3 * 60000);
+        const s3 = formatSlotWithHardCap(start3, p3.typical_duration_minutes || 75, p3);
 
         rawFallbackSchedule.push({
           id: p3.id,
-          time_slot: slot3,
+          time_slot: s3.slotStr,
           place_name: p3.name,
           address: p3.address,
-          activity_type: effectiveSlot === 'morning' ? 'Almuerzo de Bodegón' : effectiveSlot === 'lunch' ? 'Helado & Café de Culto' : effectiveSlot === 'afternoon' ? 'Tapeo & Vermut' : 'Partida de Pool & Brindis',
-          duration_minutes: dur3,
+          activity_type: effectiveSlot === 'morning' ? 'Almuerzo de Bodegón' : effectiveSlot === 'lunch' ? 'Helado & Café de Culto' : effectiveSlot === 'afternoon' ? 'Tapeo & Vermut' : ((p3.subcategories || []).includes('pool') ? 'Partida de Pool & Brindis' : 'Tragos de Cierre & Mística'),
+          duration_minutes: s3.dur,
           porteño_tip: p3.highlight || 'Coronar la ronda con mística porteña y buena sobremesa.',
           lat: p3.lat,
           lng: p3.lng,
@@ -4041,11 +4068,33 @@ export default function App() {
                   </button>
                 </div>
 
-                <p className="text-xs text-[var(--text-muted)] mb-4">
+                <p className="text-xs text-[var(--text-muted)] mb-3">
                   {anchorOriginType === 'games_pool'
                     ? 'Elegiste este lugar desde Juegos & Pool. ¿En qué momento de tu ronda preferís disfrutarlo?'
                     : 'Este lugar formará parte obligatoria de tu recorrido. Elegí su rol en la salida:'}
                 </p>
+
+                {/* Aviso informativo de horario de cierre de hoy */}
+                {(() => {
+                  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+                  const nowDay = days[new Date().getDay()];
+                  const sched = anchorPlace.schedule_by_day?.[nowDay];
+                  const closeStr = sched?.close || (anchorPlace.close_hour ? `${anchorPlace.close_hour}:00` : null);
+                  const isEarlyClose = sched?.close_hour !== undefined && sched?.close_hour !== null && (sched?.close_hour <= 25 || sched?.close_hour === 1);
+
+                  if (closeStr) {
+                    return (
+                      <div className="mb-3.5 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-900 dark:text-amber-200 text-xs flex items-center gap-2">
+                        <Clock className="w-3.5 h-3.5 text-[#E06D28] shrink-0" />
+                        <span>
+                          <strong>Horario de hoy:</strong> Cierra a las <strong>{closeStr} hs</strong>.
+                          {isEarlyClose && currentHour >= 22 ? ' Si tu salida arranca tarde, te conviene seleccionarlo "Para arrancar la salida" para aprovecharlo antes del cierre.' : ''}
+                        </span>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
 
                 {/* Selector de Posición: Cierre vs Inicio */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
