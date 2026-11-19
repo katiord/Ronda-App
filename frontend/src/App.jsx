@@ -1451,6 +1451,7 @@ export default function App() {
     showAuthSuggestion
   );
   const prevModalOpenRef = useRef(false);
+  const isProgrammaticModalCloseRef = useRef(false);
 
   // Inicializar estado base en el historial
   useEffect(() => {
@@ -1465,6 +1466,7 @@ export default function App() {
       window.history.pushState({ type: 'modal' }, '');
     } else if (!anyModalOpen && prevModalOpenRef.current) {
       if (window.history.state?.type === 'modal') {
+        isProgrammaticModalCloseRef.current = true;
         window.history.back();
       }
     }
@@ -1474,7 +1476,13 @@ export default function App() {
   // Manejar el evento popstate (botón atrás en móvil, gestos, teclado, botón del navegador)
   useEffect(() => {
     const handlePopState = (event) => {
-      // 1. Si hay algún modal abierto, el botón atrás lo cierra prioritariamente
+      // Si el popstate vino de un cierre programático del modal (botón X o backdrop), no navegar de pantalla
+      if (isProgrammaticModalCloseRef.current) {
+        isProgrammaticModalCloseRef.current = false;
+        return;
+      }
+
+      // 1. Si hay algún modal abierto, el botón atrás del navegador/móvil lo cierra prioritariamente
       if (selectedPlaceModal) {
         setSelectedPlaceModal(null);
         return;
@@ -3049,7 +3057,7 @@ export default function App() {
                 </button>
 
                 <button 
-                  onClick={() => setScreen('config')}
+                  onClick={() => handleNavigate('config', 'quick')}
                   className="flex items-center gap-1.5 text-sm font-medium text-[var(--text-main)] hover:text-[#E06D28] transition cursor-pointer"
                 >
                   <ChevronLeft className="w-5 h-5" />
@@ -3666,7 +3674,7 @@ export default function App() {
         onOpenProfile={() => setShowProfileModal(true)}
         onStartRonda={() => {
           setShowWelcomeGuideModal(false);
-          setScreen('config');
+          handleNavigate('config', 'quick');
         }}
       />
 
@@ -3741,7 +3749,7 @@ export default function App() {
           <div className="max-w-4xl mx-auto px-5 h-16 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <button 
-                onClick={() => setScreen('config')}
+                onClick={() => handleNavigate('config', 'quick')}
                 className="flex items-center gap-1.5 text-sm font-medium text-[var(--text-main)] hover:text-[#E06D28] transition cursor-pointer"
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -3878,7 +3886,7 @@ export default function App() {
             <div className="pt-2 flex justify-center">
               <button
                 type="button"
-                onClick={() => setScreen('config')}
+                onClick={() => handleNavigate('config', 'quick')}
                 className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--text-main)] transition cursor-pointer py-2 px-4 rounded-xl hover:bg-black/5 dark:hover:bg-white/5"
               >
                 <Compass className="w-4 h-4" />
@@ -4209,32 +4217,50 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Micro-preview visual: ¿Qué es una ronda? */}
-              <div className="ronda-card-inner border rounded-2xl p-3.5 sm:p-4 mb-6 shadow-2xs">
-                <div className="flex items-center justify-between mb-2.5">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-1.5">
-                    <Footprints className="w-3.5 h-3.5 text-[#E06D28]" />
-                    <span>Tu circuito en 3 paradas a pie</span>
+              {/* Micro-preview: La Fórmula Ronda en 3 Pasos */}
+              <div className="ronda-card-inner border rounded-2xl p-4 sm:p-5 mb-6 shadow-2xs">
+                <div className="flex items-center justify-between mb-3.5 pb-2.5 border-b ronda-border">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-main)] flex items-center gap-1.5">
+                    <Compass className="w-3.5 h-3.5 text-[#E06D28]" />
+                    <span>Cómo funciona tu Ronda</span>
                   </span>
                   <span className="text-[10px] font-semibold text-[#E06D28]">
-                    Conectadas sin traslados largos
+                    Circuito de 3 paradas a pie
                   </span>
                 </div>
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="ronda-card border rounded-xl p-2.5 flex flex-col items-center">
-                    <span className="text-base sm:text-lg mb-0.5">☕</span>
-                    <span className="text-[11px] font-bold text-[var(--text-main)] leading-tight truncate w-full">1. Café de culto</span>
-                    <span className="text-[9px] text-[var(--text-muted)] mt-0.5 truncate w-full">Especialidad & mesas</span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
+                  <div className="ronda-card border rounded-xl p-3.5 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-xs font-bold uppercase tracking-wider text-[#E06D28]">1. Curaduría</span>
+                        <span className="text-sm">☕ + 🏛️ + 🍷</span>
+                      </div>
+                      <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                        Unimos un café de especialidad, un rincón con historia y una mesa o barra con onda.
+                      </p>
+                    </div>
                   </div>
-                  <div className="ronda-card border rounded-xl p-2.5 flex flex-col items-center relative">
-                    <span className="text-base sm:text-lg mb-0.5">🏛️</span>
-                    <span className="text-[11px] font-bold text-[var(--text-main)] leading-tight truncate w-full">2. Rincón o Paseo</span>
-                    <span className="text-[9px] text-[#E06D28] font-medium mt-0.5 truncate w-full">~6 min a pie</span>
+                  <div className="ronda-card border rounded-xl p-3.5 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-xs font-bold uppercase tracking-wider text-[#E06D28]">2. Recorrido a pie</span>
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#E06D28]/10 text-[#E06D28] border border-[#E06D28]/20">~6 min</span>
+                      </div>
+                      <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                        Paradas a pocas cuadras de distancia para que camines el barrio sin autos ni traslados.
+                      </p>
+                    </div>
                   </div>
-                  <div className="ronda-card border rounded-xl p-2.5 flex flex-col items-center">
-                    <span className="text-base sm:text-lg mb-0.5">🍝</span>
-                    <span className="text-[11px] font-bold text-[var(--text-main)] leading-tight truncate w-full">3. Bodegón o Bar</span>
-                    <span className="text-[9px] text-[var(--text-muted)] mt-0.5 truncate w-full">Platos o vermut</span>
+                  <div className="ronda-card border rounded-xl p-3.5 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-xs font-bold uppercase tracking-wider text-[#E06D28]">3. En tiempo real</span>
+                        <span className="text-sm">☀️ 🌧️</span>
+                      </div>
+                      <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                        Sincronizado con la hora, el clima de hoy y los lugares que están abiertos ahora mismo.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -4942,7 +4968,7 @@ export default function App() {
         onOpenProfile={() => setShowProfileModal(true)}
         onStartRonda={() => {
           setShowWelcomeGuideModal(false);
-          setScreen('config');
+          handleNavigate('config', 'quick');
         }}
       />
 
