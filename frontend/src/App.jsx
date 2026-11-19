@@ -2257,6 +2257,7 @@ export default function App() {
   };
 
   const rhythmSummary = stopsCount === 3 ? '3 paradas' : '2 paradas';
+  const budgetSummary = currentBudgetObj?.amount === 'Clásico Porteño' ? '$ 25.000' : (currentBudgetObj?.amount || '$ 25.000');
   const selectedSummaryText = `${getSelectedMomentSummary()} · ${getSelectedNeighborhoodSummary()} · ${rhythmSummary} · ${budgetSummary}`;
 
   const handleGeneratePlan = async (overrideSlot = null) => {
