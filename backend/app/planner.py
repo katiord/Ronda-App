@@ -1148,7 +1148,10 @@ def generate_fallback_plan(request: PlanRequest, candidates: List[Place]) -> Pla
 
     schedule: List[PlanItem] = []
     for idx, place in enumerate(selected):
-        duration = max(35, min(place.typical_duration_minutes, 105))
+        # Duración mínima de ~90 min (1 h 30 min) para salidas de noche/cena/copas porteñas
+        is_night_time = current_dt.hour >= 20 or current_dt.hour < 6
+        default_dur = 90 if is_night_time else 75
+        duration = max(default_dur if is_night_time else 35, min(place.typical_duration_minutes or default_dur, 105))
         
         # Chequeo de aviso "Cierra pronto" y Techo Duro (Hard Stop)
         day_sched = get_place_day_schedule(place, day_val)
@@ -1162,14 +1165,20 @@ def generate_fallback_plan(request: PlanRequest, candidates: List[Place]) -> Pla
             arrival_h = current_dt.hour + (current_dt.minute / 60.0)
             if arrival_h < 6.0: arrival_h += 24.0
             diff_hours = close_h_val - arrival_h
+            
+            # Si el local ya está cerrado al momento de llegar, NO lo programamos
+            if diff_hours <= 0:
+                logger.warning(f"Lugar {place.name} ya está cerrado a las {current_dt.strftime('%H:%M')} hs (cierra {closes_at_str} hs). Saltando parada.")
+                continue
+
             if 0.5 <= diff_hours <= 1.25:
                 is_closing_soon = True
                 closing_warning = f"⚠️ Cierra a las {closes_at_str} hs · Te conviene entrar ya"
+            
             # Techo Duro: la permanencia no puede exceder el horario de cierre del local
-            if diff_hours > 0:
-                max_mins_to_close = int(diff_hours * 60)
-                if duration > max_mins_to_close:
-                    duration = max(25, max_mins_to_close)
+            max_mins_to_close = int(diff_hours * 60)
+            if duration > max_mins_to_close:
+                duration = max(30, max_mins_to_close)
 
         end_dt = current_dt + timedelta(minutes=duration)
         slot_time = f"{current_dt.strftime('%H:%M')} - {end_dt.strftime('%H:%M')}"
@@ -1274,7 +1283,8 @@ async def generate_plan(request: PlanRequest) -> PlanResponse:
                 "category": p.category,
                 "vibe": p.vibe,
                 "highlight": p.highlight,
-                "duration_min": p.typical_duration_minutes
+                "closes_at": get_place_day_schedule(p, day_val).get("close", "01:00"),
+                "duration_min": max(80, p.typical_duration_minutes or 90)
             }
             for p in candidates
         ]
@@ -1325,6 +1335,9 @@ REGLAS ESTRICTAS DE CALIDAD Y CONTINUIDAD:
    - Si hay una comida fuerte, la otra parada gastronómica SOLO puede ser un café corto de sobremesa (30-40 min) o helado, NUNCA otro restaurante ni bodegón.
 9. REGLA DE CAFÉ ÚNICO (RULE-DOM-06):
    - En salidas de mañana o merienda, SOLO PUEDE HABER UNA cafetería de especialidad. Jamás asignes dos cafeterías de filtro (ej: nunca LAB y luego Cuervo).
+10. DURACIÓN REALISTA DE 90 MINUTOS Y RESPETO ESTRICTO DEL CIERRE:
+   - En salidas de noche o cena, cada parada debe tener una duración de ~90 minutos (1 hora y media) para saborear la experiencia sin apuros.
+   - Cada parada DEBE concluir estrictamente ANTES del horario de cierre del local ('closes_at'). NUNCA programes una parada cuando el local ya esté cerrado.
 """
 
         response = client.models.generate_content(

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { 
   Compass, 
   MapPin, 
@@ -1043,11 +1043,21 @@ function calculateDistanceKm(lat1, lon1, lat2, lon2) {
   return Math.hypot(dLat, dLon);
 }
 
-// Verifica con rigor factico si un lugar está abierto y disponible para una visita (con margen de permanencia mínimo)
-function isPlaceOpenAtTime(place, dateObj, minBufferMinutes = 45) {
+// Verifica con rigor fáctico si un lugar está abierto y disponible para una visita (con margen de permanencia mínimo)
+function isPlaceOpenAtTime(place, dateObj, minBufferMinutes = 45, baseDayOverride = null) {
   if (!place) return false;
   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-  const dayKey = days[dateObj.getDay()];
+  
+  // Si estamos evaluando una trasnoche (00:00 a 05:59 hs), el turno de servicio nocturno corresponde al día anterior
+  // Ejemplo: Jueves a la 01:45 AM pertenece al turno nocturno que abrió el Miércoles a las 20:00 hs.
+  let dayKey = baseDayOverride;
+  if (!dayKey) {
+    let dayIdx = dateObj.getDay();
+    if (dateObj.getHours() < 6) {
+      dayIdx = (dayIdx + 6) % 7;
+    }
+    dayKey = days[dayIdx];
+  }
 
   if (Array.isArray(place.days_open) && !place.days_open.includes(dayKey)) {
     return false;
@@ -1060,7 +1070,7 @@ function isPlaceOpenAtTime(place, dateObj, minBufferMinutes = 45) {
 
   let openH = sched?.open_hour ?? place.open_hour;
   let closeH = sched?.close_hour ?? (
-    (dateObj.getDay() === 5 || dateObj.getDay() === 6) && place.close_hour_weekend !== undefined
+    (dayKey === 'friday' || dayKey === 'saturday') && place.close_hour_weekend !== undefined
       ? place.close_hour_weekend
       : place.close_hour
   );
@@ -1267,11 +1277,76 @@ export default function App() {
       if (targetConfigView) {
         setConfigView(targetConfigView);
       }
+      window.history.pushState({ 
+        type: 'screen', 
+        screen: targetScreen, 
+        configView: targetConfigView || configView 
+      }, '');
       window.scrollTo({ top: 0, behavior: 'instant' });
       setTimeout(() => {
         setIsNavigating(false);
       }, 350);
     }, 550);
+  };
+
+  const handleGenerateMonostop = (targetAnchor) => {
+    triggerHaptic(10);
+    const place = targetAnchor || anchorPlace;
+    if (!place) {
+      setScreen('config');
+      return;
+    }
+    const daysList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const now = new Date();
+    let baseServiceDay = daysList[now.getDay()];
+    if (now.getHours() < 6) {
+      baseServiceDay = daysList[(now.getDay() + 6) % 7];
+    }
+    const anchorSched = place.schedule_by_day?.[baseServiceDay];
+    let anchorCloseH = anchorSched?.close_hour ?? place.close_hour;
+    if (anchorCloseH !== undefined && anchorCloseH !== null && anchorCloseH <= 7) anchorCloseH += 24;
+    let startContH = now.getHours() + (now.getMinutes() / 60);
+    if (startContH < 6.0) startContH += 24.0;
+    const minsToAnchorClose = anchorCloseH ? Math.round((anchorCloseH - startContH) * 60) : 90;
+    const effDur = Math.max(60, Math.min(105, minsToAnchorClose > 0 ? minsToAnchorClose : 90));
+
+    const endDt = new Date(now.getTime() + effDur * 60000);
+    const pad = (n) => n.toString().padStart(2, '0');
+    const slotStr = `${pad(now.getHours())}:${pad(now.getMinutes())} - ${pad(endDt.getHours())}:${pad(endDt.getMinutes())}`;
+
+    const monostopPlan = {
+      id: `ronda_${place.neighborhood.toLowerCase().replace(/\s+/g, '_')}_refugio_${Date.now()}`,
+      title: `Refugio Nocturno: ${place.name}`,
+      neighborhood: place.neighborhood,
+      mood: mood || 'amigos',
+      estimated_cost: priceTier,
+      narrative_summary: `En noche de semana a las ${pad(now.getHours())}:${pad(now.getMinutes())} hs, la mejor jugada porteña no es correr entre paradas, sino hacer base en ${place.name} para disfrutar una sobremesa tranquila de ~90 min hasta su cierre a las ${anchorSched?.close || '01:00'} hs.`,
+      schedule: [
+        {
+          id: place.id,
+          time_slot: slotStr,
+          place_name: place.name,
+          address: place.address,
+          activity_type: ((place.subcategories || []).includes('pool') || (place.subcategories || []).includes('juegos_pool'))
+            ? 'Partida de Pool & Brindis'
+            : (place.category === 'nightlife' ? 'Coctelería & Sobremesa' : 'Cena Porteña'),
+          duration_minutes: effDur,
+          porteño_tip: place.game_highlight || place.highlight || 'Disfrutar la atmósfera única del lugar y pedir la recomendación de la casa.',
+          lat: place.lat,
+          lng: place.lng,
+          description: place.description,
+          activities: place.activities || [],
+          image_url: place.image_url,
+          about: place.about,
+          category: place.category
+        }
+      ]
+    };
+
+    setPlan(monostopPlan);
+    setScreen('itinerary');
+    window.history.pushState({ type: 'screen', screen: 'itinerary' }, '');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleScheduleFromSleeping = (targetSlot) => {
@@ -1364,6 +1439,85 @@ export default function App() {
   const [selectedPlaceModal, setSelectedPlaceModal] = useState(null);
   const [catalogPlaces, setCatalogPlaces] = useState(LOCAL_PLACES_CATALOG || []);
 
+  // --------------------------------------------------------------------------
+  // CONTROL DE HISTORIAL Y NAVEGACIÓN ATRÁS / ADELANTE (POPSTATE)
+  // --------------------------------------------------------------------------
+  // Evita cierres accidentales al tocar 'atrás' en el navegador o móvil.
+  // Cierra modales primero, luego vuelve de pantalla, luego de ajuste a inicio.
+  const anyModalOpen = Boolean(
+    selectedPlaceModal ||
+    showProfileModal ||
+    showWelcomeGuideModal ||
+    showAuthSuggestion
+  );
+  const prevModalOpenRef = useRef(false);
+
+  // Inicializar estado base en el historial
+  useEffect(() => {
+    if (!window.history.state) {
+      window.history.replaceState({ type: 'root', screen: 'config', configView: 'quick' }, '');
+    }
+  }, []);
+
+  // Sincronizar apertura/cierre de modales con pushState / back
+  useEffect(() => {
+    if (anyModalOpen && !prevModalOpenRef.current) {
+      window.history.pushState({ type: 'modal' }, '');
+    } else if (!anyModalOpen && prevModalOpenRef.current) {
+      if (window.history.state?.type === 'modal') {
+        window.history.back();
+      }
+    }
+    prevModalOpenRef.current = anyModalOpen;
+  }, [anyModalOpen]);
+
+  // Manejar el evento popstate (botón atrás en móvil, gestos, teclado, botón del navegador)
+  useEffect(() => {
+    const handlePopState = (event) => {
+      // 1. Si hay algún modal abierto, el botón atrás lo cierra prioritariamente
+      if (selectedPlaceModal) {
+        setSelectedPlaceModal(null);
+        return;
+      }
+      if (showProfileModal) {
+        setShowProfileModal(false);
+        return;
+      }
+      if (showWelcomeGuideModal) {
+        setShowWelcomeGuideModal(false);
+        return;
+      }
+      if (showAuthSuggestion) {
+        setShowAuthSuggestion(false);
+        return;
+      }
+
+      // 2. Si no hay modales, retroceder de pantalla o de vista de ajuste
+      if (event.state?.screen) {
+        setScreen(event.state.screen);
+        if (event.state.configView) {
+          setConfigView(event.state.configView);
+        }
+      } else {
+        if (screen === 'itinerary' || screen === 'recommended' || screen === 'sleeping') {
+          setScreen('config');
+        } else if (configView === 'adjust') {
+          setConfigView('quick');
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [
+    selectedPlaceModal,
+    showProfileModal,
+    showWelcomeGuideModal,
+    showAuthSuggestion,
+    screen,
+    configView
+  ]);
+
   // Índice para rotar entre opciones sugeridas en "¿La estiramos?" (1-tap)
   const [alargueIndex, setAlargueIndex] = useState(0);
 
@@ -1373,6 +1527,20 @@ export default function App() {
 
   const alargueCandidates = useMemo(() => {
     if (!plan) return [];
+
+    // Si la ronda fue fijada desde juegos&pool o ya contiene una parada lúdica/pool/juegos, ocultar completamente
+    const hasPlayfulStop = (plan.schedule || []).some(
+      (s) =>
+        (s.subcategories || []).includes('pool') ||
+        (s.subcategories || []).includes('bar_de_juegos') ||
+        (s.subcategories || []).includes('juegos_pool') ||
+        s.id === 'palermo_jobs_arcade' ||
+        s.id === 'san_bernardo' ||
+        (s.activities || []).some(a => a.toLowerCase().includes('pool') || a.toLowerCase().includes('juegos') || a.toLowerCase().includes('ping pong'))
+    );
+    if (anchorOriginType === 'games_pool' || hasPlayfulStop) {
+      return [];
+    }
     const targetBarrio = plan.neighborhood;
     const baseSchedule = plan.schedule?.filter((item) => !item.is_alargue) || [];
     const lastStop = baseSchedule[baseSchedule.length - 1] || plan.schedule?.[plan.schedule.length - 1];
@@ -2390,14 +2558,20 @@ export default function App() {
 
     const minAnimationPromise = new Promise(resolve => setTimeout(resolve, 1400));
 
+    // Límite de espera de 3.5 segundos con AbortController para evitar bloqueos infinitos
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
+
     try {
       const fetchPromise = fetch(`${API_BASE_URL}/api/plans/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: controller.signal
       });
 
       const [response] = await Promise.all([fetchPromise, minAnimationPromise]);
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         throw new Error(`Error en el servidor: código ${response.status}`);
@@ -2410,16 +2584,19 @@ export default function App() {
           currentTime: currentTimeFormatted
         });
         setScreen('sleeping');
+        window.history.pushState({ type: 'screen', screen: 'sleeping', configView }, '');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
 
       setPlan(data);
       setScreen('itinerary');
+      window.history.pushState({ type: 'screen', screen: 'itinerary', configView }, '');
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
     } catch (err) {
-      console.warn('Backend local no disponible. Generando itinerario curado con respaldo inteligente.', err);
+      clearTimeout(timeoutId);
+      console.warn('Backend local no disponible o excedió tiempo límite (3.5s). Generando itinerario curado con respaldo inteligente.', err);
       await minAnimationPromise;
       
       const coreBarrios = ['San Telmo', 'Palermo', 'Chacarita', 'Recoleta', 'Colegiales', 'Belgrano'];
@@ -2462,16 +2639,95 @@ export default function App() {
         ? (isLateNight || curH >= 20 ? 'night' : curH >= 16 ? 'afternoon' : curH >= 12 ? 'lunch' : 'morning')
         : (activeSlot === 'other_day' ? subSlot : activeSlot);
 
-      // VALIDACIÓN ESTRICTA DE HORARIOS: lugares que REALMENTE están abiertos con permanencia
-      const openBarrioPlaces = safePool.filter(p => isPlaceOpenAtTime(p, startDt, 45));
+      // Determinación rigurosa del día de servicio nocturno (si es madrugada < 06:00 hs, pertenece al día anterior)
+      const daysList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+      let baseServiceDay = daysList[startDt.getDay()];
+      if (startDt.getHours() < 6) {
+        baseServiceDay = daysList[(startDt.getDay() + 6) % 7];
+      }
+
+      // VALIDACIÓN ESTRICTA DE HORARIOS: lugares que REALMENTE están abiertos con permanencia en su turno
+      const openBarrioPlaces = safePool.filter(p => isPlaceOpenAtTime(p, startDt, 45, baseServiceDay));
+
+      // Si hay un lugar ancla garantizado (ej. Jobs Bar elegido desde Juegos & Pool)
+      const foundAnchor = anchorPlace ? (allPool.find(p => p.id === anchorPlace.id) || anchorPlace) : null;
+
+      // REGLA DE NOCHE EN DÍA DE SEMANA & MONOPARADA DE REFUGIO NOCTURNO:
+      // Si la salida es nocturna en día de semana y el ancla o barrio cierran temprano (ej. 01:00 AM)
+      if (foundAnchor && (activeSlot === 'now' || effectiveSlot === 'night')) {
+        const anchorSched = foundAnchor.schedule_by_day?.[baseServiceDay];
+        let anchorCloseH = anchorSched?.close_hour ?? foundAnchor.close_hour;
+        if (anchorCloseH !== undefined && anchorCloseH !== null && anchorCloseH <= 7) anchorCloseH += 24;
+        let startContH = startDt.getHours() + (startDt.getMinutes() / 60);
+        if (startContH < 6.0) startContH += 24.0;
+        const minsToAnchorClose = anchorCloseH ? Math.round((anchorCloseH - startContH) * 60) : 180;
+
+        // Si el usuario pidió 3 paradas saliendo ahora pero solo hay tiempo para 1 o 2 paradas de 90 min:
+        if (activeSlot === 'now' && stopsCount === 3 && minsToAnchorClose <= 140) {
+          setSleepingNotice({
+            neighborhood: fallbackNeighborhood,
+            currentTime: fmt(startDt),
+            reason: 'weeknight_late_stops',
+            anchorPlace: foundAnchor,
+            canDoMonostop: minsToAnchorClose >= 60,
+            closingTimeStr: anchorSched?.close || '01:00'
+          });
+          setScreen('sleeping');
+          window.history.pushState({ type: 'screen', screen: 'sleeping', configView }, '');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+
+        // Si solo hay tiempo para una parada completa de ~90 min antes del cierre
+        if (activeSlot === 'now' && minsToAnchorClose > 0 && minsToAnchorClose <= 125) {
+          const singleDur = Math.max(60, Math.min(105, minsToAnchorClose));
+          const endObj = new Date(startDt.getTime() + singleDur * 60000);
+          const monostopPlan = {
+            id: `ronda_${fallbackNeighborhood.toLowerCase().replace(/\s+/g, '_')}_refugio_${Date.now()}`,
+            title: `Refugio Nocturno: ${foundAnchor.name}`,
+            neighborhood: fallbackNeighborhood,
+            mood: mood || 'amigos',
+            estimated_cost: priceTier,
+            narrative_summary: `En noche de semana a las ${fmt(startDt)} hs, la mejor jugada porteña no es correr entre paradas, sino hacer base en ${foundAnchor.name} para disfrutar una sobremesa tranquila de ~90 min hasta su cierre a las ${anchorSched?.close || '01:00'} hs.`,
+            schedule: [
+              {
+                id: foundAnchor.id,
+                time_slot: `${fmt(startDt)} - ${fmt(endObj)}`,
+                place_name: foundAnchor.name,
+                address: foundAnchor.address,
+                activity_type: ((foundAnchor.subcategories || []).includes('pool') || (foundAnchor.subcategories || []).includes('juegos_pool'))
+                  ? 'Partida de Pool & Brindis'
+                  : (foundAnchor.category === 'nightlife' ? 'Coctelería & Sobremesa' : 'Cena Porteña'),
+                duration_minutes: singleDur,
+                porteño_tip: foundAnchor.game_highlight || foundAnchor.highlight || 'Disfrutar la atmósfera única del lugar y pedir la recomendación de la casa.',
+                lat: foundAnchor.lat,
+                lng: foundAnchor.lng,
+                description: foundAnchor.description,
+                activities: foundAnchor.activities || [],
+                image_url: foundAnchor.image_url,
+                about: foundAnchor.about,
+                category: foundAnchor.category
+              }
+            ]
+          };
+          setPlan(monostopPlan);
+          setScreen('itinerary');
+          window.history.pushState({ type: 'screen', screen: 'itinerary', configView }, '');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+      }
 
       // Si no hay al menos 2 paradas abiertas en el barrio a esta hora, avisar con pantalla de trasnoche
       if (openBarrioPlaces.length < 2) {
         setSleepingNotice({
           neighborhood: fallbackNeighborhood,
-          currentTime: fmt(startDt)
+          currentTime: fmt(startDt),
+          anchorPlace: foundAnchor,
+          canDoMonostop: Boolean(foundAnchor && isPlaceOpenAtTime(foundAnchor, startDt, 60, baseServiceDay))
         });
         setScreen('sleeping');
+        window.history.pushState({ type: 'screen', screen: 'sleeping', configView }, '');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
@@ -2480,13 +2736,10 @@ export default function App() {
       let p2 = null;
       let p3 = null;
 
-      // Si hay un lugar ancla garantizado (ej. Jobs Bar elegido desde Juegos & Pool)
-      const foundAnchor = anchorPlace ? (allPool.find(p => p.id === anchorPlace.id) || anchorPlace) : null;
-
       if (foundAnchor) {
-        // Estimar la hora de llegada al cierre según la cantidad de paradas
-        const estEndArrival = new Date(startDt.getTime() + (stopsCount === 3 ? 165 : 85) * 60000);
-        const anchorCanBeEnd = isPlaceOpenAtTime(foundAnchor, estEndArrival, 30);
+        // Estimar la hora de llegada al cierre según la cantidad de paradas de 90 min
+        const estEndArrival = new Date(startDt.getTime() + (stopsCount === 3 ? 195 : 95) * 60000);
+        const anchorCanBeEnd = isPlaceOpenAtTime(foundAnchor, estEndArrival, 30, baseServiceDay);
 
         if (anchorPosition === 'end' && anchorCanBeEnd) {
           // El ancla va como parada de cierre
@@ -2509,11 +2762,11 @@ export default function App() {
             p2 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && (p.category === 'dining' || (p.subcategories || []).includes('bodegon'))) ||
                  openBarrioPlaces.find(p => p.id !== foundAnchor.id) || openBarrioPlaces[0];
             // Para la parada 3 buscar un lugar que aguante abierto hasta tarde
-            p3 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p2.id && isPlaceOpenAtTime(p, estEndArrival, 30) && ((p.subcategories || []).includes('cocteleria') || p.category === 'nightlife' || p.category === 'culture')) ||
-                 openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p2.id && isPlaceOpenAtTime(p, estEndArrival, 30)) ||
+            p3 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p2.id && isPlaceOpenAtTime(p, estEndArrival, 30, baseServiceDay) && ((p.subcategories || []).includes('cocteleria') || p.category === 'nightlife' || p.category === 'culture')) ||
+                 openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p2.id && isPlaceOpenAtTime(p, estEndArrival, 30, baseServiceDay)) ||
                  openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p2.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
           } else {
-            p2 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && isPlaceOpenAtTime(p, estEndArrival, 30) && (p.category === 'dining' || p.category === 'nightlife' || (p.subcategories || []).includes('bodegon'))) ||
+            p2 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && isPlaceOpenAtTime(p, estEndArrival, 30, baseServiceDay) && (p.category === 'dining' || p.category === 'nightlife' || (p.subcategories || []).includes('bodegon'))) ||
                  openBarrioPlaces.find(p => p.id !== foundAnchor.id) || openBarrioPlaces[0];
           }
         }
@@ -2553,38 +2806,53 @@ export default function App() {
         }
       }
 
-      // Helper para calcular horario con Techo Duro (Hard Stop) respecto al cierre real del local
+      // Helper para calcular horario con Techo Duro (Hard Stop) respecto al cierre real del local en su turno
       const formatSlotWithHardCap = (startObj, durMins, place) => {
-        const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-        const dayKey = days[startObj.getDay()];
-        const sched = place.schedule_by_day?.[dayKey];
+        const sched = place.schedule_by_day?.[baseServiceDay];
         let closeH = sched?.close_hour ?? place.close_hour;
         
         let effDur = durMins;
+        let isClosedAlready = false;
+
         if (closeH !== undefined && closeH !== null) {
           if (closeH <= 7) closeH += 24;
           let arrivalContH = startObj.getHours() + (startObj.getMinutes() / 60);
           if (arrivalContH < 6.0 && startDt.getHours() >= 18) arrivalContH += 24.0;
           
           const diffMins = Math.round((closeH - arrivalContH) * 60);
-          if (diffMins > 0 && diffMins < effDur) {
-            effDur = Math.max(25, diffMins);
+          if (diffMins <= 0) {
+            isClosedAlready = true;
+            effDur = 0;
+          } else if (diffMins < effDur) {
+            effDur = Math.max(30, diffMins);
           }
         }
         const endObj = new Date(startObj.getTime() + effDur * 60000);
         return {
           slotStr: `${fmt(startObj)} - ${fmt(endObj)}`,
           dur: effDur,
-          endObj
+          endObj,
+          isClosedAlready
         };
       };
 
-      const s1 = formatSlotWithHardCap(startDt, p1.typical_duration_minutes || (effectiveSlot === 'morning' ? 45 : 75), p1);
+      // Duración mínima de 90 min (1 h 30 min) para salidas de noche/cena/copas porteñas
+      const defaultDuration = effectiveSlot === 'night' 
+        ? 90 
+        : effectiveSlot === 'lunch' 
+          ? 75 
+          : effectiveSlot === 'afternoon' 
+            ? 60 
+            : 45;
+
+      const dur1 = Math.max(defaultDuration, p1.typical_duration_minutes || defaultDuration);
+      const s1 = formatSlotWithHardCap(startDt, dur1, p1);
 
       const distKm = calculateDistanceKm(p1.lat, p1.lng, p2.lat, p2.lng) || 0.5;
-      const transitMins = Math.max(5, Math.min(15, Math.round(distKm * 10)));
+      const transitMins = Math.max(6, Math.min(15, Math.round(distKm * 10)));
       const start2 = new Date(s1.endObj.getTime() + transitMins * 60000);
-      const s2 = formatSlotWithHardCap(start2, p2.typical_duration_minutes || (effectiveSlot === 'morning' ? 45 : 75), p2);
+      const dur2 = Math.max(defaultDuration, p2.typical_duration_minutes || defaultDuration);
+      const s2 = formatSlotWithHardCap(start2, dur2, p2);
 
       const rawFallbackSchedule = [
         {
@@ -2602,8 +2870,11 @@ export default function App() {
           image_url: p1.image_url,
           about: p1.about,
           category: p1.category
-        },
-        {
+        }
+      ];
+
+      if (!s2.isClosedAlready && s2.dur >= 30) {
+        rawFallbackSchedule.push({
           id: p2.id,
           time_slot: s2.slotStr,
           place_name: p2.name,
@@ -2618,47 +2889,54 @@ export default function App() {
           image_url: p2.image_url,
           about: p2.about,
           category: p2.category
-        }
-      ];
-
-      if (stopsCount === 3 && p3) {
-        const dist2_3 = calculateDistanceKm(p2.lat, p2.lng, p3.lat, p3.lng) || 0.6;
-        const transit2_3 = Math.max(5, Math.min(15, Math.round(dist2_3 * 10)));
-        const start3 = new Date(s2.endObj.getTime() + transit2_3 * 60000);
-        const s3 = formatSlotWithHardCap(start3, p3.typical_duration_minutes || 75, p3);
-
-        rawFallbackSchedule.push({
-          id: p3.id,
-          time_slot: s3.slotStr,
-          place_name: p3.name,
-          address: p3.address,
-          activity_type: effectiveSlot === 'morning' ? 'Almuerzo de Bodegón' : effectiveSlot === 'lunch' ? 'Helado & Café de Culto' : effectiveSlot === 'afternoon' ? 'Tapeo & Vermut' : ((p3.subcategories || []).includes('pool') ? 'Partida de Pool & Brindis' : 'Tragos de Cierre & Mística'),
-          duration_minutes: s3.dur,
-          porteño_tip: p3.highlight || 'Coronar la ronda con mística porteña y buena sobremesa.',
-          lat: p3.lat,
-          lng: p3.lng,
-          description: p3.description,
-          activities: p3.activities || [],
-          image_url: p3.image_url,
-          about: p3.about,
-          category: p3.category
         });
+      }
+
+      if (stopsCount === 3 && p3 && !s2.isClosedAlready) {
+        const dist2_3 = calculateDistanceKm(p2.lat, p2.lng, p3.lat, p3.lng) || 0.6;
+        const transit2_3 = Math.max(6, Math.min(15, Math.round(dist2_3 * 10)));
+        const start3 = new Date(s2.endObj.getTime() + transit2_3 * 60000);
+        const dur3 = Math.max(defaultDuration, p3.typical_duration_minutes || defaultDuration);
+        const s3 = formatSlotWithHardCap(start3, dur3, p3);
+
+        if (!s3.isClosedAlready && s3.dur >= 30) {
+          rawFallbackSchedule.push({
+            id: p3.id,
+            time_slot: s3.slotStr,
+            place_name: p3.name,
+            address: p3.address,
+            activity_type: effectiveSlot === 'morning' ? 'Almuerzo de Bodegón' : effectiveSlot === 'lunch' ? 'Helado & Café de Culto' : effectiveSlot === 'afternoon' ? 'Tapeo & Vermut' : ((p3.subcategories || []).includes('pool') ? 'Partida de Pool & Brindis' : 'Tragos de Cierre & Mística'),
+            duration_minutes: s3.dur,
+            porteño_tip: p3.highlight || 'Coronar la ronda con mística porteña y buena sobremesa.',
+            lat: p3.lat,
+            lng: p3.lng,
+            description: p3.description,
+            activities: p3.activities || [],
+            image_url: p3.image_url,
+            about: p3.about,
+            category: p3.category
+          });
+        }
       }
 
       const fallbackSchedule = updateScheduleTransits(rawFallbackSchedule);
 
+      const firstTimeSlot = fallbackSchedule[0]?.time_slot?.split(' - ')[0] || fmt(startDt);
       setPlan({
         id: `ronda_${fallbackNeighborhood.toLowerCase().replace(/\s+/g, '_')}_${Date.now()}`,
-        title: `Una ronda por ${fallbackNeighborhood}.`,
+        title: rawFallbackSchedule.length === 1 
+          ? `Refugio Nocturno en ${fallbackNeighborhood}: ${p1.name}`
+          : `Una ronda por ${fallbackNeighborhood}.`,
         neighborhood: fallbackNeighborhood,
         mood: mood || 'amigos',
         estimated_cost: priceTier,
         narrative_summary: selectedSlot === 'now' 
-          ? `Ronda espontánea saliendo a las ${slot1.split(' - ')[0]} por ${fallbackNeighborhood}. Paradas conectadas a pie y sincronizadas con la movida porteña en este momento.`
-          : `Una ronda pensada para disfrutar a tu ritmo por ${fallbackNeighborhood}. Conectamos cada parada de manera caminable y respetando los tiempos de sobremesa porteña.`,
+          ? `Ronda espontánea saliendo a las ${firstTimeSlot} por ${fallbackNeighborhood}. Paradas de ~90 min conectadas a pie y sincronizadas con los horarios reales del barrio.`
+          : `Una ronda pensada para disfrutar a tu ritmo por ${fallbackNeighborhood}. Conectamos cada parada de manera caminable y respetando los 90 minutos de sobremesa porteña.`,
         schedule: fallbackSchedule
       });
       setScreen('itinerary');
+      window.history.pushState({ type: 'screen', screen: 'itinerary', configView }, '');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -3137,13 +3415,9 @@ export default function App() {
                       ¿La estiramos?
                     </h3>
                   </div>
-                  {isAdded ? (
+                  {isAdded && (
                     <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100/90 dark:bg-emerald-900/60 px-2.5 py-0.5 rounded-full border border-emerald-300 dark:border-emerald-700">
                       ✓ En tu ronda
-                    </span>
-                  ) : (
-                    <span className="text-[10px] font-bold uppercase tracking-wider ronda-text-muted ronda-card-inner px-2.5 py-0.5 rounded-full border shadow-2xs">
-                      Parada lúdica sugerida
                     </span>
                   )}
                 </div>
@@ -3505,6 +3779,36 @@ export default function App() {
                 A las <strong>{timeStr} hs</strong>, los cafetines notables, bodegones y paseos de este rincón ya bajaron sus persianas para descansar.
               </p>
             </div>
+
+            {/* Si hay un lugar ancla abierto como refugio nocturno (ej. Jobs Bar en noche de semana) */}
+            {sleepingNotice?.canDoMonostop && sleepingNotice?.anchorPlace && (
+              <div className="ronda-card border-2 border-[#E06D28] bg-[#E06D28]/10 dark:bg-[#E06D28]/15 rounded-3xl p-5 sm:p-6 text-left space-y-3.5 shadow-md">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#E06D28] flex items-center gap-1.5">
+                    <span>🌙</span> Refugio Nocturno Recomendado
+                  </span>
+                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#E06D28] text-white">
+                    ~90 min
+                  </span>
+                </div>
+                <div>
+                  <h3 className="font-editorial text-xl sm:text-2xl font-bold text-[var(--text-main)]">
+                    Hacer parada en {sleepingNotice.anchorPlace.name}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1.5 leading-relaxed">
+                    Hoy es noche de semana y {sleepingNotice.anchorPlace.name} cierra a las <strong>{sleepingNotice.closingTimeStr || '01:00'} hs</strong>. Para respetar el ritmo de 90 minutos de sobremesa sin apuros, te armamos una parada única para disfrutar con calma hasta el cierre.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleGenerateMonostop(sleepingNotice.anchorPlace)}
+                  className="w-full bg-[#E06D28] hover:bg-[#C95B1D] text-white font-bold text-sm rounded-2xl py-3.5 px-4 shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer btn-latido"
+                >
+                  <span>Armar parada en {sleepingNotice.anchorPlace.name}</span>
+                  <ArrowRight className="w-4 h-4 text-white" />
+                </button>
+              </div>
+            )}
 
             {/* Mensaje de expansión solicitado por el usuario */}
             <div className="p-4 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 text-xs text-[var(--text-muted)] leading-relaxed text-left sm:text-center">
