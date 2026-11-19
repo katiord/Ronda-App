@@ -612,6 +612,14 @@ def has_subtype_duplication(place_a: Place, place_b: Place) -> bool:
     if ("bodegon" in subs_a or "bodegon_clasico" in subs_a or "parrilla" in subs_a or "parrilla_tradicional" in subs_a) and \
        ("bodegon" in subs_b or "bodegon_clasico" in subs_b or "parrilla" in subs_b or "parrilla_tradicional" in subs_b):
         return True
+    # 7. Nunca dos bares de coctelería o speakeasies seguidos (evita duplicar bares de tragos en una misma ronda)
+    cocktail_subs = {"cocteleria", "cocteleria_de_autor", "speakeasy", "tragos_de_autor"}
+    if bool(subs_a.intersection(cocktail_subs)) and bool(subs_b.intersection(cocktail_subs)):
+        return True
+    # 8. Nunca dos bares lúdicos o de juegos/pool seguidos
+    game_subs = {"bar_de_juegos", "pool", "arcade", "juegos_de_mesa"}
+    if bool(subs_a.intersection(game_subs)) and bool(subs_b.intersection(game_subs)):
+        return True
 
     return False
 
@@ -737,7 +745,9 @@ def select_diverse_itinerary(
     max_stops: int = 3, 
     start_hour: int = 20, 
     day_of_week: Optional[str] = None,
-    allow_neighboring_barrio: bool = False
+    allow_neighboring_barrio: bool = False,
+    anchor_place_id: Optional[str] = None,
+    anchor_position: str = "end"
 ) -> List[Place]:
     """
     Selecciona paradas garantizando:
@@ -748,6 +758,7 @@ def select_diverse_itinerary(
     - Confinamiento barrial y peatonal estricto (RULE-DOM-01): Distancia <= 1.8 km entre paradas.
     - Buffer mínimo de 45 min antes de cada cierre.
     - Monoparada en trasnoche profunda (01:00 a 05:00 AM).
+    - Inclusión garantizada del lugar ancla en su posición elegida (start o end).
     """
     if not candidates:
         return []
@@ -772,25 +783,45 @@ def select_diverse_itinerary(
     if not valid_candidates:
         valid_candidates = candidates[:effective_max]
 
+    # Resolver lugar ancla garantizado si fue solicitado
+    anchor_place = None
+    if anchor_place_id:
+        anchor_place = next((p for p in valid_candidates if p.id == anchor_place_id), None) or \
+                       next((p for p in candidates if p.id == anchor_place_id), None) or \
+                       next((p for p in ALL_PLACES if p.id == anchor_place_id), None)
+
     selected: List[Place] = []
     current_time_runner = cur_h_cont
     base_hour = int(start_hour) if start_hour is not None else 20
 
-    for slot_idx in range(effective_max):
+    # Si hay lugar ancla como inicio
+    if anchor_place and anchor_position == "start":
+        selected.append(anchor_place)
+        prev_dur = max(0.6, (anchor_place.typical_duration_minutes or 60) / 60.0)
+        current_time_runner += prev_dur + 0.15
+
+    slots_to_fill = effective_max
+    if anchor_place:
+        slots_to_fill = max(1, effective_max - 1)
+
+    start_slot_idx = len(selected)
+    for slot_idx in range(start_slot_idx, start_slot_idx + (slots_to_fill if not (anchor_place and anchor_position == "start") else effective_max - 1)):
+        if len(selected) >= effective_max:
+            break
         target_cats = get_canonical_slot_target_category(slot_idx, base_hour)
         
         best_candidate = None
         for c in valid_candidates:
-            if c in selected:
+            if c in selected or (anchor_place and c.id == anchor_place.id):
                 continue
             if any(has_subtype_duplication(s, c) for s in selected):
                 continue
+            if anchor_place and has_subtype_duplication(anchor_place, c):
+                continue
             if selected:
                 prev_stop = selected[-1]
-                # Confinamiento barrial estricto (mismo barrio a menos que se permita barrio vecino)
                 if not allow_neighboring_barrio and c.neighborhood.lower() != selected[0].neighborhood.lower():
                     continue
-                # Distancia peatonal máxima de 1.8 km
                 dist_prev = calculate_distance(prev_stop, c)
                 if dist_prev > 1.8 and not allow_neighboring_barrio:
                     continue
@@ -808,9 +839,11 @@ def select_diverse_itinerary(
 
         if not best_candidate:
             for c in valid_candidates:
-                if c in selected:
+                if c in selected or (anchor_place and c.id == anchor_place.id):
                     continue
                 if any(has_subtype_duplication(s, c) for s in selected):
+                    continue
+                if anchor_place and has_subtype_duplication(anchor_place, c):
                     continue
                 if selected:
                     prev_stop = selected[-1]
@@ -834,6 +867,13 @@ def select_diverse_itinerary(
                 prev_dur = max(0.6, (prev_stop.typical_duration_minutes or 60) / 60.0)
                 current_time_runner += prev_dur + 0.15
             selected.append(best_candidate)
+
+    # Si el ancla va al final y aún no está en selected
+    if anchor_place and anchor_position == "end" and anchor_place not in selected:
+        selected.append(anchor_place)
+
+    if anchor_place:
+        return selected
 
     optimized = optimize_route_anti_zigzag(selected)
     return optimized
@@ -999,6 +1039,14 @@ def filter_candidates(request: PlanRequest, places: Optional[List[Place]] = None
 
     candidates = diverse_candidates if len(diverse_candidates) >= 2 else [p for _, p in scored_places[:6]]
 
+    # Si se solicitó un lugar ancla garantizado, asegurar que esté presente entre los candidatos prioritarios
+    if getattr(request, "anchor_place_id", None):
+        anchor_p = next((p for p in source_places if p.id == request.anchor_place_id), None)
+        if anchor_p and anchor_p not in candidates:
+            candidates.insert(0, anchor_p)
+            if len(candidates) > 8:
+                candidates = candidates[:8]
+
     # Si en el barrio no hay opciones abiertas (ej. trasnoche extrema), traer refugios nocturnos de la ciudad
     if len(candidates) < 1:
         open_anywhere = [
@@ -1038,7 +1086,11 @@ def generate_fallback_plan(request: PlanRequest, candidates: List[Place]) -> Pla
 
     is_trasnoche = (1 <= start_dt.hour < 6)
     is_night_plan = (start_dt.hour >= 20 or start_dt.hour < 6 or request.time_of_day == "night")
-    effective_max_stops = 1 if is_trasnoche else (2 if is_night_plan else 3)
+    requested_stops = getattr(request, "stops_count", None)
+    if requested_stops and requested_stops in [2, 3]:
+        effective_max_stops = 1 if is_trasnoche else requested_stops
+    else:
+        effective_max_stops = 1 if is_trasnoche else (2 if is_night_plan else 3)
 
     day_val = getattr(request, "day_of_week", None) or datetime.now().strftime("%A").lower()
 
@@ -1061,12 +1113,17 @@ def generate_fallback_plan(request: PlanRequest, candidates: List[Place]) -> Pla
             )
 
     allow_adjacent = getattr(request, "allow_neighboring_barrio", False)
+    anchor_id = getattr(request, "anchor_place_id", None)
+    anchor_pos = getattr(request, "anchor_position", "end") or "end"
+
     selected = select_diverse_itinerary(
         candidates, 
         max_stops=effective_max_stops, 
         start_hour=start_dt.hour, 
         day_of_week=day_val,
-        allow_neighboring_barrio=allow_adjacent
+        allow_neighboring_barrio=allow_adjacent,
+        anchor_place_id=anchor_id,
+        anchor_position=anchor_pos
     )
     if not selected:
         selected = candidates[:effective_max_stops]

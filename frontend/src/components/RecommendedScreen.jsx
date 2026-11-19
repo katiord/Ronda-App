@@ -1242,7 +1242,7 @@ export default function RecommendedScreen({
                           {openStatus.isOpenToday ? (
                             <button
                               type="button"
-                              onClick={() => onPlanFromHere(place)}
+                              onClick={() => onPlanFromHere(place, 'games_pool')}
                               className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-semibold bg-[#14241F] dark:bg-[#1E3328] text-white hover:bg-[#2A4B3D] rounded-xl transition cursor-pointer shadow-xs border ronda-border btn-latido"
                               title="Armar ronda con este lugar"
                             >

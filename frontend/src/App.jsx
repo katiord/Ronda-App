@@ -1329,6 +1329,9 @@ export default function App() {
   const [priceTier, setPriceTier] = useState('$$');
   const [copied, setCopied] = useState(false);
   const [originActivity, setOriginActivity] = useState(null);
+  const [anchorPlace, setAnchorPlace] = useState(null); // Lugar garantizado cuando viene de Recomendados / Juegos & Pool
+  const [anchorPosition, setAnchorPosition] = useState('end'); // 'end' (cierre) | 'start' (inicio)
+  const [anchorOriginType, setAnchorOriginType] = useState(null); // 'games_pool' | 'place' | null
 
   // Estado del Clima en tiempo real (Open-Meteo CABA)
   const [weather, setWeather] = useState({
@@ -2098,16 +2101,34 @@ export default function App() {
   };
 
   // Armar un recorrido anclando un lugar o actividad elegida desde Recomendados
-  const handlePlanFromHere = (item) => {
+  const handlePlanFromHere = (item, originType = null) => {
     if (item.neighborhood || item.barrio) {
       setNeighborhood(item.neighborhood || item.barrio);
     }
+    const isGame = originType === 'games_pool' ||
+      (item.subcategories || []).includes('pool') ||
+      (item.subcategories || []).includes('bar_de_juegos') ||
+      (item.subcategories || []).includes('arcade') ||
+      (item.play_category && item.play_category.length > 0);
+
+    setAnchorPlace(item);
+    setAnchorOriginType(isGame ? 'games_pool' : (originType || 'place'));
+    // En juegos & pool, la sugerencia natural y recomendada es el cierre de la noche
+    setAnchorPosition(isGame ? 'end' : 'start');
+
+    if (item.recommended_times && item.recommended_times.length === 1 && item.recommended_times[0] === 'night') {
+      setTimeOfDay('night');
+      if (selectedSlot !== 'now' && selectedSlot !== 'other_day') {
+        setSelectedSlot('night');
+      }
+    }
+
     if (item.title) {
       setOriginActivity(item);
       setCustomActivityNote(`Quiero sumar la actividad: ${item.title}`);
     } else {
       setOriginActivity(null);
-      setCustomActivityNote(`Quiero arrancar o pasar por ${item.name}`);
+      setCustomActivityNote(`Quiero incluir ${item.name} en mi ronda`);
     }
     handleNavigate('config', 'adjust');
   };
@@ -2362,7 +2383,9 @@ export default function App() {
       is_now: isNowVal,
       day_of_week: currentDayOfWeek,
       allow_neighboring_barrio: allowNeighboringBarrio,
-      stops_count: stopsCount
+      stops_count: stopsCount,
+      anchor_place_id: anchorPlace?.id || null,
+      anchor_position: anchorPosition
     };
 
     const minAnimationPromise = new Promise(resolve => setTimeout(resolve, 1400));
@@ -2457,13 +2480,43 @@ export default function App() {
       let p2 = null;
       let p3 = null;
 
-      if (effectiveSlot === 'night') {
+      // Si hay un lugar ancla garantizado (ej. Jobs Bar elegido desde Juegos & Pool)
+      const foundAnchor = anchorPlace ? (allPool.find(p => p.id === anchorPlace.id) || anchorPlace) : null;
+
+      if (foundAnchor) {
+        if (anchorPosition === 'end') {
+          // El ancla va como parada de cierre
+          if (stopsCount === 3) {
+            p1 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && (p.category === 'dining' || (p.subcategories || []).includes('bodegon'))) ||
+                 openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.category !== 'cafe') || openBarrioPlaces[0];
+            p2 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p1.id && ((p.subcategories || []).includes('cocteleria') || p.category === 'nightlife' || p.category === 'culture')) ||
+                 openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p1.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
+            p3 = foundAnchor;
+          } else {
+            p1 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && (p.category === 'dining' || (p.subcategories || []).includes('bodegon'))) ||
+                 openBarrioPlaces.find(p => p.id !== foundAnchor.id) || openBarrioPlaces[0];
+            p2 = foundAnchor;
+          }
+        } else {
+          // El ancla va como punto de inicio
+          p1 = foundAnchor;
+          if (stopsCount === 3) {
+            p2 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && (p.category === 'dining' || (p.subcategories || []).includes('bodegon'))) ||
+                 openBarrioPlaces.find(p => p.id !== foundAnchor.id) || openBarrioPlaces[0];
+            p3 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p2.id && ((p.subcategories || []).includes('cocteleria') || p.category === 'nightlife' || p.category === 'culture')) ||
+                 openBarrioPlaces.find(p => p.id !== foundAnchor.id && p.id !== p2.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
+          } else {
+            p2 = openBarrioPlaces.find(p => p.id !== foundAnchor.id && (p.category === 'dining' || p.category === 'nightlife' || (p.subcategories || []).includes('bodegon'))) ||
+                 openBarrioPlaces.find(p => p.id !== foundAnchor.id) || openBarrioPlaces[0];
+          }
+        }
+      } else if (effectiveSlot === 'night') {
         p1 = openBarrioPlaces.find(p => p.category === 'dining' || (p.subcategories || []).includes('bodegon')) ||
              openBarrioPlaces.find(p => p.category === 'nightlife') || openBarrioPlaces[0];
         p2 = openBarrioPlaces.find(p => p.id !== p1.id && (p.category === 'nightlife' || (p.subcategories || []).includes('cocteleria'))) ||
              openBarrioPlaces.find(p => p.id !== p1.id) || openBarrioPlaces[1 % openBarrioPlaces.length];
         if (stopsCount === 3 && openBarrioPlaces.length >= 3) {
-          p3 = openBarrioPlaces.find(p => p.id !== p1.id && p.id !== p2.id && ((p.subcategories || []).includes('juegos_pool') || p.category === 'nightlife' || p.category === 'dining')) ||
+          p3 = openBarrioPlaces.find(p => p.id !== p1.id && p.id !== p2.id && ((p.subcategories || []).includes('juegos_pool') || (p.subcategories || []).includes('bar_de_juegos') || p.category === 'nightlife' || p.category === 'dining')) ||
                openBarrioPlaces.find(p => p.id !== p1.id && p.id !== p2.id) || openBarrioPlaces[2 % openBarrioPlaces.length];
         }
       } else if (effectiveSlot === 'lunch') {
@@ -3950,6 +4003,117 @@ export default function App() {
                 <span>Volver a sugerencia rápida</span>
               </button>
             </div>
+
+            {/* TARJETA DESTACADA: LUGAR PROTAGONISTA FIJADO (EJ. JUEGOS & POOL) */}
+            {anchorPlace && (
+              <div className="ronda-card border border-[#E06D28]/40 bg-[#FAF7F2] dark:bg-[#1E2E26] rounded-3xl p-5 sm:p-6 shadow-sm animate-fade-in relative overflow-hidden">
+                <div className="flex items-start justify-between gap-4 mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-11 h-11 rounded-2xl bg-[#E06D28]/15 text-[#E06D28] flex items-center justify-center text-2xl shrink-0">
+                      {anchorOriginType === 'games_pool' ? '🎱' : '📌'}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-[#E06D28] text-white px-2 py-0.5 rounded-full">
+                          Lugar Protagonista Fijado
+                        </span>
+                        <span className="text-xs text-[var(--text-muted)] font-semibold">
+                          {anchorPlace.neighborhood || neighborhood}
+                        </span>
+                      </div>
+                      <h3 className="text-base sm:text-lg font-bold text-[var(--text-main)] mt-0.5">
+                        {anchorPlace.name}
+                      </h3>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      triggerHaptic(8);
+                      setAnchorPlace(null);
+                      setAnchorOriginType(null);
+                    }}
+                    className="text-xs text-[var(--text-muted)] hover:text-red-500 font-semibold px-2.5 py-1 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition flex items-center gap-1 cursor-pointer"
+                    title="Quitar lugar ancla"
+                  >
+                    <span>Quitar</span>
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                <p className="text-xs text-[var(--text-muted)] mb-4">
+                  {anchorOriginType === 'games_pool'
+                    ? 'Elegiste este lugar desde Juegos & Pool. ¿En qué momento de tu ronda preferís disfrutarlo?'
+                    : 'Este lugar formará parte obligatoria de tu recorrido. Elegí su rol en la salida:'}
+                </p>
+
+                {/* Selector de Posición: Cierre vs Inicio */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      triggerHaptic(8);
+                      setAnchorPosition('end');
+                    }}
+                    className={`p-3.5 rounded-2xl text-left border transition cursor-pointer flex items-center justify-between ${
+                      anchorPosition === 'end'
+                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#14241F] dark:border-[#385C4A] shadow-md ring-2 ring-[#E06D28]/40'
+                        : 'ronda-card border text-[var(--text-main)] hover:border-[#E06D28]'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center gap-1.5 font-bold text-xs sm:text-sm">
+                        <span>🏁</span>
+                        <span>Como cierre de la salida</span>
+                        {anchorOriginType === 'games_pool' && (
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase ${
+                            anchorPosition === 'end' ? 'bg-[#E06D28] text-white' : 'bg-emerald-500/20 text-emerald-800 dark:text-emerald-300'
+                          }`}>
+                            Recomendado
+                          </span>
+                        )}
+                      </div>
+                      <p className={`text-[11px] mt-1 leading-snug ${anchorPosition === 'end' ? 'text-white/80' : 'ronda-text-muted'}`}>
+                        Arrancar con cena o tragos y coronar jugando al pool y brindando.
+                      </p>
+                    </div>
+                    <div className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] shrink-0 ml-2 ${
+                      anchorPosition === 'end' ? 'border-[#E06D28] bg-[#E06D28] text-white font-bold' : 'border-stone-400'
+                    }`}>
+                      {anchorPosition === 'end' ? '✓' : ''}
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      triggerHaptic(8);
+                      setAnchorPosition('start');
+                    }}
+                    className={`p-3.5 rounded-2xl text-left border transition cursor-pointer flex items-center justify-between ${
+                      anchorPosition === 'start'
+                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#14241F] dark:border-[#385C4A] shadow-md ring-2 ring-[#E06D28]/40'
+                        : 'ronda-card border text-[var(--text-main)] hover:border-[#E06D28]'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center gap-1.5 font-bold text-xs sm:text-sm">
+                        <span>🚀</span>
+                        <span>Para arrancar la salida</span>
+                      </div>
+                      <p className={`text-[11px] mt-1 leading-snug ${anchorPosition === 'start' ? 'text-white/80' : 'ronda-text-muted'}`}>
+                        Punto de encuentro: arrancar jugando, picar algo y continuar la noche.
+                      </p>
+                    </div>
+                    <div className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] shrink-0 ml-2 ${
+                      anchorPosition === 'start' ? 'border-[#E06D28] bg-[#E06D28] text-white font-bold' : 'border-stone-400'
+                    }`}>
+                      {anchorPosition === 'start' ? '✓' : ''}
+                    </div>
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* SECCIÓN 1: ¿CUÁNDO SALÍS? (MINIMALISTA Y HORIZONTAL) */}
             <section className="ronda-card border rounded-3xl p-5 sm:p-7 shadow-xs">

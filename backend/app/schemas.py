@@ -53,6 +53,9 @@ class PlanRequest(BaseModel):
     day_of_week: Optional[str] = Field(default=None, description="Día de la semana en minúsculas en inglés (ej. 'monday', 'friday')")
     allow_neighboring_barrio: bool = Field(default=False, description="Permite conectar la 3ra parada con un barrio lindero contiguo")
     target_neighborhood: Optional[str] = Field(default=None, description="Barrio ancla resuelto internamente si se solicitó Cualquiera")
+    anchor_place_id: Optional[str] = Field(default=None, description="ID del lugar garantizado que el usuario eligió como ancla")
+    anchor_position: Optional[str] = Field(default="end", description="Posición del ancla: 'start' o 'end'")
+    stops_count: Optional[int] = Field(default=2, description="Cantidad de paradas: 2 o 3")
 
 class TransitInfo(BaseModel):
     mode: str = Field(description="Modo de traslado sugerido: a pie, taxi, colectivo, o no aplica")
