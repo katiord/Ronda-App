@@ -115,3 +115,10 @@ Cada paso es coordinado por el **Orquestador**, investigado por el **Investigado
   - Configuración Todo-en-Uno para despliegue web gratuito (`vercel.json`, `api/index.py`, `requirements.txt` y `frontend/.env.example`).
   - Detección automática de dominio web en `frontend/src/App.jsx` y persistencia serverless read-only Zero-PII en `backend/app/auth.py`.
   - Auditoría final aprobada por el Revisor (`5/5` suites del Harness y build de producción).
+- [x] **Paso 12: Conciencia de Ubicación & Filtro Anti-Cierre (Buffer de Traslado Porteño)**
+  - Erradicación de la inconsistencia del "teletransporte" en salidas espontáneas ("Armar ya"): la app ahora tiene en cuenta el punto de partida real del usuario.
+  - Botón de 1 tap `📍 Cerca mío` (detección GPS de barrio vía `navigator.geolocation`) y selector de origen "¿Desde dónde salís?" en vista rápida y en ajuste de barrio.
+  - Estimación determinista de tiempos de traslado en CABA (`estimateTransitMinutes` y matriz de centros geográficos canónicos de los 11 barrios).
+  - Sincronización fáctica de la Parada 1 calculando la llegada real (`startDt = hora actual + tiempo de viaje`).
+  - **Regla Estricta Anti-Cierre**: Ningún lugar puede ser asignado a la Parada 1 si al llegar faltan menos de 60 minutos para su cierre (o menos de 75 min para cena/bodegón).
+  - Tarjeta de partida en la pantalla de itinerario mostrando el origen, modo de traslado y tiempos de salida y llegada coordinados.

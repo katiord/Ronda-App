@@ -42,7 +42,9 @@ import {
   Info,
   Bookmark,
   Gamepad2,
-  Plus
+  Plus,
+  Navigation,
+  LocateFixed
 } from 'lucide-react';
 import RondaMap from './components/RondaMap';
 import RecommendedScreen from './components/RecommendedScreen';
@@ -1043,6 +1045,45 @@ function calculateDistanceKm(lat1, lon1, lat2, lon2) {
   return Math.hypot(dLat, dLon);
 }
 
+// Centros geográficos canónicos de los 11 barrios de Ronda en CABA
+const BARRIO_CENTERS = {
+  'Palermo': { lat: -34.5889, lng: -58.4305 },
+  'San Telmo': { lat: -34.6212, lng: -58.3731 },
+  'Recoleta': { lat: -34.5875, lng: -58.3927 },
+  'Chacarita': { lat: -34.5867, lng: -58.4556 },
+  'Colegiales': { lat: -34.5752, lng: -58.4513 },
+  'Belgrano': { lat: -34.5614, lng: -58.4563 },
+  'San Nicolás': { lat: -34.6037, lng: -58.3816 },
+  'Puerto Madero': { lat: -34.6083, lng: -58.3639 },
+  'Caballito': { lat: -34.6186, lng: -58.4429 },
+  'Almagro': { lat: -34.6094, lng: -58.4208 },
+  'Villa Crespo': { lat: -34.5997, lng: -58.4378 }
+};
+
+// Estima minutos de traslado real en CABA (a pie si es <= 1.2 km, o en transporte urbano)
+function estimateTransitMinutes(originCoords, destCoords) {
+  if (!originCoords || !destCoords) return 15;
+  const distKm = calculateDistanceKm(originCoords.lat, originCoords.lng, destCoords.lat, destCoords.lng) || 0.6;
+  if (distKm <= 1.2) {
+    return Math.max(10, Math.min(22, Math.round(distKm * 13)));
+  }
+  return Math.max(18, Math.min(65, Math.round(14 + distKm * 3.2)));
+}
+
+// Identifica el barrio más cercano a unas coordenadas dadas
+function getClosestBarrio(lat, lng) {
+  let closest = 'Palermo';
+  let minDist = 999999;
+  for (const [bName, coords] of Object.entries(BARRIO_CENTERS)) {
+    const d = calculateDistanceKm(lat, lng, coords.lat, coords.lng);
+    if (d !== null && d < minDist) {
+      minDist = d;
+      closest = bName;
+    }
+  }
+  return closest;
+}
+
 // Verifica con rigor fáctico si un lugar está abierto y disponible para una visita (con margen de permanencia mínimo)
 function isPlaceOpenAtTime(place, dateObj, minBufferMinutes = 45, baseDayOverride = null) {
   if (!place) return false;
@@ -1384,6 +1425,10 @@ export default function App() {
 
   // Estados de configuración de la ronda
   const [neighborhood, setNeighborhood] = useState('Cualquiera');
+  const [userOrigin, setUserOrigin] = useState('same_barrio'); // 'same_barrio' | barrio name | 'gps'
+  const [userGpsCoords, setUserGpsCoords] = useState(null); // { lat, lng, barrio, isGps: true }
+  const [isLocatingGps, setIsLocatingGps] = useState(false);
+  const [locationToast, setLocationToast] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState('now'); // 'now' | 'morning' | 'lunch' | 'afternoon' | 'night' | 'other_day'
   const [showPastSlots, setShowPastSlots] = useState(false);
   const [subSlot, setSubSlot] = useState('morning'); // para 'other_day'
@@ -1425,6 +1470,75 @@ export default function App() {
     () => getWeatherVisual(weather, currentHour),
     [weather, currentHour]
   );
+
+  // Estimación reactiva del traslado inicial según origen y barrio destino
+  const originTransitEstimate = useMemo(() => {
+    const targetBarrio = neighborhood === 'Cualquiera' ? 'Palermo' : neighborhood;
+    const destCoords = BARRIO_CENTERS[targetBarrio] || BARRIO_CENTERS['Palermo'];
+    if (userGpsCoords) {
+      const mins = estimateTransitMinutes(userGpsCoords, destCoords);
+      const isWalk = mins <= 15;
+      return {
+        minutes: mins,
+        mode: isWalk ? 'walk' : 'transit',
+        label: isWalk ? `🚶 ~${mins} min a pie desde tu ubicación` : `🚗 ~${mins} min de viaje desde tu ubicación`,
+        isSameBarrio: userGpsCoords.barrio === targetBarrio,
+        originName: `Cerca de ${userGpsCoords.barrio}`
+      };
+    }
+    if (userOrigin && userOrigin !== 'same_barrio') {
+      const origCoords = BARRIO_CENTERS[userOrigin] || BARRIO_CENTERS['Palermo'];
+      const mins = userOrigin === targetBarrio ? 12 : estimateTransitMinutes(origCoords, destCoords);
+      const isWalk = mins <= 15;
+      return {
+        minutes: mins,
+        mode: isWalk ? 'walk' : 'transit',
+        label: userOrigin === targetBarrio ? `🚶 ~12 min a pie en ${targetBarrio}` : `🚗 ~${mins} min de viaje desde ${userOrigin}`,
+        isSameBarrio: userOrigin === targetBarrio,
+        originName: userOrigin
+      };
+    }
+    return {
+      minutes: 12,
+      mode: 'walk',
+      label: `🚶 ~12 min a pie en el barrio`,
+      isSameBarrio: true,
+      originName: 'En el barrio de la salida'
+    };
+  }, [neighborhood, userOrigin, userGpsCoords]);
+
+  const handleDetectGps = () => {
+    if (typeof window === 'undefined' || !navigator.geolocation) {
+      setLocationToast('⚠️ Tu navegador no soporta geolocalización.');
+      setTimeout(() => setLocationToast(null), 3000);
+      return;
+    }
+    triggerHaptic(10);
+    setIsLocatingGps(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setIsLocatingGps(false);
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const closest = getClosestBarrio(lat, lng);
+        setUserGpsCoords({ lat, lng, barrio: closest, isGps: true });
+        setUserOrigin(closest);
+        if (neighborhood === 'Cualquiera') {
+          setNeighborhood(closest);
+        }
+        triggerHaptic(15);
+        setLocationToast(`📍 Ubicación detectada en ${closest} · Horarios sincronizados`);
+        setTimeout(() => setLocationToast(null), 3500);
+      },
+      (err) => {
+        setIsLocatingGps(false);
+        console.warn('Error obteniendo geolocalización:', err);
+        setLocationToast('⚠️ No pudimos acceder a tu GPS. Podés elegir tu barrio manualmente.');
+        setTimeout(() => setLocationToast(null), 3500);
+      },
+      { timeout: 8000, enableHighAccuracy: false }
+    );
+  };
 
   // Filtrado de franjas horarias según el horario actual (descarte inteligente + menú fuera de rango)
   const activeSlots = TIME_SLOT_OPTIONS.filter((slot) => !slot.isPast(currentHour));
@@ -2561,7 +2675,10 @@ export default function App() {
       allow_neighboring_barrio: allowNeighboringBarrio,
       stops_count: stopsCount,
       anchor_place_id: anchorPlace?.id || null,
-      anchor_position: anchorPosition
+      anchor_position: anchorPosition,
+      origin_neighborhood: userOrigin !== 'same_barrio' ? userOrigin : (userGpsCoords?.barrio || null),
+      origin_lat: userGpsCoords?.lat || null,
+      origin_lng: userGpsCoords?.lng || null
     };
 
     const minAnimationPromise = new Promise(resolve => setTimeout(resolve, 1400));
@@ -2608,9 +2725,18 @@ export default function App() {
       await minAnimationPromise;
       
       const coreBarrios = ['San Telmo', 'Palermo', 'Chacarita', 'Recoleta', 'Colegiales', 'Belgrano'];
-      const fallbackNeighborhood = neighborhood === 'Cualquiera'
-        ? coreBarrios[Math.floor(Math.random() * coreBarrios.length)]
-        : neighborhood;
+      // Si el usuario eligió 'Cualquiera', priorizar su barrio si está en coreBarrios para evitar traslados absurdos
+      let fallbackNeighborhood = neighborhood;
+      if (fallbackNeighborhood === 'Cualquiera') {
+        if (userGpsCoords?.barrio && coreBarrios.includes(userGpsCoords.barrio)) {
+          fallbackNeighborhood = userGpsCoords.barrio;
+        } else if (userOrigin && userOrigin !== 'same_barrio' && coreBarrios.includes(userOrigin)) {
+          fallbackNeighborhood = userOrigin;
+        } else {
+          fallbackNeighborhood = coreBarrios[Math.floor(Math.random() * coreBarrios.length)];
+        }
+      }
+
       const allPool = catalogPlaces && catalogPlaces.length > 0 ? catalogPlaces : LOCAL_PLACES_CATALOG;
       const barrioPlaces = allPool.filter(p => p.neighborhood.toLowerCase() === fallbackNeighborhood.toLowerCase());
       const safePool = barrioPlaces.length >= 2 
@@ -2621,9 +2747,30 @@ export default function App() {
       const pad = (n) => n.toString().padStart(2, '0');
       const fmt = (d) => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 
+      // Cálculo del tiempo de viaje estimado desde el origen hasta el barrio destino
+      const destCoords = BARRIO_CENTERS[fallbackNeighborhood] || { lat: -34.5889, lng: -58.4305 };
+      let originCoords = null;
+      let originName = 'Tu ubicación actual';
+      if (userGpsCoords) {
+        originCoords = userGpsCoords;
+        originName = `Cerca de ${userGpsCoords.barrio} (GPS)`;
+      } else if (userOrigin && userOrigin !== 'same_barrio' && BARRIO_CENTERS[userOrigin]) {
+        originCoords = BARRIO_CENTERS[userOrigin];
+        originName = userOrigin;
+      } else {
+        originCoords = destCoords;
+        originName = fallbackNeighborhood;
+      }
+
+      const initialTransitMinutes = (userOrigin === 'same_barrio' && !userGpsCoords)
+        ? 12
+        : estimateTransitMinutes(originCoords, destCoords);
+      const isInitialWalk = initialTransitMinutes <= 15;
+
+      const departureDt = new Date();
       let startDt = new Date();
       if (activeSlot === 'now') {
-        startDt.setMinutes(startDt.getMinutes() + 15);
+        startDt.setMinutes(startDt.getMinutes() + initialTransitMinutes);
         const rem = startDt.getMinutes() % 5;
         if (rem !== 0) startDt.setMinutes(startDt.getMinutes() + (5 - rem));
       } else if (activeSlot === 'morning') {
@@ -2654,8 +2801,24 @@ export default function App() {
         baseServiceDay = daysList[(startDt.getDay() + 6) % 7];
       }
 
-      // VALIDACIÓN ESTRICTA DE HORARIOS: lugares que REALMENTE están abiertos con permanencia en su turno
-      const openBarrioPlaces = safePool.filter(p => isPlaceOpenAtTime(p, startDt, 45, baseServiceDay));
+      // VALIDACIÓN ESTRICTA DE HORARIOS Y ANTI-CIERRE:
+      // Verifica que el local esté abierto a la hora estimada de LLEGADA y tenga permanencia real
+      const openBarrioPlaces = safePool.filter(p => {
+        if (!isPlaceOpenAtTime(p, startDt, 45, baseServiceDay)) return false;
+        if (activeSlot === 'now') {
+          const sched = p.schedule_by_day?.[baseServiceDay];
+          let closeH = sched?.close_hour ?? p.close_hour;
+          if (closeH !== undefined && closeH !== null) {
+            if (closeH <= 7) closeH += 24;
+            let arrivalContH = startDt.getHours() + (startDt.getMinutes() / 60);
+            if (arrivalContH < 6.0 && departureDt.getHours() >= 18) arrivalContH += 24.0;
+            const remainingMins = Math.round((closeH - arrivalContH) * 60);
+            const minRequired = (p.category === 'dining' || (p.subcategories || []).includes('bodegon')) ? 60 : 45;
+            if (remainingMins < minRequired) return false;
+          }
+        }
+        return true;
+      });
 
       // Si hay un lugar ancla garantizado (ej. Jobs Bar elegido desde Juegos & Pool)
       const foundAnchor = anchorPlace ? (allPool.find(p => p.id === anchorPlace.id) || anchorPlace) : null;
@@ -2696,6 +2859,14 @@ export default function App() {
             neighborhood: fallbackNeighborhood,
             mood: mood || 'amigos',
             estimated_cost: priceTier,
+            initial_transit: {
+              origin: originName,
+              destination: fallbackNeighborhood,
+              travel_minutes: initialTransitMinutes,
+              mode: isInitialWalk ? 'walk' : 'transit',
+              departure_time: fmt(departureDt),
+              arrival_time: fmt(startDt)
+            },
             narrative_summary: `En noche de semana a las ${fmt(startDt)} hs, la mejor jugada porteña no es correr entre paradas, sino hacer base en ${foundAnchor.name} para disfrutar una sobremesa tranquila de ~90 min hasta su cierre a las ${anchorSched?.close || '01:00'} hs.`,
             schedule: [
               {
@@ -2938,8 +3109,16 @@ export default function App() {
         neighborhood: fallbackNeighborhood,
         mood: mood || 'amigos',
         estimated_cost: priceTier,
+        initial_transit: {
+          origin: originName,
+          destination: fallbackNeighborhood,
+          travel_minutes: initialTransitMinutes,
+          mode: isInitialWalk ? 'walk' : 'transit',
+          departure_time: fmt(departureDt),
+          arrival_time: fmt(startDt)
+        },
         narrative_summary: selectedSlot === 'now' 
-          ? `Ronda espontánea saliendo a las ${firstTimeSlot} por ${fallbackNeighborhood}. Paradas de ~90 min conectadas a pie y sincronizadas con los horarios reales del barrio.`
+          ? `Ronda espontánea saliendo a las ${fmt(departureDt)} hs (llegada a las ${firstTimeSlot} hs) desde ${originName} hacia ${fallbackNeighborhood}. Paradas de ~90 min conectadas a pie y sincronizadas con los horarios reales del barrio.`
           : `Una ronda pensada para disfrutar a tu ritmo por ${fallbackNeighborhood}. Conectamos cada parada de manera caminable y respetando los 90 minutos de sobremesa porteña.`,
         schedule: fallbackSchedule
       });
@@ -3142,6 +3321,43 @@ export default function App() {
 
           {/* Mapa Interactivo con todos los puntos del recorrido */}
           <RondaMap schedule={plan.schedule} neighborhood={plan.neighborhood} />
+
+          {/* Card de traslado inicial desde el origen del usuario */}
+          {plan.initial_transit && (
+            <div className="ronda-card-inner border border-[#E06D28]/35 bg-[#FAF7F2] dark:bg-[#1E2E26] rounded-2xl p-4 mb-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fade-in">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#E06D28]/15 border border-[#E06D28]/30 flex items-center justify-center shrink-0">
+                  {plan.initial_transit.mode === 'walk' ? (
+                    <Footprints className="w-5 h-5 text-[#E06D28]" />
+                  ) : (
+                    <Navigation className="w-5 h-5 text-[#E06D28]" />
+                  )}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#E06D28]">
+                      Punto de Partida
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#E06D28]/15 text-[#E06D28]">
+                      {plan.initial_transit.mode === 'walk' ? 'Caminata' : 'Traslado urbano'}
+                    </span>
+                  </div>
+                  <p className="text-sm font-bold text-[var(--text-main)]">
+                    Desde {plan.initial_transit.origin} hacia {plan.initial_transit.destination}
+                  </p>
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                    Salís a las <strong>{plan.initial_transit.departure_time} hs</strong> · Llegás a las <strong>{plan.initial_transit.arrival_time} hs</strong> a la primera parada (~{plan.initial_transit.travel_minutes} min de viaje sincronizado con horarios reales).
+                  </p>
+                </div>
+              </div>
+              <div className="shrink-0 text-left sm:text-right">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                  <Check className="w-3.5 h-3.5" />
+                  <span>Llegada a tiempo</span>
+                </span>
+              </div>
+            </div>
+          )}
 
           <div className="space-y-3 mb-10">
             {plan.schedule.map((item, idx) => {
@@ -3707,6 +3923,14 @@ export default function App() {
         </div>
       )}
 
+      {/* Toast Flotante de Detección de Ubicación / GPS */}
+      {locationToast && (
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-[#182A24]/95 backdrop-blur-md text-white text-xs font-semibold px-4 py-2.5 rounded-2xl shadow-2xl border border-[#30483E] flex items-center gap-2 animate-bounce-subtle">
+          <MapPin className="w-4 h-4 text-[#E06D28] shrink-0" />
+          <span>{locationToast}</span>
+        </div>
+      )}
+
       {/* Modal Translúcido de Detalle del Lugar y Actividades */}
       {selectedPlaceModal && (
         <PlaceDetailModal 
@@ -4006,7 +4230,15 @@ export default function App() {
           onConfirmLogin={handleConfirmLoginFromSuggestion}
         />
 
-        {/* Modal Translúcido de Detalle del Lugar y Actividades */}
+        {/* Toast Flotante de Detección de Ubicación / GPS */}
+      {locationToast && (
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-[#182A24]/95 backdrop-blur-md text-white text-xs font-semibold px-4 py-2.5 rounded-2xl shadow-2xl border border-[#30483E] flex items-center gap-2 animate-bounce-subtle">
+          <MapPin className="w-4 h-4 text-[#E06D28] shrink-0" />
+          <span>{locationToast}</span>
+        </div>
+      )}
+
+      {/* Modal Translúcido de Detalle del Lugar y Actividades */}
         {selectedPlaceModal && (
           <PlaceDetailModal 
             place={selectedPlaceModal} 
@@ -4316,6 +4548,65 @@ export default function App() {
                     <p className="text-sm sm:text-base font-bold text-[var(--text-main)] truncate">
                       {currentBudgetObj.label} · {currentBudgetObj.amount}
                     </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Selector de Punto de Partida / Origen con detección 1-tap de GPS */}
+              <div className="ronda-card-inner border rounded-2xl p-4 mb-5 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-xl ronda-icon-box border flex items-center justify-center shrink-0">
+                      <Navigation className="w-5 h-5 text-[#E06D28]" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-medium ronda-text-muted">Punto de partida</span>
+                        {userGpsCoords && (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                            GPS Activo
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm font-bold text-[var(--text-main)] truncate">
+                        {userGpsCoords ? `Cerca de ${userGpsCoords.barrio}` : (userOrigin === 'same_barrio' ? 'En el barrio de la salida' : `Desde ${userOrigin}`)}
+                      </p>
+                      <span className="text-xs text-[#E06D28] font-medium block">
+                        {originTransitEstimate.label}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={handleDetectGps}
+                      disabled={isLocatingGps}
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-[#182A24] dark:bg-[#2A4B3D] text-white hover:bg-[#223931] transition cursor-pointer shadow-2xs disabled:opacity-50 btn-latido"
+                      title="Detectar barrio actual vía GPS"
+                    >
+                      <LocateFixed className={`w-3.5 h-3.5 text-[#E06D28] ${isLocatingGps ? 'animate-spin' : ''}`} />
+                      <span>{isLocatingGps ? 'Buscando...' : 'Cerca mío'}</span>
+                    </button>
+
+                    <select
+                      value={userOrigin}
+                      onChange={(e) => {
+                        triggerHaptic(6);
+                        setUserOrigin(e.target.value);
+                        if (e.target.value !== 'gps') {
+                          setUserGpsCoords(null);
+                        }
+                      }}
+                      className="text-xs font-semibold px-3 py-2 rounded-xl border ronda-card text-[var(--text-main)] cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#E06D28]"
+                    >
+                      <option value="same_barrio">En el barrio elegido</option>
+                      {BARRIOS.filter((b) => b.id !== 'Cualquiera').map((b) => (
+                        <option key={b.id} value={b.id}>
+                          Desde {b.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               </div>
@@ -4674,7 +4965,7 @@ export default function App() {
 
             {/* SECCIÓN 2: ¿EN QUÉ BARRIO? */}
             <section className="ronda-card border rounded-3xl p-5 sm:p-7 shadow-xs">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#E06D28] block mb-0.5">
                     Paso 2 · Barrio
@@ -4683,7 +4974,16 @@ export default function App() {
                     ¿Por qué barrio te gustaría moverte?
                   </h2>
                 </div>
-                <span className="text-xs text-[var(--text-muted)]">6 zonas curadas</span>
+                <button
+                  type="button"
+                  onClick={handleDetectGps}
+                  disabled={isLocatingGps}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#182A24] dark:bg-[#2A4B3D] text-white hover:bg-[#223931] transition cursor-pointer self-start sm:self-auto shadow-2xs btn-latido disabled:opacity-50"
+                  title="Detectar barrio actual vía GPS"
+                >
+                  <LocateFixed className={`w-3.5 h-3.5 text-[#E06D28] ${isLocatingGps ? 'animate-spin' : ''}`} />
+                  <span>{isLocatingGps ? 'Buscando...' : '📍 Salir cerca mío (GPS)'}</span>
+                </button>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
@@ -4998,6 +5298,14 @@ export default function App() {
             <p className="font-bold text-sm text-[#FAF8F5]">{authToast.title}</p>
             <p className="text-[11px] text-[#A6C0B2] font-normal">{authToast.message}</p>
           </div>
+        </div>
+      )}
+
+      {/* Toast Flotante de Detección de Ubicación / GPS */}
+      {locationToast && (
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-[#182A24]/95 backdrop-blur-md text-white text-xs font-semibold px-4 py-2.5 rounded-2xl shadow-2xl border border-[#30483E] flex items-center gap-2 animate-bounce-subtle">
+          <MapPin className="w-4 h-4 text-[#E06D28] shrink-0" />
+          <span>{locationToast}</span>
         </div>
       )}
 

@@ -56,6 +56,9 @@ class PlanRequest(BaseModel):
     anchor_place_id: Optional[str] = Field(default=None, description="ID del lugar garantizado que el usuario eligió como ancla")
     anchor_position: Optional[str] = Field(default="end", description="Posición del ancla: 'start' o 'end'")
     stops_count: Optional[int] = Field(default=2, description="Cantidad de paradas: 2 o 3")
+    origin_neighborhood: Optional[str] = Field(default=None, description="Barrio de origen del usuario si difiere del destino")
+    origin_lat: Optional[float] = Field(default=None, description="Latitud de origen si el usuario usó GPS")
+    origin_lng: Optional[float] = Field(default=None, description="Longitud de origen si el usuario usó GPS")
 
 class TransitInfo(BaseModel):
     mode: str = Field(description="Modo de traslado sugerido: a pie, taxi, colectivo, o no aplica")
@@ -99,6 +102,14 @@ class SuggestedActivityInfo(BaseModel):
     weather: str = "outdoor"
     valid_days: Optional[List[str]] = Field(default_factory=list, description="Días fácticos de funcionamiento en inglés (ej: ['saturday', 'sunday'])")
 
+class InitialTransitInfo(BaseModel):
+    origin: str = Field(description="Punto o barrio de partida del usuario")
+    destination: str = Field(description="Barrio de destino de la ronda")
+    travel_minutes: int = Field(description="Minutos estimados de traslado inicial hasta la Parada 1")
+    mode: str = Field(description="'walk' si es caminata o 'transit' si es auto/colectivo/subte")
+    departure_time: str = Field(description="Hora estimada de salida (HH:MM)")
+    arrival_time: str = Field(description="Hora estimada de llegada a la Parada 1 (HH:MM)")
+
 class PlanResponse(BaseModel):
     id: str
     title: str = Field(description="Título evocativo del plan, ej: 'Tarde de libros, café y bohemia en Palermo'")
@@ -109,6 +120,7 @@ class PlanResponse(BaseModel):
     schedule: List[PlanItem] = Field(description="Secuencia cronológica optimizada de actividades")
     suggested_activity: Optional[SuggestedActivityInfo] = Field(default=None, description="Actividad o feria sugerida del barrio para completar la ronda")
     saved_at: Optional[str] = Field(default=None, description="Fecha en que se guardó el plan si aplica")
+    initial_transit: Optional[InitialTransitInfo] = Field(default=None, description="Información del traslado inicial si el usuario salía desde otro punto o con GPS")
 
 class GoogleAuthRequest(BaseModel):
     credential: Optional[str] = None
