@@ -63,9 +63,20 @@ export const getPlaceGoogleMapsUrl = (placeName, address) => {
   return `https://www.google.com/maps/search/?api=1&query=${query}`;
 };
 
-export default function RondaMap({ schedule = [], neighborhood = 'Palermo' }) {
+export default function RondaMap({ 
+  schedule = [], 
+  neighborhood = 'Palermo', 
+  userLocation = null, 
+  initialTransit = null 
+}) {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
+
+  const hasUserLocation = Boolean(
+    userLocation && 
+    typeof userLocation.lat === 'number' && 
+    typeof userLocation.lng === 'number'
+  );
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -115,7 +126,10 @@ export default function RondaMap({ schedule = [], neighborhood = 'Palermo' }) {
     }
 
     // Inicializar mapa de Leaflet
-    const defaultCenter = [validPoints[0].lat, validPoints[0].lng];
+    const defaultCenter = hasUserLocation 
+      ? [userLocation.lat, userLocation.lng] 
+      : [validPoints[0].lat, validPoints[0].lng];
+
     const map = L.map(mapContainerRef.current, {
       center: defaultCenter,
       zoom: 14,
@@ -132,7 +146,82 @@ export default function RondaMap({ schedule = [], neighborhood = 'Palermo' }) {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
     }).addTo(map);
 
-    // Trazar línea de recorrido a pie (polilínea)
+    const bounds = L.latLngBounds();
+
+    // Si el usuario compartió su ubicación o viene con GPS ("Cerca mío"), trazar conexión inicial y marcador
+    if (hasUserLocation) {
+      bounds.extend([userLocation.lat, userLocation.lng]);
+
+      // Línea punteada verde esmeralda de conexión desde el usuario hasta la Parada 1
+      L.polyline([[userLocation.lat, userLocation.lng], [validPoints[0].lat, validPoints[0].lng]], {
+        color: '#10B981', // Verde esmeralda distintivo para el punto de partida
+        weight: 3.5,
+        opacity: 0.85,
+        dashArray: '5, 7',
+        lineCap: 'round',
+        lineJoin: 'round'
+      }).addTo(map);
+
+      // Marcador con pulso y estilo GPS activo para el usuario
+      const userMarkerIcon = L.divIcon({
+        className: 'ronda-user-marker',
+        html: `
+          <div style="position: relative; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+            <div style="
+              position: absolute;
+              width: 34px;
+              height: 34px;
+              border-radius: 50%;
+              background: rgba(16, 185, 129, 0.35);
+              box-shadow: 0 0 14px rgba(16, 185, 129, 0.6);
+            "></div>
+            <div style="
+              position: relative;
+              width: 26px;
+              height: 26px;
+              border-radius: 50%;
+              background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+              border: 2.5px solid #FFFFFF;
+              box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: #FFFFFF;
+              font-size: 13px;
+              cursor: pointer;
+            ">
+              📍
+            </div>
+          </div>
+        `,
+        iconSize: [36, 36],
+        iconAnchor: [18, 18],
+        popupAnchor: [0, -20]
+      });
+
+      const depText = initialTransit?.departure_time 
+        ? `Salís a las <strong>${initialTransit.departure_time} hs</strong>` 
+        : 'Punto de partida';
+      const userPopupContent = `
+        <div style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; padding: 4px; min-width: 175px;">
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #10B981; margin-bottom: 2px;">
+            📍 Tu Ubicación (Punto de Partida)
+          </div>
+          <div style="font-size: 13px; font-weight: 700; color: #182A24; margin-bottom: 3px;">
+            ${userLocation.barrio ? `Cerca de ${userLocation.barrio}` : 'Ubicación actual'}
+          </div>
+          <div style="font-size: 11px; color: #5E6F66; line-height: 1.4;">
+            ${depText} hacia la Parada 1 (<strong>${validPoints[0].place_name}</strong>).
+          </div>
+        </div>
+      `;
+
+      L.marker([userLocation.lat, userLocation.lng], { icon: userMarkerIcon, zIndexOffset: 1000 })
+        .bindPopup(userPopupContent, { maxWidth: 260, className: 'ronda-map-popup' })
+        .addTo(map);
+    }
+
+    // Trazar línea de recorrido peatonal entre paradas de la ronda
     const latLngs = validPoints.map(p => [p.lat, p.lng]);
     L.polyline(latLngs, {
       color: '#C25E3E', // Terracota cálido de Ronda
@@ -144,8 +233,6 @@ export default function RondaMap({ schedule = [], neighborhood = 'Palermo' }) {
     }).addTo(map);
 
     // Añadir marcadores personalizados para cada punto
-    const bounds = L.latLngBounds();
-
     validPoints.forEach((point) => {
       bounds.extend([point.lat, point.lng]);
 
@@ -219,9 +306,10 @@ export default function RondaMap({ schedule = [], neighborhood = 'Palermo' }) {
         .addTo(map);
     });
 
-    // Ajustar el zoom automáticamente para que todos los puntos sean visibles
-    if (validPoints.length > 1) {
-      map.fitBounds(bounds, { padding: [35, 35], maxZoom: 16 });
+    // Ajustar el zoom automáticamente para que el usuario y todos los puntos sean visibles
+    const totalMarkers = validPoints.length + (hasUserLocation ? 1 : 0);
+    if (totalMarkers > 1) {
+      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 16 });
     } else {
       map.setView([validPoints[0].lat, validPoints[0].lng], 15);
     }
@@ -239,7 +327,7 @@ export default function RondaMap({ schedule = [], neighborhood = 'Palermo' }) {
         mapInstanceRef.current = null;
       }
     };
-  }, [schedule, neighborhood]);
+  }, [schedule, neighborhood, userLocation, initialTransit, hasUserLocation]);
 
   return (
     <div className="ronda-card border rounded-3xl p-4 sm:p-5 shadow-xs mb-8 transition-colors">
@@ -249,11 +337,18 @@ export default function RondaMap({ schedule = [], neighborhood = 'Palermo' }) {
             <Navigation className="w-4 h-4 text-[#E06D28]" />
           </div>
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--text-main)]">
-              Mapa del Recorrido
-            </h4>
+            <div className="flex items-center gap-2">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--text-main)]">
+                Mapa del Recorrido
+              </h4>
+              {hasUserLocation && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                  📍 Tu ubicación incluida
+                </span>
+              )}
+            </div>
             <p className="text-[11px] ronda-text-muted">
-              {schedule.length} paradas conectadas a pie en {neighborhood}
+              {hasUserLocation ? 'Tu punto de partida y ' : ''}{schedule.length} paradas conectadas a pie en {neighborhood}
             </p>
           </div>
         </div>

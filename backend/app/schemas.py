@@ -114,6 +114,9 @@ class InitialTransitInfo(BaseModel):
     transit_minutes: Optional[int] = Field(default=None, description="Minutos estimados en transporte público")
     car_minutes: Optional[int] = Field(default=None, description="Minutos estimados en auto / taxi")
     bike_minutes: Optional[int] = Field(default=None, description="Minutos estimados en bicicleta")
+    origin_lat: Optional[float] = Field(default=None, description="Latitud de partida si usó GPS")
+    origin_lng: Optional[float] = Field(default=None, description="Longitud de partida si usó GPS")
+    is_gps: Optional[bool] = Field(default=False, description="True si la ubicación de origen fue fijada por GPS")
 
 class PlanResponse(BaseModel):
     id: str

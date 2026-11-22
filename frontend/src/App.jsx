@@ -2797,7 +2797,10 @@ export default function App() {
           transit_minutes: data.initial_transit?.transit_minutes || transitMins,
           car_minutes: data.initial_transit?.car_minutes || carMins,
           bike_minutes: data.initial_transit?.bike_minutes || bikeMins,
-          first_stop_name: p1.place_name || data.neighborhood
+          first_stop_name: p1.place_name || data.neighborhood,
+          origin_lat: activeGpsCoords?.lat || userGpsCoords?.lat || data.initial_transit?.origin_lat || null,
+          origin_lng: activeGpsCoords?.lng || userGpsCoords?.lng || data.initial_transit?.origin_lng || null,
+          is_gps: !!(activeGpsCoords || userGpsCoords?.isGps || data.initial_transit?.is_gps)
         };
       }
 
@@ -2964,7 +2967,10 @@ export default function App() {
               transit_minutes: Math.max(12, Math.round(1.0 * 3.2 + 8)),
               car_minutes: Math.max(8, Math.round(1.0 * 2.5 + 5)),
               bike_minutes: Math.max(5, Math.round(1.0 * 4.3 + 3)),
-              first_stop_name: foundAnchor.name
+              first_stop_name: foundAnchor.name,
+              origin_lat: userGpsCoords?.lat || (userOrigin && userOrigin !== 'same_barrio' && BARRIO_CENTERS[userOrigin]?.lat) || null,
+              origin_lng: userGpsCoords?.lng || (userOrigin && userOrigin !== 'same_barrio' && BARRIO_CENTERS[userOrigin]?.lng) || null,
+              is_gps: !!userGpsCoords
             },
             narrative_summary: `En noche de semana a las ${fmt(startDt)} hs, la mejor jugada porteña no es correr entre paradas, sino hacer base en ${foundAnchor.name} para disfrutar una sobremesa tranquila de ~90 min hasta su cierre a las ${anchorSched?.close || '01:00'} hs.`,
             schedule: [
@@ -3226,7 +3232,10 @@ export default function App() {
           transit_minutes: transitFallbackMins,
           car_minutes: carFallbackMins,
           bike_minutes: bikeFallbackMins,
-          first_stop_name: p1.name
+          first_stop_name: p1.name,
+          origin_lat: userGpsCoords?.lat || (userOrigin && userOrigin !== 'same_barrio' && BARRIO_CENTERS[userOrigin]?.lat) || null,
+          origin_lng: userGpsCoords?.lng || (userOrigin && userOrigin !== 'same_barrio' && BARRIO_CENTERS[userOrigin]?.lng) || null,
+          is_gps: !!userGpsCoords
         },
         narrative_summary: selectedSlot === 'now' 
           ? `Ronda espontánea saliendo a las ${fmt(departureDt)} hs (llegada a las ${firstTimeSlot} hs) desde ${originName} hacia ${fallbackNeighborhood}. Paradas de ~90 min conectadas a pie y sincronizadas con los horarios reales del barrio.`
@@ -3430,8 +3439,21 @@ export default function App() {
             </p>
           </div>
 
-          {/* Mapa Interactivo con todos los puntos del recorrido */}
-          <RondaMap schedule={plan.schedule} neighborhood={plan.neighborhood} />
+          {/* Mapa Interactivo con todos los puntos del recorrido y ubicación de partida (Cerca mío / GPS) */}
+          <RondaMap 
+            schedule={plan.schedule} 
+            neighborhood={plan.neighborhood} 
+            userLocation={
+              userGpsCoords || 
+              (plan.initial_transit?.origin_lat && plan.initial_transit?.origin_lng ? {
+                lat: plan.initial_transit.origin_lat,
+                lng: plan.initial_transit.origin_lng,
+                barrio: plan.initial_transit.origin,
+                isGps: !!plan.initial_transit.is_gps
+              } : null)
+            }
+            initialTransit={plan.initial_transit}
+          />
 
           {/* Card de traslado inicial desde el origen del usuario con cálculo interactivo de modos de transporte */}
           {plan.initial_transit && (() => {

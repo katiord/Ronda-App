@@ -1185,7 +1185,10 @@ def calculate_initial_transit_info(
         walk_minutes=walk_mins,
         transit_minutes=transit_mins,
         car_minutes=car_mins,
-        bike_minutes=bike_mins
+        bike_minutes=bike_mins,
+        origin_lat=orig_lat if has_gps else None,
+        origin_lng=orig_lng if has_gps else None,
+        is_gps=has_gps
     )
 
 def generate_fallback_plan(request: PlanRequest, candidates: List[Place]) -> PlanResponse:
