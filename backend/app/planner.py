@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import List, Optional, Tuple
 from dotenv import load_dotenv
 
-from .schemas import PlanRequest, PlanResponse, PlanItem, TransitInfo, Place, SuggestedActivityInfo
+from .schemas import PlanRequest, PlanResponse, PlanItem, TransitInfo, Place, SuggestedActivityInfo, InitialTransitInfo
 
 load_dotenv()
 logger = logging.getLogger("ronda.planner")
@@ -1089,6 +1089,105 @@ def resolve_suggested_activity(neighborhood_name: str, day_of_week: Optional[str
         # En días de semana, NUNCA sugerir ferias de fin de semana (RULE-DOM-08)
         return NEIGHBORHOOD_WEEKDAY_SUGGESTED_ACTIVITIES.get(neighborhood_name) or NEIGHBORHOOD_SUGGESTED_ACTIVITIES.get(neighborhood_name)
 
+BARRIO_CENTERS = {
+    "Palermo": {"lat": -34.5889, "lng": -58.4305},
+    "San Telmo": {"lat": -34.6212, "lng": -58.3731},
+    "Recoleta": {"lat": -34.5875, "lng": -58.3927},
+    "Chacarita": {"lat": -34.5867, "lng": -58.4556},
+    "Colegiales": {"lat": -34.5752, "lng": -58.4513},
+    "Belgrano": {"lat": -34.5614, "lng": -58.4563},
+    "San Nicolás": {"lat": -34.6037, "lng": -58.3816},
+    "Puerto Madero": {"lat": -34.6083, "lng": -58.3639},
+    "Caballito": {"lat": -34.6186, "lng": -58.4429},
+    "Almagro": {"lat": -34.6094, "lng": -58.4208},
+    "Villa Crespo": {"lat": -34.5997, "lng": -58.4378},
+}
+
+def calculate_initial_transit_info(
+    request: PlanRequest,
+    destination_neighborhood: str,
+    first_stop: Optional[PlanItem] = None,
+    default_start_dt: Optional[datetime] = None
+) -> InitialTransitInfo:
+    dest_center = BARRIO_CENTERS.get(destination_neighborhood, {"lat": -34.5889, "lng": -58.4305})
+    dest_lat = (first_stop.lat if first_stop and first_stop.lat else None) or dest_center["lat"]
+    dest_lng = (first_stop.lng if first_stop and first_stop.lng else None) or dest_center["lng"]
+
+    has_gps = request.origin_lat is not None and request.origin_lng is not None
+    orig_neigh = request.origin_neighborhood
+
+    if has_gps:
+        orig_lat = request.origin_lat
+        orig_lng = request.origin_lng
+        orig_name = f"Tu ubicación ({orig_neigh or 'GPS'})"
+    elif orig_neigh and orig_neigh in BARRIO_CENTERS:
+        orig_lat = BARRIO_CENTERS[orig_neigh]["lat"]
+        orig_lng = BARRIO_CENTERS[orig_neigh]["lng"]
+        orig_name = orig_neigh
+    else:
+        orig_lat = dest_lat
+        orig_lng = dest_lng
+        orig_name = f"En {destination_neighborhood}"
+
+    d_lat = (orig_lat - dest_lat) * 111.0
+    d_lng = (orig_lng - dest_lng) * 85.0
+    dist_km = round(max(0.2, (d_lat**2 + d_lng**2)**0.5), 2)
+
+    walk_mins = max(5, min(120, round(dist_km * 13)))
+    transit_mins = max(12, min(90, round(dist_km * 3.2 + 8)))
+    car_mins = max(8, min(75, round(dist_km * 2.5 + 5)))
+    bike_mins = max(5, min(90, round(dist_km * 4.3 + 3)))
+
+    if dist_km <= 1.2:
+        mode = "walk"
+        travel_mins = walk_mins
+    else:
+        mode = "transit"
+        travel_mins = transit_mins
+
+    arr_h = 20
+    arr_m = 30
+    if first_stop and first_stop.time_slot and " - " in first_stop.time_slot:
+        start_part = first_stop.time_slot.split(" - ")[0].strip()
+        if ":" in start_part:
+            try:
+                p = start_part.split(":")
+                arr_h = int(p[0])
+                arr_m = int(p[1])
+            except Exception:
+                pass
+    elif default_start_dt:
+        arr_h = default_start_dt.hour
+        arr_m = default_start_dt.minute
+
+    if request.is_now:
+        now_dt = datetime.now()
+        dep_str = now_dt.strftime("%H:%M")
+        arr_calc = now_dt + timedelta(minutes=travel_mins)
+        rem = arr_calc.minute % 5
+        if rem != 0:
+            arr_calc = arr_calc + timedelta(minutes=(5 - rem))
+        arr_str = arr_calc.strftime("%H:%M")
+    else:
+        arr_str = f"{arr_h:02d}:{arr_m:02d}"
+        arr_dummy = datetime(2026, 1, 1, arr_h, arr_m)
+        dep_calc = arr_dummy - timedelta(minutes=travel_mins)
+        dep_str = dep_calc.strftime("%H:%M")
+
+    return InitialTransitInfo(
+        origin=orig_name,
+        destination=destination_neighborhood,
+        travel_minutes=travel_mins,
+        mode=mode,
+        departure_time=dep_str,
+        arrival_time=arr_str,
+        distance_km=dist_km,
+        walk_minutes=walk_mins,
+        transit_minutes=transit_mins,
+        car_minutes=car_mins,
+        bike_minutes=bike_mins
+    )
+
 def generate_fallback_plan(request: PlanRequest, candidates: List[Place]) -> PlanResponse:
     """
     Genera un itinerario determinista y de alta calidad basado en la hora exacta
@@ -1237,6 +1336,13 @@ def generate_fallback_plan(request: PlanRequest, candidates: List[Place]) -> Pla
     title = f"Refugio de trasnoche en {neighborhood_name}." if is_trasnoche else f"Una ronda por {neighborhood_name}."
     suggested_act = resolve_suggested_activity(neighborhood_name, day_of_week=day_val, is_night_plan=is_night_plan, is_trasnoche=is_trasnoche)
 
+    initial_tr = calculate_initial_transit_info(
+        request=request,
+        destination_neighborhood=neighborhood_name,
+        first_stop=schedule[0] if schedule else None,
+        default_start_dt=start_dt
+    )
+
     return PlanResponse(
         id=f"ronda_{uuid.uuid4().hex[:8]}",
         title=title,
@@ -1249,7 +1355,8 @@ def generate_fallback_plan(request: PlanRequest, candidates: List[Place]) -> Pla
             f"Un plan diseñado con precisión para disfrutar la vibra de {neighborhood_name} saliendo a partir de las {start_dt.strftime('%H:%M')}. Cada parada está conectada a pie respetando los tiempos auténticos porteños."
         ),
         schedule=schedule,
-        suggested_activity=suggested_act
+        suggested_activity=suggested_act,
+        initial_transit=initial_tr
     )
 
 async def generate_plan(request: PlanRequest) -> PlanResponse:
@@ -1390,6 +1497,14 @@ REGLAS ESTRICTAS DE CALIDAD Y CONTINUIDAD:
                 item.vegetarian_friendly = match.vegetarian_friendly
                 item.vegetarian_details = match.vegetarian_details
                 item.features = match.features
+
+        target_neigh = plan.neighborhood or request.neighborhood
+        plan.initial_transit = calculate_initial_transit_info(
+            request=request,
+            destination_neighborhood=target_neigh,
+            first_stop=plan.schedule[0] if plan.schedule else None,
+            default_start_dt=start_dt
+        )
 
         return plan
 

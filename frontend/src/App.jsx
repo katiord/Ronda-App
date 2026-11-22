@@ -22,7 +22,9 @@ import {
   Moon,
   Cloud,
   CloudSun,
-  Share2,
+  Car,
+  Bike,
+  Bus,
   ChevronLeft,
   ChevronUp,
   ChevronDown,
@@ -1547,6 +1549,7 @@ export default function App() {
 
   // Plan generado
   const [plan, setPlan] = useState(null);
+  const [selectedTransitMode, setSelectedTransitMode] = useState(null);
   const [error, setError] = useState(null);
 
   // Modal translúcido con detalle del lugar seleccionado y cosas para hacer
@@ -2663,6 +2666,32 @@ export default function App() {
     const daysMap = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const currentDayOfWeek = daysMap[now.getDay()];
 
+    setSelectedTransitMode(null);
+
+    // Si el usuario no detectó GPS aún y está en 'same_barrio', intentamos detección rápida vía GPS si el navegador lo permite
+    let activeGpsCoords = userGpsCoords;
+    if (!activeGpsCoords && typeof window !== 'undefined' && navigator.geolocation && userOrigin === 'same_barrio') {
+      try {
+        activeGpsCoords = await new Promise((resolve) => {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              const lat = pos.coords.latitude;
+              const lng = pos.coords.longitude;
+              const closest = getClosestBarrio(lat, lng);
+              const coords = { lat, lng, barrio: closest, isGps: true };
+              setUserGpsCoords(coords);
+              setUserOrigin(closest);
+              resolve(coords);
+            },
+            () => resolve(null),
+            { timeout: 1400, enableHighAccuracy: false }
+          );
+        });
+      } catch (e) {
+        // Continuar sin GPS
+      }
+    }
+
     const payload = {
       neighborhood,
       time_of_day: effectiveTimeOfDay,
@@ -2676,9 +2705,9 @@ export default function App() {
       stops_count: stopsCount,
       anchor_place_id: anchorPlace?.id || null,
       anchor_position: anchorPosition,
-      origin_neighborhood: userOrigin !== 'same_barrio' ? userOrigin : (userGpsCoords?.barrio || null),
-      origin_lat: userGpsCoords?.lat || null,
-      origin_lng: userGpsCoords?.lng || null
+      origin_neighborhood: userOrigin !== 'same_barrio' ? userOrigin : (activeGpsCoords?.barrio || userGpsCoords?.barrio || null),
+      origin_lat: activeGpsCoords?.lat || userGpsCoords?.lat || null,
+      origin_lng: activeGpsCoords?.lng || userGpsCoords?.lng || null
     };
 
     const minAnimationPromise = new Promise(resolve => setTimeout(resolve, 1400));
@@ -2712,6 +2741,64 @@ export default function App() {
         window.history.pushState({ type: 'screen', screen: 'sleeping', configView }, '');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
+      }
+
+      // Enriquecimiento garantizado de initial_transit en el cliente
+      if (data.schedule && data.schedule.length > 0) {
+        const p1 = data.schedule[0];
+        const destCoords = {
+          lat: p1.lat || BARRIO_CENTERS[data.neighborhood]?.lat || -34.5889,
+          lng: p1.lng || BARRIO_CENTERS[data.neighborhood]?.lng || -58.4305
+        };
+        const originCoords = activeGpsCoords || userGpsCoords || (userOrigin && userOrigin !== 'same_barrio' && BARRIO_CENTERS[userOrigin]) || destCoords;
+        const originName = (activeGpsCoords || userGpsCoords) 
+          ? `Cerca de ${(activeGpsCoords || userGpsCoords).barrio} (GPS)` 
+          : (userOrigin && userOrigin !== 'same_barrio' ? userOrigin : `En ${data.neighborhood}`);
+        const distKm = calculateDistanceKm(originCoords.lat, originCoords.lng, destCoords.lat, destCoords.lng) || 0.6;
+        const walkMins = Math.max(5, Math.min(120, Math.round(distKm * 13)));
+        const transitMins = Math.max(12, Math.min(90, Math.round(distKm * 3.2 + 8)));
+        const carMins = Math.max(8, Math.min(75, Math.round(distKm * 2.5 + 5)));
+        const bikeMins = Math.max(5, Math.min(90, Math.round(distKm * 4.3 + 3)));
+        const travelMins = data.initial_transit?.travel_minutes || (distKm <= 1.2 ? walkMins : transitMins);
+
+        let arrH = 20, arrM = 30;
+        if (p1.time_slot && p1.time_slot.includes(' - ')) {
+          const parts = p1.time_slot.split(' - ')[0].trim().split(':');
+          if (parts.length === 2) {
+            arrH = parseInt(parts[0], 10);
+            arrM = parseInt(parts[1], 10);
+          }
+        }
+        let depStr = '';
+        let arrStr = `${arrH.toString().padStart(2, '0')}:${arrM.toString().padStart(2, '0')}`;
+        if (isNowVal) {
+          const nowDt = new Date();
+          depStr = `${nowDt.getHours().toString().padStart(2, '0')}:${nowDt.getMinutes().toString().padStart(2, '0')}`;
+          const arrDt = new Date(nowDt.getTime() + travelMins * 60000);
+          const rem = arrDt.getMinutes() % 5;
+          if (rem !== 0) arrDt.setMinutes(arrDt.getMinutes() + (5 - rem));
+          arrStr = `${arrDt.getHours().toString().padStart(2, '0')}:${arrDt.getMinutes().toString().padStart(2, '0')}`;
+        } else {
+          const arrDt = new Date();
+          arrDt.setHours(arrH, arrM, 0, 0);
+          const depDt = new Date(arrDt.getTime() - travelMins * 60000);
+          depStr = `${depDt.getHours().toString().padStart(2, '0')}:${depDt.getMinutes().toString().padStart(2, '0')}`;
+        }
+
+        data.initial_transit = {
+          origin: data.initial_transit?.origin || originName,
+          destination: data.neighborhood,
+          travel_minutes: travelMins,
+          mode: data.initial_transit?.mode || (distKm <= 1.2 ? 'walk' : 'transit'),
+          departure_time: data.initial_transit?.departure_time || depStr,
+          arrival_time: data.initial_transit?.arrival_time || arrStr,
+          distance_km: parseFloat(distKm.toFixed(1)),
+          walk_minutes: data.initial_transit?.walk_minutes || walkMins,
+          transit_minutes: data.initial_transit?.transit_minutes || transitMins,
+          car_minutes: data.initial_transit?.car_minutes || carMins,
+          bike_minutes: data.initial_transit?.bike_minutes || bikeMins,
+          first_stop_name: p1.place_name || data.neighborhood
+        };
       }
 
       setPlan(data);
@@ -2767,25 +2854,31 @@ export default function App() {
         : estimateTransitMinutes(originCoords, destCoords);
       const isInitialWalk = initialTransitMinutes <= 15;
 
-      const departureDt = new Date();
+      let departureDt = new Date();
       let startDt = new Date();
       if (activeSlot === 'now') {
+        departureDt = new Date();
         startDt.setMinutes(startDt.getMinutes() + initialTransitMinutes);
         const rem = startDt.getMinutes() % 5;
         if (rem !== 0) startDt.setMinutes(startDt.getMinutes() + (5 - rem));
       } else if (activeSlot === 'morning') {
         startDt.setHours(10, 0, 0, 0);
+        departureDt = new Date(startDt.getTime() - initialTransitMinutes * 60000);
       } else if (activeSlot === 'lunch') {
         startDt.setHours(12, 45, 0, 0);
+        departureDt = new Date(startDt.getTime() - initialTransitMinutes * 60000);
       } else if (activeSlot === 'afternoon') {
         startDt.setHours(16, 30, 0, 0);
+        departureDt = new Date(startDt.getTime() - initialTransitMinutes * 60000);
       } else if (activeSlot === 'night') {
         startDt.setHours(20, 30, 0, 0);
+        departureDt = new Date(startDt.getTime() - initialTransitMinutes * 60000);
       } else if (activeSlot === 'other_day') {
         if (subSlot === 'morning') startDt.setHours(10, 0, 0, 0);
         else if (subSlot === 'lunch') startDt.setHours(12, 45, 0, 0);
         else if (subSlot === 'afternoon') startDt.setHours(16, 30, 0, 0);
         else startDt.setHours(20, 30, 0, 0);
+        departureDt = new Date(startDt.getTime() - initialTransitMinutes * 60000);
       }
 
       const curH = startDt.getHours();
@@ -2865,7 +2958,13 @@ export default function App() {
               travel_minutes: initialTransitMinutes,
               mode: isInitialWalk ? 'walk' : 'transit',
               departure_time: fmt(departureDt),
-              arrival_time: fmt(startDt)
+              arrival_time: fmt(startDt),
+              distance_km: 1.0,
+              walk_minutes: Math.max(5, Math.round(1.0 * 13)),
+              transit_minutes: Math.max(12, Math.round(1.0 * 3.2 + 8)),
+              car_minutes: Math.max(8, Math.round(1.0 * 2.5 + 5)),
+              bike_minutes: Math.max(5, Math.round(1.0 * 4.3 + 3)),
+              first_stop_name: foundAnchor.name
             },
             narrative_summary: `En noche de semana a las ${fmt(startDt)} hs, la mejor jugada porteña no es correr entre paradas, sino hacer base en ${foundAnchor.name} para disfrutar una sobremesa tranquila de ~90 min hasta su cierre a las ${anchorSched?.close || '01:00'} hs.`,
             schedule: [
@@ -3100,6 +3199,12 @@ export default function App() {
 
       const fallbackSchedule = updateScheduleTransits(rawFallbackSchedule);
 
+      const distFallbackKm = calculateDistanceKm(originCoords.lat, originCoords.lng, (p1?.lat || destCoords.lat), (p1?.lng || destCoords.lng)) || 0.6;
+      const walkFallbackMins = Math.max(5, Math.min(120, Math.round(distFallbackKm * 13)));
+      const transitFallbackMins = Math.max(12, Math.min(90, Math.round(distFallbackKm * 3.2 + 8)));
+      const carFallbackMins = Math.max(8, Math.min(75, Math.round(distFallbackKm * 2.5 + 5)));
+      const bikeFallbackMins = Math.max(5, Math.min(90, Math.round(distFallbackKm * 4.3 + 3)));
+
       const firstTimeSlot = fallbackSchedule[0]?.time_slot?.split(' - ')[0] || fmt(startDt);
       setPlan({
         id: `ronda_${fallbackNeighborhood.toLowerCase().replace(/\s+/g, '_')}_${Date.now()}`,
@@ -3115,7 +3220,13 @@ export default function App() {
           travel_minutes: initialTransitMinutes,
           mode: isInitialWalk ? 'walk' : 'transit',
           departure_time: fmt(departureDt),
-          arrival_time: fmt(startDt)
+          arrival_time: fmt(startDt),
+          distance_km: parseFloat(distFallbackKm.toFixed(1)),
+          walk_minutes: walkFallbackMins,
+          transit_minutes: transitFallbackMins,
+          car_minutes: carFallbackMins,
+          bike_minutes: bikeFallbackMins,
+          first_stop_name: p1.name
         },
         narrative_summary: selectedSlot === 'now' 
           ? `Ronda espontánea saliendo a las ${fmt(departureDt)} hs (llegada a las ${firstTimeSlot} hs) desde ${originName} hacia ${fallbackNeighborhood}. Paradas de ~90 min conectadas a pie y sincronizadas con los horarios reales del barrio.`
@@ -3322,42 +3433,190 @@ export default function App() {
           {/* Mapa Interactivo con todos los puntos del recorrido */}
           <RondaMap schedule={plan.schedule} neighborhood={plan.neighborhood} />
 
-          {/* Card de traslado inicial desde el origen del usuario */}
-          {plan.initial_transit && (
-            <div className="ronda-card-inner border border-[#E06D28]/35 bg-[#FAF7F2] dark:bg-[#1E2E26] rounded-2xl p-4 mb-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fade-in">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#E06D28]/15 border border-[#E06D28]/30 flex items-center justify-center shrink-0">
-                  {plan.initial_transit.mode === 'walk' ? (
-                    <Footprints className="w-5 h-5 text-[#E06D28]" />
-                  ) : (
-                    <Navigation className="w-5 h-5 text-[#E06D28]" />
-                  )}
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#E06D28]">
-                      Punto de Partida
-                    </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#E06D28]/15 text-[#E06D28]">
-                      {plan.initial_transit.mode === 'walk' ? 'Caminata' : 'Traslado urbano'}
+          {/* Card de traslado inicial desde el origen del usuario con cálculo interactivo de modos de transporte */}
+          {plan.initial_transit && (() => {
+            const tr = plan.initial_transit;
+            const effectiveMode = selectedTransitMode || tr.mode || (tr.travel_minutes <= 15 ? 'walk' : 'transit');
+            const distVal = tr.distance_km || 1.5;
+            const walkM = tr.walk_minutes || Math.max(5, Math.round(distVal * 13));
+            const transitM = tr.transit_minutes || Math.max(12, Math.round(distVal * 3.2 + 8));
+            const carM = tr.car_minutes || Math.max(8, Math.round(distVal * 2.5 + 5));
+            const bikeM = tr.bike_minutes || Math.max(5, Math.round(distVal * 4.3 + 3));
+
+            const currentMins = effectiveMode === 'walk' ? walkM : effectiveMode === 'car' ? carM : effectiveMode === 'bike' ? bikeM : transitM;
+
+            let dynamicDepTime = tr.departure_time;
+            if (tr.arrival_time && tr.arrival_time.includes(':')) {
+              const [arrH, arrM] = tr.arrival_time.split(':').map(Number);
+              const dummyArr = new Date();
+              dummyArr.setHours(arrH, arrM, 0, 0);
+              const dummyDep = new Date(dummyArr.getTime() - currentMins * 60000);
+              const padZero = (n) => n.toString().padStart(2, '0');
+              dynamicDepTime = `${padZero(dummyDep.getHours())}:${padZero(dummyDep.getMinutes())}`;
+            }
+
+            const firstPlace = plan.schedule && plan.schedule[0];
+            const firstPlaceName = tr.first_stop_name || firstPlace?.place_name || tr.destination;
+
+            const modeTip = effectiveMode === 'walk'
+              ? 'Caminata barrial tranquila por veredas porteñas.'
+              : effectiveMode === 'transit'
+              ? 'En Subte o Bondi: calculado con margen de 5 a 8 min por frecuencias porteñas.'
+              : effectiveMode === 'car'
+              ? 'En Auto o Taxi / Cabify: contemplando el tránsito habitual y búsqueda de lugar.'
+              : 'Pedaleando por ciclovía o calles barriales.';
+
+            const gMapsMode = effectiveMode === 'walk' ? 'walking' : effectiveMode === 'car' ? 'driving' : effectiveMode === 'bike' ? 'bicycling' : 'transit';
+            const originQuery = userGpsCoords 
+              ? `${userGpsCoords.lat},${userGpsCoords.lng}` 
+              : encodeURIComponent(`${tr.origin}, Buenos Aires`);
+            const destQuery = firstPlace?.lat && firstPlace?.lng 
+              ? `${firstPlace.lat},${firstPlace.lng}` 
+              : encodeURIComponent(`${firstPlaceName}, Buenos Aires`);
+            const mapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originQuery}&destination=${destQuery}&travelmode=${gMapsMode}`;
+
+            return (
+              <div className="ronda-card-inner border border-[#E06D28]/35 bg-[#FAF7F2] dark:bg-[#1E2E26] rounded-2xl p-4 sm:p-5 mb-5 shadow-xs animate-fade-in">
+                {/* Cabecera con Punto de partida y Badge de Hora de salida */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#E06D28]/15 border border-[#E06D28]/30 flex items-center justify-center shrink-0">
+                      {effectiveMode === 'walk' && <Footprints className="w-5 h-5 text-[#E06D28]" />}
+                      {effectiveMode === 'transit' && <Bus className="w-5 h-5 text-[#E06D28]" />}
+                      {effectiveMode === 'car' && <Car className="w-5 h-5 text-[#E06D28]" />}
+                      {effectiveMode === 'bike' && <Bike className="w-5 h-5 text-[#E06D28]" />}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#E06D28]">
+                          Punto de Partida & Horarios
+                        </span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#E06D28]/15 text-[#E06D28]">
+                          {effectiveMode === 'walk' ? 'A pie' : effectiveMode === 'transit' ? 'Subte / Bondi' : effectiveMode === 'car' ? 'Auto / Taxi' : 'Bici'}
+                        </span>
+                      </div>
+                      <p className="text-sm font-bold text-[var(--text-main)]">
+                        Desde {tr.origin} hacia {tr.destination}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="shrink-0 flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                      <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <span>Salí a las {dynamicDepTime} hs</span>
                     </span>
                   </div>
-                  <p className="text-sm font-bold text-[var(--text-main)]">
-                    Desde {plan.initial_transit.origin} hacia {plan.initial_transit.destination}
+                </div>
+
+                {/* Banner de Salida y Llegada */}
+                <div className="mt-3 p-3.5 rounded-xl bg-white/75 dark:bg-black/25 border border-[var(--border-subtle)] text-xs text-[var(--text-muted)] space-y-1">
+                  <p className="text-sm font-bold text-[var(--text-main)] flex items-center gap-1.5">
+                    <span>🧭</span>
+                    <span>Salís a las <strong className="text-[#E06D28]">{dynamicDepTime} hs</strong> de tu locación</span>
                   </p>
-                  <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                    Salís a las <strong>{plan.initial_transit.departure_time} hs</strong> · Llegás a las <strong>{plan.initial_transit.arrival_time} hs</strong> a la primera parada (~{plan.initial_transit.travel_minutes} min de viaje sincronizado con horarios reales).
+                  <p className="text-xs">
+                    Llegás a las <strong>{tr.arrival_time} hs</strong> a la primera parada (<strong>{firstPlaceName}</strong>).
+                    Viaje estimado de <strong>~{currentMins} min</strong> ({distVal} km de recorrido).
                   </p>
                 </div>
+
+                {/* Selector Interactivo de Modos de Transporte */}
+                <div className="mt-3 pt-3 border-t border-[var(--border-subtle)]">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider">
+                      ¿Cómo vas hasta el lugar?
+                    </span>
+                    <span className="text-[10px] text-[#E06D28] font-medium">Toca para recalcular horario</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => { triggerHaptic(8); setSelectedTransitMode('walk'); }}
+                      className={`p-2.5 rounded-xl border text-left transition flex flex-col justify-between cursor-pointer ${
+                        effectiveMode === 'walk'
+                          ? 'border-[#E06D28] bg-[#E06D28]/15 text-[var(--text-main)] shadow-xs ring-1 ring-[#E06D28]/50'
+                          : 'border-[var(--border-subtle)] bg-white/50 dark:bg-black/20 text-[var(--text-muted)] hover:border-[#E06D28]/40'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <Footprints className={`w-4 h-4 ${effectiveMode === 'walk' ? 'text-[#E06D28]' : ''}`} />
+                        <span className="text-xs font-bold text-[#E06D28]">~{walkM} min</span>
+                      </div>
+                      <span className="text-[11px] font-semibold mt-1.5">🚶 A pie</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => { triggerHaptic(8); setSelectedTransitMode('transit'); }}
+                      className={`p-2.5 rounded-xl border text-left transition flex flex-col justify-between cursor-pointer ${
+                        effectiveMode === 'transit'
+                          ? 'border-[#E06D28] bg-[#E06D28]/15 text-[var(--text-main)] shadow-xs ring-1 ring-[#E06D28]/50'
+                          : 'border-[var(--border-subtle)] bg-white/50 dark:bg-black/20 text-[var(--text-muted)] hover:border-[#E06D28]/40'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <Bus className={`w-4 h-4 ${effectiveMode === 'transit' ? 'text-[#E06D28]' : ''}`} />
+                        <span className="text-xs font-bold text-[#E06D28]">~{transitM} min</span>
+                      </div>
+                      <span className="text-[11px] font-semibold mt-1.5">🚇 Subte / Bondi</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => { triggerHaptic(8); setSelectedTransitMode('car'); }}
+                      className={`p-2.5 rounded-xl border text-left transition flex flex-col justify-between cursor-pointer ${
+                        effectiveMode === 'car'
+                          ? 'border-[#E06D28] bg-[#E06D28]/15 text-[var(--text-main)] shadow-xs ring-1 ring-[#E06D28]/50'
+                          : 'border-[var(--border-subtle)] bg-white/50 dark:bg-black/20 text-[var(--text-muted)] hover:border-[#E06D28]/40'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <Car className={`w-4 h-4 ${effectiveMode === 'car' ? 'text-[#E06D28]' : ''}`} />
+                        <span className="text-xs font-bold text-[#E06D28]">~{carM} min</span>
+                      </div>
+                      <span className="text-[11px] font-semibold mt-1.5">🚗 Auto / Taxi</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => { triggerHaptic(8); setSelectedTransitMode('bike'); }}
+                      className={`p-2.5 rounded-xl border text-left transition flex flex-col justify-between cursor-pointer ${
+                        effectiveMode === 'bike'
+                          ? 'border-[#E06D28] bg-[#E06D28]/15 text-[var(--text-main)] shadow-xs ring-1 ring-[#E06D28]/50'
+                          : 'border-[var(--border-subtle)] bg-white/50 dark:bg-black/20 text-[var(--text-muted)] hover:border-[#E06D28]/40'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <Bike className={`w-4 h-4 ${effectiveMode === 'bike' ? 'text-[#E06D28]' : ''}`} />
+                        <span className="text-xs font-bold text-[#E06D28]">~{bikeM} min</span>
+                      </div>
+                      <span className="text-[11px] font-semibold mt-1.5">🚲 Bici</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Fila de Tip porteño y Botón a Google Maps */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mt-3 pt-3 border-t border-[var(--border-subtle)]">
+                  <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
+                    <span className="text-sm">💡</span>
+                    <span>{modeTip}</span>
+                  </div>
+
+                  <a
+                    href={mapsDirectionsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#E06D28] hover:bg-[#C95B1D] text-white transition shadow-2xs cursor-pointer shrink-0"
+                  >
+                    <Navigation className="w-3.5 h-3.5" />
+                    <span>Ver cómo ir en Google Maps</span>
+                  </a>
+                </div>
               </div>
-              <div className="shrink-0 text-left sm:text-right">
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
-                  <Check className="w-3.5 h-3.5" />
-                  <span>Llegada a tiempo</span>
-                </span>
-              </div>
-            </div>
-          )}
+            );
+          })()}
 
           <div className="space-y-3 mb-10">
             {plan.schedule.map((item, idx) => {
@@ -3810,38 +4069,18 @@ export default function App() {
           )}
 
           <div className="space-y-3 mb-12">
-            <div className="flex flex-col sm:flex-row gap-3">
-              {/* Botón Guardar en mi perfil */}
-              <button
-                onClick={() => handleSavePlan(plan)}
-                className={`flex-1 font-semibold py-3.5 px-6 rounded-2xl transition text-center text-sm flex items-center justify-center gap-2 shadow-sm cursor-pointer btn-latido ${
-                  isCurrentPlanSaved
-                    ? 'bg-[#213D30] hover:bg-[#284B3B] text-white border border-emerald-500/40'
-                    : 'bg-[#182A24] hover:bg-[#223931] text-white'
-                }`}
-              >
-                <Bookmark className={`w-4 h-4 text-[#E06D28] ${isCurrentPlanSaved ? 'fill-[#E06D28]' : ''}`} />
-                <span>{isCurrentPlanSaved ? '✓ Ronda guardada en tu perfil' : 'Guardar en mi perfil'}</span>
-              </button>
-
-              {/* Botón Mandar por WhatsApp */}
-              <button
-                onClick={shareViaWhatsApp}
-                className="flex-1 bg-[#128C7E] hover:bg-[#075E54] text-white font-semibold py-3.5 px-6 rounded-2xl transition text-center text-sm flex items-center justify-center gap-2 shadow-sm cursor-pointer"
-              >
-                <Share2 className="w-4 h-4" />
-                <span>Mandar por WhatsApp</span>
-              </button>
-
-              {/* Botón Copiar resumen */}
-              <button
-                onClick={copyPlanToClipboard}
-                className="flex-1 ronda-card-inner border hover:border-[#E06D28] text-[var(--text-main)] font-semibold py-3.5 px-6 rounded-2xl transition text-center text-sm flex items-center justify-center gap-2 shadow-xs cursor-pointer"
-              >
-                <CheckCircle2 className={`w-4 h-4 ${copied ? 'text-green-600' : 'text-[#5E6F66]'}`} />
-                <span>{copied ? '¡Recorrido copiado!' : 'Copiar texto'}</span>
-              </button>
-            </div>
+            {/* Botón Guardar en mi perfil */}
+            <button
+              onClick={() => handleSavePlan(plan)}
+              className={`w-full font-semibold py-4 px-6 rounded-2xl transition text-center text-sm flex items-center justify-center gap-2 shadow-sm cursor-pointer btn-latido ${
+                isCurrentPlanSaved
+                  ? 'bg-[#213D30] hover:bg-[#284B3B] text-white border border-emerald-500/40'
+                  : 'bg-[#182A24] hover:bg-[#223931] text-white'
+              }`}
+            >
+              <Bookmark className={`w-4 h-4 text-[#E06D28] ${isCurrentPlanSaved ? 'fill-[#E06D28]' : ''}`} />
+              <span>{isCurrentPlanSaved ? '✓ Ronda guardada en tu perfil' : 'Guardar en mi perfil'}</span>
+            </button>
 
             <button
               onClick={() => handleNavigate('config', 'adjust')}

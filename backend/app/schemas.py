@@ -109,6 +109,11 @@ class InitialTransitInfo(BaseModel):
     mode: str = Field(description="'walk' si es caminata o 'transit' si es auto/colectivo/subte")
     departure_time: str = Field(description="Hora estimada de salida (HH:MM)")
     arrival_time: str = Field(description="Hora estimada de llegada a la Parada 1 (HH:MM)")
+    distance_km: Optional[float] = Field(default=None, description="Distancia estimada en km")
+    walk_minutes: Optional[int] = Field(default=None, description="Minutos estimados a pie")
+    transit_minutes: Optional[int] = Field(default=None, description="Minutos estimados en transporte público")
+    car_minutes: Optional[int] = Field(default=None, description="Minutos estimados en auto / taxi")
+    bike_minutes: Optional[int] = Field(default=None, description="Minutos estimados en bicicleta")
 
 class PlanResponse(BaseModel):
     id: str
