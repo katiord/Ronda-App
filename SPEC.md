@@ -152,3 +152,7 @@ Cada paso es coordinado por el **Orquestador**, investigado por el **Investigado
     - *Guías por Barrio*: Spot de Portada (Hero), Boletos Culturales y Cápsulas de Joyitas Imperdibles.
     - *Agenda Finde & Ferias*: Postales cinemáticas de eventos de fin de semana.
   - Aprobado por el Harness y desplegado en producción (`RULE-DEP-01`, commit `b4b19cc`).
+- [x] **Paso 18: Rebote Editorial & Destello al Abrir la Ficha / Carta del Lugar (`PlaceDetailModal`)**
+  - **Alineación con la Intención del Usuario**: Se eliminó la sobrecarga de puntos y animaciones de rebote en las miniaturas de los menús/feeds para mantener la exploración limpia y despejada.
+  - **Efecto Rebote al Abrir la Ficha**: Al tocar cualquier parada del itinerario en "Armá tu ronda", "Ver ficha completa" en Juegos & Pool o desde el perfil de favoritos, la carta translúcida (`PlaceDetailModal`) abre su título en gran formato con emergencia vertical elástica (`animate-hero-title`) y coronación del punto ámbar con latido/destello (`animate-punto-destello`), extendido también al encabezado de *Experiencias*.
+  - Aprobado por el Harness y desplegado en producción (`RULE-DEP-01`, commit `1412069`).
