@@ -536,8 +536,8 @@ export default function RecommendedScreen({
                             <span className="truncate">{heroActivity.location}</span>
                           </span>
                         </div>
-                        <h4 className="font-editorial text-2xl sm:text-3xl font-bold leading-tight mb-2 text-white drop-shadow-sm">
-                          {heroActivity.title}
+                        <h4 className="font-editorial text-2xl sm:text-3xl font-bold leading-tight mb-2 text-white drop-shadow-sm animate-hero-title">
+                          {heroActivity.title}<span className="text-[#E06D28] animate-punto-destello">.</span>
                         </h4>
                         <p className="text-xs sm:text-sm text-stone-200 line-clamp-2 leading-relaxed">
                           {heroActivity.description}
@@ -642,8 +642,8 @@ export default function RecommendedScreen({
                               </div>
                             </div>
 
-                            <h4 className="font-editorial text-lg sm:text-xl font-bold text-[var(--text-main)] mb-1.5 leading-snug">
-                              {act.title}
+                            <h4 className="font-editorial text-lg sm:text-xl font-bold text-[var(--text-main)] mb-1.5 leading-snug animate-hero-title">
+                              {act.title}<span className="text-[#E06D28] animate-punto-destello">.</span>
                             </h4>
 
                             <p className="flex items-center gap-1.5 text-xs ronda-text-muted mb-2.5">
@@ -736,8 +736,8 @@ export default function RecommendedScreen({
                       {/* Cápsula Flotante Integrada con Paleta Ronda */}
                       <div className="relative z-10 m-3 p-4 rounded-2xl ronda-card border shadow-lg text-[var(--text-main)] flex flex-col justify-between transition-transform duration-300">
                         <div>
-                          <h4 className="font-editorial text-lg font-bold text-[var(--text-main)] leading-snug truncate mb-0.5">
-                            {place.name}
+                          <h4 className="font-editorial text-lg font-bold text-[var(--text-main)] leading-snug truncate mb-0.5 animate-hero-title">
+                            {place.name}<span className="text-[#E06D28] animate-punto-destello">.</span>
                           </h4>
                           <p className="text-[11px] ronda-text-muted truncate flex items-center gap-1 mb-2">
                             <MapPin className="w-3 h-3 text-[#E06D28] shrink-0" />
@@ -1142,8 +1142,8 @@ export default function RecommendedScreen({
                       <span className="text-white/90 font-medium">{item.hours}</span>
                     </div>
 
-                    <h3 className="font-editorial text-xl sm:text-2xl font-bold text-white leading-tight drop-shadow-md group-hover:text-[#E06D28] transition duration-300">
-                      {item.title}
+                    <h3 className="font-editorial text-xl sm:text-2xl font-bold text-white leading-tight drop-shadow-md group-hover:text-[#E06D28] transition duration-300 animate-hero-title">
+                      {item.title}<span className="text-[#E06D28] animate-punto-destello">.</span>
                     </h3>
 
                     <div className="pt-2 flex items-center text-xs font-bold text-[#E06D28]">
@@ -1232,7 +1232,7 @@ export default function RecommendedScreen({
               const heroBadges = heroPlace ? getPlayBadges(heroPlace) : [];
 
               return (
-                <section key={group.id} className="space-y-6 pt-2">
+                <section key={`${selectedPlayVibe}-${group.id}`} className="space-y-6 pt-2">
                   {/* Cabecera de Categoría */}
                   <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b ronda-border pb-3">
                     <div>
@@ -1242,8 +1242,8 @@ export default function RecommendedScreen({
                           {group.badge}
                         </span>
                       </div>
-                      <h3 className="font-editorial text-2xl sm:text-3xl font-bold text-[var(--text-main)]">
-                        {group.title}
+                      <h3 className="font-editorial text-2xl sm:text-3xl font-bold text-[var(--text-main)] animate-hero-title">
+                        {group.title}<span className="text-[#E06D28] animate-punto-destello">.</span>
                       </h3>
                       <p className="text-xs sm:text-sm ronda-text-muted mt-0.5 max-w-2xl leading-relaxed">
                         {group.tagline}
@@ -1301,8 +1301,8 @@ export default function RecommendedScreen({
                               </span>
                             ))}
                           </div>
-                          <h4 className="font-editorial text-2xl sm:text-4xl font-bold leading-tight drop-shadow-md">
-                            {heroPlace.name}
+                          <h4 className="font-editorial text-2xl sm:text-4xl font-bold leading-tight drop-shadow-md animate-hero-title">
+                            {heroPlace.name}<span className="text-[#E06D28] animate-punto-destello">.</span>
                           </h4>
                           <p className="text-xs text-white/80 flex items-center gap-1 mt-1 drop-shadow">
                             <MapPin className="w-3.5 h-3.5 text-[#E06D28]" />
@@ -1433,8 +1433,8 @@ export default function RecommendedScreen({
                                 {/* Cuerpo de la Ficha */}
                                 <div className="p-4 sm:p-5 space-y-3">
                                   <div>
-                                    <h4 className="font-editorial text-lg sm:text-xl font-bold text-[var(--text-main)] leading-snug group-hover:text-[#E06D28] transition">
-                                      {place.name}
+                                    <h4 className="font-editorial text-lg sm:text-xl font-bold text-[var(--text-main)] leading-snug group-hover:text-[#E06D28] transition animate-hero-title">
+                                      {place.name}<span className="text-[#E06D28] animate-punto-destello">.</span>
                                     </h4>
                                     <p className="text-xs ronda-text-muted flex items-center gap-1 mt-0.5">
                                       <MapPin className="w-3 h-3 text-[#E06D28] shrink-0" />
