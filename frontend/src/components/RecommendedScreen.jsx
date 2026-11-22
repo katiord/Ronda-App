@@ -332,9 +332,9 @@ export default function RecommendedScreen({
                   setSelectedAgendaActivity(null);
                   setActiveTab('by_barrio');
                 }}
-                className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer flex items-center gap-1.5 btn-latido ${
                   activeTab === 'by_barrio'
-                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#14241F] dark:border-[#385C4A] shadow-md ring-2 ring-[#E06D28]/40'
+                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#E06D28]/60 chip-barrio-active shadow-md ring-2 ring-[#E06D28]/40'
                     : 'ronda-text-muted hover:text-[var(--text-main)]'
                 }`}
               >
@@ -348,9 +348,9 @@ export default function RecommendedScreen({
                   setSelectedAgendaActivity(null);
                   setActiveTab('weekend_agenda');
                 }}
-                className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer flex items-center gap-1.5 btn-latido ${
                   activeTab === 'weekend_agenda'
-                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#14241F] dark:border-[#385C4A] shadow-md ring-2 ring-[#E06D28]/40'
+                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#E06D28]/60 chip-barrio-active shadow-md ring-2 ring-[#E06D28]/40'
                     : 'ronda-text-muted hover:text-[var(--text-main)]'
                 }`}
               >
@@ -364,9 +364,9 @@ export default function RecommendedScreen({
                   setSelectedAgendaActivity(null);
                   setActiveTab('games_pool');
                 }}
-                className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer flex items-center gap-1.5 btn-latido ${
                   activeTab === 'games_pool'
-                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#14241F] dark:border-[#385C4A] shadow-md ring-2 ring-[#E06D28]/40'
+                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#E06D28]/60 chip-barrio-active shadow-md ring-2 ring-[#E06D28]/40'
                     : 'ronda-text-muted hover:text-[var(--text-main)]'
                 }`}
               >
@@ -396,12 +396,15 @@ export default function RecommendedScreen({
                       key={b}
                       type="button"
                       onClick={() => setSelectedBarrio(b)}
-                      className={`px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer border btn-latido ${
+                      className={`px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer border btn-latido flex items-center gap-1.5 ${
                         isSelected
-                          ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#14241F] dark:border-[#385C4A] shadow-md ring-2 ring-[#E06D28]/40'
+                          ? 'bg-[#14241F] dark:bg-[#1E3328] text-white border-[#E06D28]/60 chip-barrio-active shadow-md ring-2 ring-[#E06D28]/40'
                           : 'ronda-card border ronda-text-muted hover:border-[var(--text-main)] hover:text-[var(--text-main)] shadow-xs'
                       }`}
                     >
+                      {isSelected && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#E06D28] pulse-slow shrink-0 inline-block" />
+                      )}
                       <span>{b}</span>
                     </button>
                   );
@@ -442,8 +445,8 @@ export default function RecommendedScreen({
 
               {/* 1. ARQUETIPO: SPOT DE PORTADA (HERO BANNER) */}
               {heroActivity && (
-                <article className="relative w-full rounded-3xl overflow-hidden shadow-md border border-[#E2E8F0] mb-6 group bg-[#182A24]">
-                  {/* Foto Full-Bleed Inmersiva con Zoom suave al hover */}
+                <article className="relative w-full rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl border border-[#E2E8F0] dark:border-[#2E4A3B] mb-6 group bg-[#182A24] transition-all duration-500">
+                  {/* Foto Full-Bleed Inmersiva con Zoom suave al hover y barrido dorado */}
                   <div className="relative w-full h-80 sm:h-[380px] overflow-hidden bg-[#182A24]">
                     <img
                       src={heroActivity.photo}
@@ -455,6 +458,9 @@ export default function RecommendedScreen({
                         }
                       }}
                     />
+                    {/* Barrido de luz dorada estilo atardecer porteño (Golden Hour Sweep) */}
+                    <div className="shimmer-golden" />
+
                     {/* Degradé oscuro cinemático para máxima legibilidad */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/45 to-black/20 pointer-events-none" />
 
@@ -462,7 +468,8 @@ export default function RecommendedScreen({
                     <div className="absolute top-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 z-10">
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-amber-200 bg-amber-950/85 backdrop-blur-md px-3 py-1 rounded-full border border-amber-400/40 flex items-center gap-1.5 shadow-sm">
-                          ⭐ Spot de Portada
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 pulse-slow shrink-0 inline-block" />
+                          <span>Spot de Portada</span>
                         </span>
                         {heroActivity.badge === 'Cultura Abierta' ? (
                           <span className="text-[10px] font-bold bg-[#133E32]/90 text-[#D1F2E0] border border-[#2E6B58] backdrop-blur-md px-2.5 py-1 rounded-full inline-flex items-center gap-1 shadow-sm">
@@ -515,7 +522,7 @@ export default function RecommendedScreen({
                         <button
                           type="button"
                           onClick={() => handleStartFromActivity(heroActivity)}
-                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-[#E06D28] hover:bg-[#c95b1d] text-white font-bold text-xs sm:text-sm transition cursor-pointer shadow-lg hover:shadow-xl btn-latido"
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#E06D28] hover:bg-[#c95b1d] text-white font-bold text-xs sm:text-sm transition cursor-pointer shadow-lg hover:shadow-xl btn-latido glow-dore"
                         >
                           <Compass className="w-4 h-4 text-white" />
                           <span>Armar ronda desde acá</span>
@@ -546,7 +553,7 @@ export default function RecommendedScreen({
                     {ticketActivities.map((act) => (
                       <article
                         key={act.id}
-                        className="ronda-card rounded-3xl border hover:border-[#E06D28] hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col sm:flex-row relative group shadow-sm"
+                        className="ronda-card rounded-3xl border hover:border-[#E06D28]/70 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col sm:flex-row relative group shadow-sm"
                       >
                         {/* Talón Izquierdo del Boleto / Fecha & Horario */}
                         <div className="w-full sm:w-44 ronda-card-inner border-b sm:border-b-0 sm:border-r border-dashed border-[var(--border-card)] p-4 flex sm:flex-col items-center justify-between sm:justify-center text-center relative shrink-0 transition-colors shadow-xs">
@@ -568,16 +575,27 @@ export default function RecommendedScreen({
                           </div>
 
                           {act.isFree && (
-                            <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full sm:mt-2">
+                            <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-full sm:mt-2">
                               Gratis
                             </span>
                           )}
                         </div>
 
                         {/* Cuerpo del Boleto */}
-                        <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                        <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between relative">
+                          {/* Sello de Tinta Porteño troquelado */}
+                          <div className="absolute top-3.5 right-3.5 sm:top-4 sm:right-5">
+                            <span className={`ticket-stamp ${
+                              act.isFree 
+                                ? 'text-emerald-700 dark:text-emerald-400 border-emerald-600/60 dark:border-emerald-400/60 bg-emerald-500/10'
+                                : 'text-[#E06D28] border-[#E06D28]/60 bg-[#E06D28]/10'
+                            }`}>
+                              {act.isFree ? 'ENTRADA LIBRE' : (act.badge === 'Cultura Abierta' ? 'CULTURA ABIERTA' : 'JOYA OCULTA')}
+                            </span>
+                          </div>
+
                           <div>
-                            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <div className="flex flex-wrap items-center justify-between gap-2 mb-2 pr-28">
                               <div className="flex items-center gap-1.5">
                                 {act.badge === 'Cultura Abierta' ? (
                                   <span className="text-[10px] font-bold bg-[#133E32] text-[#D1F2E0] border border-[#2E6B58] px-2.5 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs">
@@ -607,7 +625,7 @@ export default function RecommendedScreen({
                               <span>{act.location}</span>
                             </p>
 
-                            <p className="text-xs sm:text-sm text-[#3E5248] leading-relaxed mb-3">
+                            <p className="text-xs sm:text-sm text-[#3E5248] dark:text-[#A8BAAF] leading-relaxed mb-3">
                               {act.description}
                             </p>
 
@@ -619,13 +637,13 @@ export default function RecommendedScreen({
                             )}
                           </div>
 
-                          <div className="pt-2 border-t border-[#EDF2F7] flex items-center justify-end">
+                          <div className="pt-2 border-t border-[var(--border-subtle)] flex items-center justify-end">
                             <button
                               type="button"
                               onClick={() => handleStartFromActivity(act)}
-                              className="inline-flex items-center gap-1.5 py-2 px-4 rounded-xl bg-[#182A24] hover:bg-[#2A4B3D] text-white text-xs font-semibold transition cursor-pointer shadow-2xs btn-latido"
+                              className="inline-flex items-center gap-1.5 py-2 px-4 rounded-xl bg-[#182A24] dark:bg-[#1E3328] hover:bg-[#E06D28] text-white text-xs font-semibold transition cursor-pointer shadow-2xs btn-latido"
                             >
-                              <Compass className="w-3.5 h-3.5 text-[#E06D28]" />
+                              <Compass className="w-3.5 h-3.5 text-[#E06D28] group-hover:text-white transition-colors" />
                               <span>Armar ronda desde este pase</span>
                             </button>
                           </div>
@@ -660,7 +678,7 @@ export default function RecommendedScreen({
                   return (
                     <article
                       key={place.id}
-                      className="relative rounded-3xl overflow-hidden border ronda-border hover:border-[#E06D28]/60 hover:shadow-xl transition-all duration-300 flex flex-col justify-end aspect-[4/5] group bg-[#182A24]"
+                      className="relative rounded-3xl overflow-hidden border ronda-border hover:border-[#E06D28]/70 joyita-glass-card flex flex-col justify-end aspect-[4/5] group bg-[#182A24] cursor-pointer shadow-md"
                     >
                       {/* Foto de fondo full-bleed con zoom sutil */}
                       <img
@@ -674,8 +692,9 @@ export default function RecommendedScreen({
 
                       {/* Badges superiores flotantes */}
                       <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between gap-1 pointer-events-none z-10">
-                        <span className="text-[10px] font-bold text-white bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 capitalize shadow-xs">
-                          {place.category === 'cafe' ? '☕ Café de Culto' : place.category === 'dining' ? '🍽️ Bodegón Porteño' : '🍸 Barra & Coctelería'}
+                        <span className="text-[10px] font-bold text-white bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 capitalize shadow-xs flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 pulse-slow shrink-0 inline-block" />
+                          <span>{place.category === 'cafe' ? '☕ Café de Culto' : place.category === 'dining' ? '🍽️ Bodegón Porteño' : '🍸 Barra & Coctelería'}</span>
                         </span>
                         {place.price_tier && (
                           <span className="text-[10px] font-bold text-white bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/20 shadow-xs">
@@ -696,9 +715,9 @@ export default function RecommendedScreen({
                           </p>
 
                           {/* Micro-dato sensorial / Plato o Trago insignia */}
-                          <div className="ronda-card-inner border rounded-xl px-2.5 py-1.5 mb-3 text-[11px] text-[var(--text-main)] flex items-center gap-1.5">
-                            <Sparkles className="w-3.5 h-3.5 text-[#E06D28] shrink-0" />
-                            <span className="line-clamp-1 font-medium"><strong>Insignia:</strong> {insignia}</span>
+                          <div className="ronda-card-inner border rounded-xl px-2.5 py-1.5 mb-3 text-[11px] text-[var(--text-main)] flex items-center gap-1.5 group-hover:border-[#E06D28]/40 transition-colors">
+                            <Sparkles className="w-3.5 h-3.5 text-[#E06D28] shrink-0 group-hover:rotate-12 transition-transform duration-300" />
+                            <span className="line-clamp-1 font-medium"><strong className="text-[#E06D28]">Insignia:</strong> {insignia}</span>
                           </div>
                         </div>
 
@@ -707,17 +726,17 @@ export default function RecommendedScreen({
                           <button
                             type="button"
                             onClick={() => onSelectPlace(place)}
-                            className="flex-1 py-1.5 px-2 text-center text-xs font-semibold text-[var(--text-main)] ronda-card-inner hover:bg-[var(--bg-card)] rounded-xl border transition cursor-pointer btn-latido"
+                            className="flex-1 py-2 px-2 text-center text-xs font-semibold text-[var(--text-main)] ronda-card-inner hover:bg-[var(--bg-card)] rounded-xl border transition cursor-pointer btn-latido"
                           >
                             Ver ficha
                           </button>
                           <button
                             type="button"
                             onClick={() => onPlanFromHere(place)}
-                            className="flex-1 inline-flex items-center justify-center gap-1 py-1.5 px-2 text-xs font-semibold bg-[#14241F] dark:bg-[#1E3328] text-white hover:bg-[#2A4B3D] rounded-xl transition cursor-pointer shadow-2xs border ronda-border btn-latido"
+                            className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-2 text-xs font-bold bg-[#14241F] dark:bg-[#1E3328] hover:bg-[#E06D28] text-white rounded-xl transition-all cursor-pointer shadow-xs border ronda-border btn-latido glow-dore"
                             title="Armar ronda con este lugar"
                           >
-                            <Compass className="w-3 h-3 text-[#E06D28]" />
+                            <Compass className="w-3.5 h-3.5 text-[#E06D28] group-hover:text-white transition-colors" />
                             <span>Ronda</span>
                           </button>
                         </div>
