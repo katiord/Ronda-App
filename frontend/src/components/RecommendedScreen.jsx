@@ -787,7 +787,7 @@ export default function RecommendedScreen({
                   setSelectedAgendaActivity(null);
                   setActivePhotoIndex(0);
                 }}
-                className="inline-flex items-center gap-2 text-xs font-bold text-[#E06D28] hover:text-[#C95B1D] transition cursor-pointer"
+                className="inline-flex items-center gap-2 text-xs font-bold text-[#E06D28] hover:text-[#C95B1D] transition cursor-pointer btn-latido"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Volver a la Agenda de Fin de Semana</span>
@@ -795,11 +795,11 @@ export default function RecommendedScreen({
 
               {/* Cabecera Gran Formato para la Foto con corte y encuadre perfecto */}
               <div className="space-y-3">
-                <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] max-h-[420px] rounded-3xl overflow-hidden bg-[#182A24] border ronda-border shadow-md group">
+                <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] max-h-[420px] rounded-3xl overflow-hidden bg-[#182A24] border ronda-border shadow-md group postcard-glow">
                   <img
                     src={currentPhoto}
                     alt={selectedAgendaActivity.title}
-                    className="w-full h-full object-cover object-center transition-all duration-500"
+                    className="w-full h-full object-cover object-center transition-all duration-700 group-hover:scale-104"
                     onError={(e) => {
                       if (selectedAgendaActivity.fallbackPhoto && e.target.src !== selectedAgendaActivity.fallbackPhoto) {
                         e.target.src = selectedAgendaActivity.fallbackPhoto;
@@ -807,20 +807,23 @@ export default function RecommendedScreen({
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/15 pointer-events-none" />
+                  <div className="shimmer-golden opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
                   {/* Badges superiores flotantes */}
                   <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2 pointer-events-none z-10">
-                    <span className="text-xs font-bold text-white bg-black/70 backdrop-blur-md px-3.5 py-1 rounded-full border border-white/25">
-                      📍 {selectedAgendaActivity.barrio}
+                    <span className="text-xs font-bold text-white bg-black/70 backdrop-blur-md px-3.5 py-1 rounded-full border border-white/25 shadow-sm flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-[#E06D28]" />
+                      <span>{selectedAgendaActivity.barrio}</span>
                     </span>
                     <div className="flex items-center gap-2">
                       {activityPhotos.length > 1 && (
-                        <span className="text-xs font-bold text-white bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-white/25">
+                        <span className="text-xs font-bold text-white bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-white/25 shadow-sm">
                           📷 {activePhotoIndex + 1} de {activityPhotos.length}
                         </span>
                       )}
-                      <span className="text-xs font-bold text-emerald-100 bg-emerald-900/80 backdrop-blur-md px-3 py-1 rounded-full border border-emerald-500/30">
-                        {selectedAgendaActivity.isFree ? 'Entrada libre' : selectedAgendaActivity.badge}
+                      <span className="text-xs font-bold text-emerald-100 bg-emerald-900/85 backdrop-blur-md px-3 py-1 rounded-full border border-emerald-500/35 shadow-sm flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-slow" />
+                        <span>{selectedAgendaActivity.isFree ? 'Entrada libre' : selectedAgendaActivity.badge}</span>
                       </span>
                     </div>
                   </div>
@@ -834,7 +837,7 @@ export default function RecommendedScreen({
                           e.stopPropagation();
                           setActivePhotoIndex((prev) => (prev > 0 ? prev - 1 : activityPhotos.length - 1));
                         }}
-                        className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md pointer-events-auto transition cursor-pointer border border-white/25 shadow-md"
+                        className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md pointer-events-auto transition cursor-pointer border border-white/25 shadow-md btn-latido"
                         title="Foto anterior"
                       >
                         <ChevronLeft className="w-5 h-5" />
@@ -845,7 +848,7 @@ export default function RecommendedScreen({
                           e.stopPropagation();
                           setActivePhotoIndex((prev) => (prev < activityPhotos.length - 1 ? prev + 1 : 0));
                         }}
-                        className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md pointer-events-auto transition cursor-pointer border border-white/25 shadow-md"
+                        className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md pointer-events-auto transition cursor-pointer border border-white/25 shadow-md btn-latido"
                         title="Foto siguiente"
                       >
                         <ChevronRight className="w-5 h-5" />
@@ -861,8 +864,9 @@ export default function RecommendedScreen({
                       <span>·</span>
                       <span className="text-white/90">{selectedAgendaActivity.hours}</span>
                     </div>
-                    <h2 className="font-editorial text-2xl sm:text-4xl font-bold leading-tight drop-shadow-md">
+                    <h2 className="font-editorial text-2xl sm:text-4xl font-bold leading-tight drop-shadow-md animate-hero-title">
                       {selectedAgendaActivity.title}
+                      <span className="text-[#E06D28] animate-punto-destello">.</span>
                     </h2>
                   </div>
                 </div>
@@ -875,10 +879,10 @@ export default function RecommendedScreen({
                         key={photoSrc}
                         type="button"
                         onClick={() => setActivePhotoIndex(idx)}
-                        className={`relative w-24 sm:w-32 h-16 sm:h-20 rounded-2xl overflow-hidden border-2 transition-all cursor-pointer shrink-0 ${
+                        className={`relative w-24 sm:w-32 h-16 sm:h-20 rounded-2xl overflow-hidden border-2 transition-all cursor-pointer shrink-0 btn-latido ${
                           idx === activePhotoIndex
-                            ? 'border-[#E06D28] ring-2 ring-[#E06D28]/40 scale-102 shadow-md'
-                            : 'border-transparent opacity-65 hover:opacity-100 hover:border-white/40'
+                            ? 'border-[#E06D28] ring-2 ring-[#E06D28]/50 scale-105 shadow-md chip-barrio-active'
+                            : 'border-transparent opacity-65 hover:opacity-100 hover:border-white/40 hover:scale-102'
                         }`}
                       >
                         <img
@@ -914,13 +918,15 @@ export default function RecommendedScreen({
 
                 {/* Dato al paso / La Posta del Baqueano */}
                 {selectedAgendaActivity.tip && (
-                  <div className="ronda-card-inner border rounded-2xl p-4 sm:p-5 flex items-start gap-3">
-                    <Lightbulb className="w-5 h-5 text-[#E06D28] shrink-0 mt-0.5" />
+                  <div className="ronda-card-inner border border-[#E06D28]/30 dark:border-[#E06D28]/35 bg-gradient-to-r from-[#E06D28]/10 via-[#E06D28]/5 to-transparent rounded-2xl p-4 sm:p-5 flex items-start gap-3 shadow-xs">
+                    <div className="p-2 rounded-xl bg-[#E06D28]/15 border border-[#E06D28]/30 shrink-0 mt-0.5">
+                      <Lightbulb className="w-5 h-5 text-[#E06D28]" />
+                    </div>
                     <div>
                       <h4 className="text-xs font-bold uppercase tracking-wider text-[#E06D28] mb-1">
                         El Dato del Baqueano (Para no fallar)
                       </h4>
-                      <p className="text-xs sm:text-sm text-[var(--text-main)] leading-relaxed">
+                      <p className="text-xs sm:text-sm text-[var(--text-main)] leading-relaxed font-medium">
                         {selectedAgendaActivity.tip}
                       </p>
                     </div>
@@ -940,7 +946,7 @@ export default function RecommendedScreen({
                   <button
                     type="button"
                     onClick={() => handleStartFromActivity(selectedAgendaActivity)}
-                    className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-[#14241F] dark:bg-[#1E3328] hover:bg-[#2A4B3D] text-white text-xs sm:text-sm font-bold transition cursor-pointer shadow-md border ronda-border shrink-0 btn-latido"
+                    className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-gradient-to-r from-[#14241F] to-[#1F3A2E] dark:from-[#1E3328] dark:to-[#2B4B39] hover:from-[#2A4B3D] hover:to-[#366350] text-white text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-[0_4px_18px_rgba(224,109,40,0.25)] border border-[#E06D28]/40 shrink-0 btn-latido hover:scale-[1.02]"
                   >
                     <Compass className="w-4 h-4 text-[#E06D28]" />
                     <span>Armar ronda desde acá</span>
@@ -954,10 +960,10 @@ export default function RecommendedScreen({
         {activeTab === 'weekend_agenda' && !selectedAgendaActivity && (
           <div>
             <div className="mb-6">
-              <h2 className="font-editorial text-3xl font-bold text-[var(--text-main)] mb-1">
-                Agenda de Fin de Semana & Ferias
+              <h2 className="font-editorial text-3xl font-bold text-[var(--text-main)] mb-1 animate-hero-title">
+                Agenda de Fin de Semana & Ferias<span className="text-[#E06D28] animate-punto-destello">.</span>
               </h2>
-              <p className="text-xs sm:text-sm ronda-text-muted">
+              <p className="text-xs sm:text-sm ronda-text-muted animate-hero-sub">
                 Todas las ferias de antigüedades, diseño, recitales al aire libre y pases de Cultura Abierta en CABA
               </p>
             </div>
@@ -977,7 +983,7 @@ export default function RecommendedScreen({
                   <button
                     type="button"
                     onClick={() => setAgendaSearch('')}
-                    className="absolute right-2.5 top-2.5 p-0.5 ronda-text-muted hover:text-[var(--text-main)]"
+                    className="absolute right-2.5 top-2.5 p-0.5 ronda-text-muted hover:text-[var(--text-main)] cursor-pointer"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -990,9 +996,9 @@ export default function RecommendedScreen({
                   <button
                     type="button"
                     onClick={() => setAgendaDayFilter('all')}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition cursor-pointer ${
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer btn-latido ${
                       agendaDayFilter === 'all'
-                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
+                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40 chip-barrio-active'
                         : 'ronda-text-muted hover:text-[var(--text-main)]'
                     }`}
                   >
@@ -1001,9 +1007,9 @@ export default function RecommendedScreen({
                   <button
                     type="button"
                     onClick={() => setAgendaDayFilter('sabado')}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition cursor-pointer ${
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer btn-latido ${
                       agendaDayFilter === 'sabado'
-                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
+                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40 chip-barrio-active'
                         : 'ronda-text-muted hover:text-[var(--text-main)]'
                     }`}
                   >
@@ -1012,9 +1018,9 @@ export default function RecommendedScreen({
                   <button
                     type="button"
                     onClick={() => setAgendaDayFilter('domingo')}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition cursor-pointer ${
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer btn-latido ${
                       agendaDayFilter === 'domingo'
-                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
+                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40 chip-barrio-active'
                         : 'ronda-text-muted hover:text-[var(--text-main)]'
                     }`}
                   >
@@ -1027,9 +1033,9 @@ export default function RecommendedScreen({
                   <button
                     type="button"
                     onClick={() => setAgendaWeatherFilter('all')}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition cursor-pointer ${
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer btn-latido ${
                       agendaWeatherFilter === 'all'
-                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
+                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40 chip-barrio-active'
                         : 'ronda-text-muted hover:text-[var(--text-main)]'
                     }`}
                   >
@@ -1038,9 +1044,9 @@ export default function RecommendedScreen({
                   <button
                     type="button"
                     onClick={() => setAgendaWeatherFilter('cultura_abierta')}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition cursor-pointer ${
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer btn-latido ${
                       agendaWeatherFilter === 'cultura_abierta'
-                        ? 'bg-[#133E32] text-[#D1F2E0] shadow-xs ring-2 ring-[#2E6B58]'
+                        ? 'bg-[#133E32] text-[#D1F2E0] shadow-xs ring-2 ring-[#2E6B58] chip-barrio-active'
                         : 'ronda-text-muted hover:text-[var(--text-main)]'
                     }`}
                   >
@@ -1049,9 +1055,9 @@ export default function RecommendedScreen({
                   <button
                     type="button"
                     onClick={() => setAgendaWeatherFilter('outdoor')}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition cursor-pointer ${
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer btn-latido ${
                       agendaWeatherFilter === 'outdoor'
-                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
+                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40 chip-barrio-active'
                         : 'ronda-text-muted hover:text-[var(--text-main)]'
                     }`}
                   >
@@ -1060,9 +1066,9 @@ export default function RecommendedScreen({
                   <button
                     type="button"
                     onClick={() => setAgendaWeatherFilter('indoor')}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition cursor-pointer ${
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer btn-latido ${
                       agendaWeatherFilter === 'indoor'
-                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40'
+                        ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40 chip-barrio-active'
                         : 'ronda-text-muted hover:text-[var(--text-main)]'
                     }`}
                   >
@@ -1081,13 +1087,13 @@ export default function RecommendedScreen({
                     setActivePhotoIndex(0);
                     setSelectedAgendaActivity(item);
                   }}
-                  className="relative rounded-3xl overflow-hidden aspect-[16/11] sm:aspect-[16/10] lg:aspect-[16/11] min-h-[250px] border ronda-border shadow-md hover:shadow-2xl hover:scale-[1.01] transition-all duration-500 cursor-pointer group bg-[#182A24] flex flex-col justify-between p-5 sm:p-6"
+                  className="postcard-glow relative rounded-3xl overflow-hidden aspect-[16/11] sm:aspect-[16/10] lg:aspect-[16/11] min-h-[250px] border ronda-border shadow-md cursor-pointer group bg-[#182A24] flex flex-col justify-between p-5 sm:p-6"
                 >
                   {/* Foto full-bleed de fondo con zoom suave */}
                   <img
                     src={item.photo}
                     alt={item.title}
-                    className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-106 transition-transform duration-700 opacity-90"
+                    className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-700 opacity-90"
                     onError={(e) => {
                       if (item.fallbackPhoto && e.target.src !== item.fallbackPhoto) {
                         e.target.src = item.fallbackPhoto;
@@ -1096,14 +1102,19 @@ export default function RecommendedScreen({
                   />
                   {/* Degradé cinemático suave concentrado en la base para máxima claridad */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none group-hover:via-black/40 transition-colors duration-500" />
+                  
+                  {/* Destello sutil de atardecer en hover */}
+                  <div className="shimmer-golden opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-                  {/* Badges superiores flotantes: solo Barrio y Entrada libre (sin recuento de fotos) */}
+                  {/* Badges superiores flotantes */}
                   <div className="relative z-10 flex items-center justify-between gap-2 pointer-events-none">
-                    <span className="text-xs font-bold text-white bg-black/65 backdrop-blur-md px-3.5 py-1 rounded-full border border-white/25 shadow-sm">
-                      📍 {item.barrio}
+                    <span className="text-xs font-bold text-white bg-black/70 backdrop-blur-md px-3.5 py-1 rounded-full border border-white/25 shadow-sm flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-[#E06D28]" />
+                      <span>{item.barrio}</span>
                     </span>
-                    <span className="text-xs font-bold text-emerald-100 bg-emerald-950/80 backdrop-blur-md px-3 py-1 rounded-full border border-emerald-500/40 shadow-sm">
-                      {item.isFree ? 'Entrada libre' : item.badge}
+                    <span className="text-xs font-bold text-emerald-100 bg-emerald-950/85 backdrop-blur-md px-3 py-1 rounded-full border border-emerald-500/40 shadow-sm flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-slow" />
+                      <span>{item.isFree ? 'Entrada libre' : item.badge}</span>
                     </span>
                   </div>
 
@@ -1121,9 +1132,9 @@ export default function RecommendedScreen({
                     </h3>
 
                     <div className="pt-2 flex items-center text-xs font-bold text-[#E06D28]">
-                      <span className="inline-flex items-center gap-1.5 group-hover:translate-x-1.5 transition-transform duration-300">
+                      <span className="inline-flex items-center gap-1.5 group-hover:translate-x-2 transition-transform duration-300">
                         <span>Ver crónica & secretos</span>
-                        <ArrowRight className="w-4 h-4" />
+                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                       </span>
                     </div>
                   </div>
