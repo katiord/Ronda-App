@@ -122,3 +122,10 @@ Cada paso es coordinado por el **Orquestador**, investigado por el **Investigado
   - Sincronización fáctica de la Parada 1 calculando la llegada real (`startDt = hora actual + tiempo de viaje`).
   - **Regla Estricta Anti-Cierre**: Ningún lugar puede ser asignado a la Parada 1 si al llegar faltan menos de 60 minutos para su cierre (o menos de 75 min para cena/bodegón).
   - Tarjeta de partida en la pantalla de itinerario mostrando el origen, modo de traslado y tiempos de salida y llegada coordinados.
+- [x] **Paso 13: Sincronización Integral de Ubicación, Selector Interactivo de Transporte & Limpieza de Acciones**
+  - **Detección Activa de Ubicación**: Captura rápida no bloqueante de coordenadas GPS al armar la ronda o mediante el botón "Cerca mío".
+  - **Cálculo Exacto de Hora de Salida**: Para rondas programadas (`activeSlot !== 'now'`), la hora de salida se calcula matemáticamente restando los minutos de viaje al horario de inicio de la Parada 1 (`hora_salida = hora_parada_1 - travel_minutes`). Para salidas inmediatas (`now`), se calcula la llegada en base a la hora de partida.
+  - **Selector Interactivo de Transporte ("¿Cómo vas?")**: 4 pestañas interactivas en la pantalla de itinerario (🚶 A pie, 🚇 Subte/Bondi, 🚗 Auto/Taxi, 🚲 Bici) que recalculan la hora de salida en tiempo real.
+  - **Botón 1-Tap a Google Maps**: Enlace directo para navegación punto a punto desde la ubicación del usuario hasta la Parada 1 con el modo de transporte seleccionado.
+  - **Eliminación de Compartir y Copiar**: Se eliminaron los botones de WhatsApp y Copiar texto al armar la ronda, manteniendo únicamente el guardado en el perfil.
+  - **Soporte Full-Stack**: Integrado en `backend/app/planner.py`, `backend/app/schemas.py` y `frontend/src/App.jsx`. Aprobado por el Harness y desplegado de forma atómica y reversible (`RULE-DEP-01`).
