@@ -413,18 +413,25 @@ export default function RecommendedScreen({
             </div>
 
             {/* BANNER / PRESENTACIÓN EDITORIAL DEL BARRIO */}
-            <div className="ronda-card rounded-3xl border p-4 sm:p-5 mb-6 shadow-md relative overflow-hidden transition-colors">
-              <div className="max-w-2xl">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#E06D28] block mb-0.5">
+            <div 
+              key={`banner-${selectedBarrio}`}
+              className="ronda-card rounded-3xl border p-4 sm:p-5 mb-6 shadow-md relative overflow-hidden transition-all duration-300 animate-fade-in"
+            >
+              {/* Barrido de luz dorada muy suave al cambiar de barrio */}
+              <div className="shimmer-golden" />
+
+              <div className="max-w-2xl relative z-10">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#E06D28] block mb-0.5 animate-hero-sub">
                   Guía de Barrio
                 </span>
-                <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-[var(--text-main)] mb-1 leading-tight">
+                <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-[var(--text-main)] mb-1 leading-tight animate-hero-title">
                   {currentGuide.name}
+                  <span className="text-[#E06D28] animate-punto-destello">.</span>
                 </h2>
-                <p className="text-xs sm:text-sm font-semibold text-[#2A4B3D] mb-1.5">
+                <p className="text-xs sm:text-sm font-semibold text-[#2A4B3D] dark:text-[#6EE7B7] mb-1.5 animate-hero-sub">
                   {currentGuide.tagline}
                 </p>
-                <p className="text-xs sm:text-sm ronda-text-muted leading-relaxed">
+                <p className="text-xs sm:text-sm ronda-text-muted leading-relaxed animate-hero-sub" style={{ animationDelay: '0.28s' }}>
                   {currentGuide.vibe}
                 </p>
               </div>
@@ -432,12 +439,16 @@ export default function RecommendedScreen({
 
             {/* SECCIÓN A: QUÉ HACER EN ESTE BARRIO (Spot de Portada + Boletos Culturales) */}
             <section className="mb-12">
-              <div className="flex items-center justify-between mb-5">
+              <div 
+                key={`section-title-${selectedBarrio}`}
+                className="flex items-center justify-between mb-5"
+              >
                 <div>
-                  <h3 className="font-editorial text-2xl font-bold text-[var(--text-main)]">
+                  <h3 className="font-editorial text-2xl font-bold text-[var(--text-main)] animate-hero-title">
                     Qué hacer & vivir en {currentGuide.name}
+                    <span className="text-[#E06D28] animate-punto-destello">.</span>
                   </h3>
-                  <p className="text-xs ronda-text-muted">
+                  <p className="text-xs ronda-text-muted animate-hero-sub">
                     El plan estrella del barrio y pases de fin de semana recomendados
                   </p>
                 </div>
@@ -657,13 +668,17 @@ export default function RecommendedScreen({
 
             {/* SECCIÓN B: 3 JOYITAS IMPERDIBLES (CÁPSULAS TRANSLÚCIDAS / GLASS CARDS) */}
             <section className="border-t border-[#E2E8F0] pt-8">
-              <div className="flex items-center justify-between mb-5">
+              <div 
+                key={`joyitas-title-${selectedBarrio}`}
+                className="flex items-center justify-between mb-5"
+              >
                 <div>
-                  <h3 className="font-editorial text-2xl font-bold text-[var(--text-main)] flex items-center gap-2">
+                  <h3 className="font-editorial text-2xl font-bold text-[var(--text-main)] flex items-center gap-2 animate-hero-title">
                     <Sparkles className="w-5 h-5 text-[#E06D28]" />
                     <span>3 Joyitas Imperdibles de {currentGuide.name}</span>
+                    <span className="text-[#E06D28] animate-punto-destello">.</span>
                   </h3>
-                  <p className="text-xs ronda-text-muted">
+                  <p className="text-xs ronda-text-muted animate-hero-sub">
                     Nuestra curaduría de culto: fotografía inmersiva y cápsula con el plato/trago insignia
                   </p>
                 </div>
