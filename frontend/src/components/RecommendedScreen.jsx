@@ -105,6 +105,9 @@ export default function RecommendedScreen({
   // Datos del barrio seleccionado
   const currentGuide = BARRIO_GUIDES[selectedBarrio] || BARRIO_GUIDES['San Telmo'];
 
+  // Filtro de Vibra para Juegos & Pool: 'billar' | 'arcade' | 'bowling' | 'all'
+  const [selectedPlayVibe, setSelectedPlayVibe] = useState('billar');
+
   // Actividad Hero (Spot de Portada) y el resto de actividades tipo boleto cultural
   const heroActivity = useMemo(() => {
     return currentGuide.whatToDo.find(a => a.isHero) || currentGuide.whatToDo[0];
@@ -137,29 +140,41 @@ export default function RecommendedScreen({
       {
         id: 'billar',
         title: 'Templos de Billar & Bodegón Porteño Clásico',
+        shortTitle: 'Billar & Vermut',
         icon: '🎱',
         badge: 'Mesas de paño verde & Vermut',
         tagline: 'Cafés centenarios, mozos con chaleco, paño verde profesional, dados y ajedrez para arrancar o estirar la noche.',
+        heroId: 'villacrespo_cafe_san_bernardo',
         places: playfulPlaces.filter(p => billarIds.includes(p.id))
       },
       {
         id: 'arcade',
         title: 'Arcades Retro, Fichines & Neón',
+        shortTitle: 'Arcades & Fichines',
         icon: '🕹️',
         badge: 'Fichas de metal & Tragos',
         tagline: 'Máquinas arcade originales de los 80s y 90s, cócteles de autor, ludotecas gigantes y luces de neón.',
+        heroId: 'palermo_el_destello',
         places: playfulPlaces.filter(p => arcadeIds.includes(p.id))
       },
       {
         id: 'bowling',
         title: 'Salones de Bowling & Trasnoche',
+        shortTitle: 'Bowling & Pistas',
         icon: '🎳',
         badge: 'Pistas profesionales & Grupos',
         tagline: 'Pistas de bowling automatizadas de madera lustrada, pizza de molde, tejo de aire y espacio para grupos grandes.',
+        heroId: 'almagro_acatraz',
         places: playfulPlaces.filter(p => bowlingIds.includes(p.id))
       }
     ];
   }, [playfulPlaces]);
+
+  // Grupos filtrados según el Selector de Vibra
+  const groupsToDisplay = useMemo(() => {
+    if (selectedPlayVibe === 'all') return playfulGroups;
+    return playfulGroups.filter(g => g.id === selectedPlayVibe);
+  }, [selectedPlayVibe, playfulGroups]);
 
   // Obtener las 3 joyitas reales del catálogo de lugares para este barrio
   const top3Places = useMemo(() => {
@@ -1148,7 +1163,7 @@ export default function RecommendedScreen({
         {/* PESTAÑA 3: JUEGOS, POOL & TRASNOCHE EN CABA              */}
         {/* ======================================================== */}
         {activeTab === 'games_pool' && (
-          <div className="space-y-12 pb-16 animate-fadeIn">
+          <div className="space-y-10 pb-16 animate-fadeIn">
             {/* Cabecera general */}
             <div className="border-b ronda-border pb-6">
               <div className="flex items-center gap-2 mb-1.5">
@@ -1159,159 +1174,334 @@ export default function RecommendedScreen({
                   13 templos verificados
                 </span>
               </div>
-              <h2 className="font-editorial text-3xl sm:text-4xl font-bold text-[var(--text-main)] mb-1">
-                Juegos, Pool & El Alargue
+              <h2 className="font-editorial text-3xl sm:text-4xl font-bold text-[var(--text-main)] mb-1 animate-hero-title">
+                Juegos, Pool & El Alargue<span className="text-[#E06D28] animate-punto-destello">.</span>
               </h2>
-              <p className="text-xs sm:text-sm ronda-text-muted max-w-2xl leading-relaxed">
-                Separados por vibra nocturna: desde billares históricos con café de filtro hasta arcades iluminados con neón y pistas de bowling para estirar la noche.
+              <p className="text-xs sm:text-sm ronda-text-muted max-w-2xl leading-relaxed animate-hero-sub">
+                Elegí tu vibra para estirar la noche porteña: templos de paño verde centenarios, arcades retro con cócteles o salones de bowling para salir en banda.
               </p>
             </div>
 
-            {/* Las 3 Categorías Temáticas */}
-            {playfulGroups.map((group) => (
-              <section key={group.id} className="space-y-5">
-                {/* Cabecera de Categoría */}
-                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b ronda-border pb-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-lg">{group.icon}</span>
-                      <span className="text-xs font-bold text-[#E06D28] tracking-wide uppercase">
-                        {group.badge}
-                      </span>
-                    </div>
-                    <h3 className="font-editorial text-2xl font-bold text-[var(--text-main)]">
-                      {group.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm ronda-text-muted mt-0.5">
-                      {group.tagline}
-                    </p>
-                  </div>
-                  <span className="text-xs font-semibold ronda-text-muted shrink-0 self-start sm:self-auto">
-                    {group.places.length} lugares
+            {/* SELECTOR DE VIBRA EN 1 TAP */}
+            <div className="flex flex-wrap items-center gap-2 p-1.5 ronda-card-inner rounded-2xl border">
+              {playfulGroups.map((g) => (
+                <button
+                  key={g.id}
+                  type="button"
+                  onClick={() => setSelectedPlayVibe(g.id)}
+                  className={`px-3.5 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer btn-latido flex items-center gap-2 ${
+                    selectedPlayVibe === g.id
+                      ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40 chip-barrio-active'
+                      : 'ronda-text-muted hover:text-[var(--text-main)] hover:bg-black/5 dark:hover:bg-white/5'
+                  }`}
+                >
+                  <span className="text-sm">{g.icon}</span>
+                  <span>{g.shortTitle}</span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                    selectedPlayVibe === g.id ? 'bg-[#E06D28] text-white' : 'bg-black/10 dark:bg-white/10'
+                  }`}>
+                    {g.places.length}
                   </span>
-                </div>
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => setSelectedPlayVibe('all')}
+                className={`px-3.5 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer btn-latido flex items-center gap-1.5 ${
+                  selectedPlayVibe === 'all'
+                    ? 'bg-[#14241F] dark:bg-[#1E3328] text-white shadow-xs ring-2 ring-[#E06D28]/40 chip-barrio-active'
+                    : 'ronda-text-muted hover:text-[var(--text-main)] hover:bg-black/5 dark:hover:bg-white/5'
+                }`}
+              >
+                <span>✨</span>
+                <span>Ver Todos</span>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                  selectedPlayVibe === 'all' ? 'bg-[#E06D28] text-white' : 'bg-black/10 dark:bg-white/10'
+                }`}>
+                  {playfulPlaces.length}
+                </span>
+              </button>
+            </div>
 
-                {/* Grilla de Fichas de Club Nocturno */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                  {group.places.map((place) => {
-                    const photoUrl = place.image_url || `/places/${place.id}.jpg`;
-                    const openStatus = getPlayfulOpenStatus(place, currentDayKey, currentHour);
-                    const badges = getPlayBadges(place);
+            {/* SECCIONES SEGÚN VIBRA SELECCIONADA */}
+            {groupsToDisplay.map((group) => {
+              const heroPlace = group.places.find(p => p.id === group.heroId) || group.places[0];
+              const otherPlaces = group.places.filter(p => p.id !== heroPlace?.id);
+              const heroPhotoUrl = heroPlace?.image_url || `/places/${heroPlace?.id}.jpg`;
+              const heroOpenStatus = heroPlace ? getPlayfulOpenStatus(heroPlace, currentDayKey, currentHour) : null;
+              const heroBadges = heroPlace ? getPlayBadges(heroPlace) : [];
 
-                    return (
-                      <article
-                        key={place.id}
-                        className="ronda-card rounded-2xl border shadow-sm hover:border-[#E06D28]/60 hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col justify-between group"
-                      >
-                        <div>
-                          {/* Foto del salón con luz ambiental */}
-                          <div className="relative aspect-[16/10] overflow-hidden bg-[#182A24]">
-                            <img
-                              src={photoUrl}
-                              alt={place.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
-                              onError={(e) => { e.target.style.display = 'none'; }}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none" />
+              return (
+                <section key={group.id} className="space-y-6 pt-2">
+                  {/* Cabecera de Categoría */}
+                  <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b ronda-border pb-3">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xl">{group.icon}</span>
+                        <span className="text-xs font-bold text-[#E06D28] tracking-wider uppercase">
+                          {group.badge}
+                        </span>
+                      </div>
+                      <h3 className="font-editorial text-2xl sm:text-3xl font-bold text-[var(--text-main)]">
+                        {group.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm ronda-text-muted mt-0.5 max-w-2xl leading-relaxed">
+                        {group.tagline}
+                      </p>
+                    </div>
+                    <span className="text-xs font-semibold ronda-text-muted shrink-0 self-start sm:self-auto">
+                      {group.places.length} templos en CABA
+                    </span>
+                  </div>
 
-                            {/* Badges superiores flotantes */}
-                            <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-1 z-10 pointer-events-none">
-                              <span className="text-[11px] font-bold text-white bg-black/75 backdrop-blur-md px-3 py-0.5 rounded-full border border-white/20 shadow-xs">
-                                📍 {place.neighborhood}
+                  {/* 👑 EL TEMPLO INSIGNIA (HERO LÚDICO EDITORIAL) */}
+                  {heroPlace && (
+                    <div className="ronda-card rounded-3xl border ronda-border overflow-hidden shadow-lg group postcard-glow">
+                      <div className="relative aspect-[16/10] sm:aspect-[21/9] max-h-[380px] w-full overflow-hidden bg-[#182A24]">
+                        <img
+                          src={heroPhotoUrl}
+                          alt={heroPlace.name}
+                          className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-700 opacity-90"
+                          onError={(e) => { e.target.style.display = 'none'; }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 pointer-events-none" />
+                        <div className="shimmer-golden opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+                        {/* Badges superiores flotantes */}
+                        <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2 z-10 pointer-events-none">
+                          <span className="text-xs font-bold text-amber-200 bg-amber-950/85 backdrop-blur-md px-3.5 py-1 rounded-full border border-amber-500/40 shadow-sm flex items-center gap-1.5">
+                            <span>👑</span>
+                            <span>Templo Insignia</span>
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-white bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-white/25 shadow-sm flex items-center gap-1">
+                              <MapPin className="w-3.5 h-3.5 text-[#E06D28]" />
+                              <span>{heroPlace.neighborhood}</span>
+                            </span>
+                            <span className={`text-xs font-bold px-3 py-1 rounded-full backdrop-blur-md border shadow-sm flex items-center gap-1.5 ${
+                              heroOpenStatus?.isOpenToday
+                                ? 'text-emerald-100 bg-emerald-950/85 border-emerald-500/40'
+                                : 'text-red-100 bg-red-950/85 border-red-500/40'
+                            }`}>
+                              {heroOpenStatus?.isOpenToday && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-slow" />}
+                              <span>{heroOpenStatus?.label}</span>
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Título en la base de la foto */}
+                        <div className="absolute bottom-4 left-4 right-4 text-white pointer-events-none z-10">
+                          <div className="flex flex-wrap gap-1.5 mb-2">
+                            {heroBadges.map((b) => (
+                              <span
+                                key={b.id}
+                                className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full backdrop-blur-md border shadow-xs ${b.bg}`}
+                              >
+                                {b.label}
                               </span>
-                              <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full backdrop-blur-md border shadow-xs ${
-                                openStatus.isOpenToday
-                                  ? 'text-emerald-200 bg-emerald-950/85 border-emerald-500/40'
-                                  : 'text-red-200 bg-red-950/85 border-red-500/40'
-                              }`}>
-                                {openStatus.label}
-                              </span>
-                            </div>
+                            ))}
+                          </div>
+                          <h4 className="font-editorial text-2xl sm:text-4xl font-bold leading-tight drop-shadow-md">
+                            {heroPlace.name}
+                          </h4>
+                          <p className="text-xs text-white/80 flex items-center gap-1 mt-1 drop-shadow">
+                            <MapPin className="w-3.5 h-3.5 text-[#E06D28]" />
+                            <span>{heroPlace.address}</span>
+                          </p>
+                        </div>
+                      </div>
 
-                            {/* Disciplinas en la base de la foto */}
-                            <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5 z-10 pointer-events-none">
-                              {badges.map((b) => (
-                                <span
-                                  key={b.id}
-                                  className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full backdrop-blur-md border shadow-xs ${b.bg}`}
-                                >
-                                  {b.label}
-                                </span>
-                              ))}
+                      {/* Cuerpo del Templo Insignia: Mística & Qué pedir */}
+                      <div className="p-5 sm:p-6 space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="ronda-card-inner border rounded-2xl p-4 space-y-1.5">
+                            <div className="text-xs font-bold uppercase tracking-wider text-[#E06D28] flex items-center gap-1.5">
+                              <Sparkles className="w-4 h-4" />
+                              <span>La Mística & A qué se juega</span>
                             </div>
+                            <p className="text-xs sm:text-sm text-[var(--text-main)] leading-relaxed">
+                              {heroPlace.game_highlight}
+                            </p>
                           </div>
 
-                          {/* Cuerpo de la Ficha */}
-                          <div className="p-5 space-y-3">
-                            <div>
-                              <h4 className="font-editorial text-xl font-bold text-[var(--text-main)] leading-snug group-hover:text-[#E06D28] transition">
-                                {place.name}
-                              </h4>
-                              <p className="text-xs ronda-text-muted flex items-center gap-1 mt-1">
-                                <MapPin className="w-3.5 h-3.5 text-[#E06D28] shrink-0" />
-                                <span className="truncate">{place.address}</span>
-                              </p>
+                          <div className="ronda-card-inner border rounded-2xl p-4 space-y-1.5">
+                            <div className="text-xs font-bold uppercase tracking-wider text-[#E06D28] flex items-center gap-1.5">
+                              <Lightbulb className="w-4 h-4" />
+                              <span>El Maridaje & Qué picar</span>
                             </div>
+                            <p className="text-xs sm:text-sm text-[var(--text-main)] leading-relaxed">
+                              {heroPlace.highlight}
+                            </p>
+                          </div>
+                        </div>
 
-                            {/* El Templo: qué se juega */}
-                            <div className="ronda-card-inner border rounded-xl p-3 text-xs leading-relaxed space-y-1">
-                              <div className="text-[11px] font-bold text-[#E06D28] uppercase tracking-wider flex items-center gap-1">
-                                <span>🏆 El Templo:</span>
-                              </div>
-                              <p className="text-[var(--text-main)]">
-                                {place.game_highlight}
-                              </p>
-                            </div>
-
-                            {/* Para tomar y picar */}
-                            {place.highlight && (
-                              <p className="text-xs ronda-text-muted flex items-start gap-1.5 leading-relaxed">
-                                <span className="text-sm">🍻</span>
-                                <span><strong className="text-[var(--text-main)]">Para picar: </strong>{place.highlight}</span>
-                              </p>
+                        {/* Acciones del Templo Insignia */}
+                        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t ronda-border">
+                          <span className="text-xs ronda-text-muted self-start sm:self-auto">
+                            {heroPlace.features ? heroPlace.features.slice(0, 2).join(' · ') : 'El alargue clásico de la noche porteña'}
+                          </span>
+                          <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                            <button
+                              type="button"
+                              onClick={() => onSelectPlace(heroPlace)}
+                              className="flex-1 sm:flex-none py-2.5 px-4 text-xs font-semibold text-[var(--text-main)] ronda-card-inner hover:bg-[var(--bg-card)] rounded-xl border transition cursor-pointer btn-latido"
+                            >
+                              Ver ficha completa
+                            </button>
+                            {heroOpenStatus?.isOpenToday ? (
+                              <button
+                                type="button"
+                                onClick={() => onPlanFromHere(heroPlace, 'games_pool')}
+                                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 py-2.5 px-5 rounded-xl bg-gradient-to-r from-[#14241F] to-[#1F3A2E] dark:from-[#1E3328] dark:to-[#2B4B39] hover:from-[#2A4B3D] hover:to-[#366350] text-white text-xs font-bold transition-all cursor-pointer shadow-[0_4px_18px_rgba(224,109,40,0.25)] border border-[#E06D28]/40 btn-latido hover:scale-[1.02]"
+                              >
+                                <Compass className="w-4 h-4 text-[#E06D28]" />
+                                <span>+ Ronda desde este templo</span>
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                disabled
+                                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 py-2.5 px-4 text-xs font-semibold rounded-xl bg-neutral-200/50 dark:bg-neutral-800/60 text-neutral-400 cursor-not-allowed border opacity-60"
+                              >
+                                <Clock className="w-3.5 h-3.5" />
+                                <span>No disponible hoy</span>
+                              </button>
                             )}
                           </div>
                         </div>
+                      </div>
+                    </div>
+                  )}
 
-                        {/* Botones al pie: con verificación de cerrado/disponible */}
-                        <div className="p-5 pt-0 flex items-center gap-2.5">
-                          <button
-                            type="button"
-                            onClick={() => onSelectPlace(place)}
-                            className="flex-1 py-2.5 px-3 text-center text-xs font-semibold text-[var(--text-main)] ronda-card-inner hover:bg-[var(--bg-card)] rounded-xl border transition cursor-pointer btn-latido"
-                          >
-                            Ver ficha completa
-                          </button>
+                  {/* EL RESTO DE LOS TEMPLOS: FICHAS DE TRASNOCHE / PASES LÚDICOS */}
+                  {otherPlaces.length > 0 && (
+                    <div className="space-y-3 pt-2">
+                      <h4 className="text-xs uppercase font-bold tracking-wider text-[var(--text-muted)] flex items-center gap-1.5">
+                        <span>Más templos de {group.shortTitle} para la trasnoche:</span>
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
+                        {otherPlaces.map((place) => {
+                          const photoUrl = place.image_url || `/places/${place.id}.jpg`;
+                          const openStatus = getPlayfulOpenStatus(place, currentDayKey, currentHour);
+                          const badges = getPlayBadges(place);
 
-                          {/* Botón de Ronda: deshabilitado y 'No disponible' si está cerrado hoy */}
-                          {openStatus.isOpenToday ? (
-                            <button
-                              type="button"
-                              onClick={() => onPlanFromHere(place, 'games_pool')}
-                              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-semibold bg-[#14241F] dark:bg-[#1E3328] text-white hover:bg-[#2A4B3D] rounded-xl transition cursor-pointer shadow-xs border ronda-border btn-latido"
-                              title="Armar ronda con este lugar"
+                          return (
+                            <article
+                              key={place.id}
+                              className="ronda-card rounded-2xl border shadow-sm hover:border-[#E06D28]/60 hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col justify-between group postcard-glow"
                             >
-                              <Compass className="w-3.5 h-3.5 text-[#E06D28]" />
-                              <span>+ Ronda</span>
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              disabled
-                              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-semibold rounded-xl bg-neutral-200/50 dark:bg-neutral-800/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed border border-neutral-300/30 dark:border-neutral-700/30 opacity-60"
-                              title="Este lugar se encuentra cerrado hoy"
-                            >
-                              <Clock className="w-3.5 h-3.5" />
-                              <span>No disponible</span>
-                            </button>
-                          )}
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
-              </section>
-            ))}
+                              <div>
+                                {/* Foto del salón con luz ambiental */}
+                                <div className="relative aspect-[16/9] overflow-hidden bg-[#182A24]">
+                                  <img
+                                    src={photoUrl}
+                                    alt={place.name}
+                                    className="w-full h-full object-cover group-hover:scale-106 transition-transform duration-500 opacity-90"
+                                    onError={(e) => { e.target.style.display = 'none'; }}
+                                  />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none" />
+
+                                  {/* Badges superiores flotantes */}
+                                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-1 z-10 pointer-events-none">
+                                    <span className="text-[11px] font-bold text-white bg-black/75 backdrop-blur-md px-3 py-0.5 rounded-full border border-white/20 shadow-xs flex items-center gap-1">
+                                      <MapPin className="w-3 h-3 text-[#E06D28]" />
+                                      <span>{place.neighborhood}</span>
+                                    </span>
+                                    <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full backdrop-blur-md border shadow-xs flex items-center gap-1 ${
+                                      openStatus.isOpenToday
+                                        ? 'text-emerald-200 bg-emerald-950/85 border-emerald-500/40'
+                                        : 'text-red-200 bg-red-950/85 border-red-500/40'
+                                    }`}>
+                                      {openStatus.isOpenToday && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-slow" />}
+                                      <span>{openStatus.label}</span>
+                                    </span>
+                                  </div>
+
+                                  {/* Disciplinas en la base de la foto */}
+                                  <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5 z-10 pointer-events-none">
+                                    {badges.map((b) => (
+                                      <span
+                                        key={b.id}
+                                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur-md border shadow-xs ${b.bg}`}
+                                      >
+                                        {b.label}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                {/* Cuerpo de la Ficha */}
+                                <div className="p-4 sm:p-5 space-y-3">
+                                  <div>
+                                    <h4 className="font-editorial text-lg sm:text-xl font-bold text-[var(--text-main)] leading-snug group-hover:text-[#E06D28] transition">
+                                      {place.name}
+                                    </h4>
+                                    <p className="text-xs ronda-text-muted flex items-center gap-1 mt-0.5">
+                                      <MapPin className="w-3 h-3 text-[#E06D28] shrink-0" />
+                                      <span className="truncate">{place.address}</span>
+                                    </p>
+                                  </div>
+
+                                  {/* Fila 1: A qué se juega */}
+                                  <div className="ronda-card-inner border rounded-xl p-2.5 text-xs leading-relaxed space-y-1">
+                                    <div className="text-[10px] font-bold text-[#E06D28] uppercase tracking-wider flex items-center gap-1">
+                                      <span>🎯 A qué se juega:</span>
+                                    </div>
+                                    <p className="text-[var(--text-main)] text-xs line-clamp-2">
+                                      {place.game_highlight}
+                                    </p>
+                                  </div>
+
+                                  {/* Fila 2: Para tomar y picar */}
+                                  {place.highlight && (
+                                    <p className="text-xs ronda-text-muted flex items-start gap-1.5 leading-relaxed">
+                                      <span className="text-sm shrink-0">🍻</span>
+                                      <span className="line-clamp-2"><strong className="text-[var(--text-main)]">Para picar: </strong>{place.highlight}</span>
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Botones al pie */}
+                              <div className="p-4 sm:p-5 pt-0 flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => onSelectPlace(place)}
+                                  className="flex-1 py-2 px-3 text-center text-xs font-semibold text-[var(--text-main)] ronda-card-inner hover:bg-[var(--bg-card)] rounded-xl border transition cursor-pointer btn-latido"
+                                >
+                                  Ver ficha
+                                </button>
+
+                                {openStatus.isOpenToday ? (
+                                  <button
+                                    type="button"
+                                    onClick={() => onPlanFromHere(place, 'games_pool')}
+                                    className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-semibold bg-[#14241F] dark:bg-[#1E3328] text-white hover:bg-[#2A4B3D] rounded-xl transition cursor-pointer shadow-xs border ronda-border btn-latido"
+                                    title="Armar ronda con este lugar"
+                                  >
+                                    <Compass className="w-3.5 h-3.5 text-[#E06D28]" />
+                                    <span>+ Ronda</span>
+                                  </button>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    disabled
+                                    className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-semibold rounded-xl bg-neutral-200/50 dark:bg-neutral-800/60 text-neutral-400 cursor-not-allowed border opacity-60"
+                                  >
+                                    <Clock className="w-3.5 h-3.5" />
+                                    <span>No disponible</span>
+                                  </button>
+                                )}
+                              </div>
+                            </article>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </section>
+              );
+            })}
           </div>
         )}
 
