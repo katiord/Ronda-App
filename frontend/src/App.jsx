@@ -704,8 +704,8 @@ function PlaceDetailModal({ place, onClose, getPlaceGoogleMapsUrl, onPlanFromHer
         </div>
 
         {/* Nombre del Lugar */}
-        <h3 className="font-editorial text-2xl sm:text-3xl font-bold text-[var(--text-main)] mb-1.5 leading-tight">
-          {place.place_name || place.name}
+        <h3 className="font-editorial text-2xl sm:text-3xl font-bold text-[var(--text-main)] mb-1.5 leading-tight animate-hero-title">
+          {place.place_name || place.name}<span className="text-[#E06D28] animate-punto-destello">.</span>
         </h3>
 
         {/* Dirección */}
@@ -790,8 +790,8 @@ function PlaceDetailModal({ place, onClose, getPlaceGoogleMapsUrl, onPlanFromHer
             {/* Header del bloque editorial */}
             <div className="flex items-center gap-2 pb-3 mb-4 border-b ronda-border">
               <span className="text-base">✨</span>
-              <h4 className="font-editorial text-lg sm:text-xl font-bold text-[var(--text-main)]">
-                Experiencias
+              <h4 className="font-editorial text-lg sm:text-xl font-bold text-[var(--text-main)] animate-hero-title">
+                Experiencias<span className="text-[#E06D28] animate-punto-destello">.</span>
               </h4>
             </div>
 
