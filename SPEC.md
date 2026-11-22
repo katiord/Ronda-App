@@ -146,3 +146,9 @@ Cada paso es coordinado por el **Orquestador**, investigado por el **Investigado
   - **Selector de Vibra Lúdica en 1 Tap**: Píldoras interactivas con farol ámbar nocturno (`🎱 Billar & Vermut`, `🕹️ Arcades & Fichines`, `🎳 Bowling & Pistas`, `✨ Ver Todos`) con recuento en vivo de templos.
   - **El Templo Insignia (Hero Editorial Lúdico)**: Destacado panorámico de gran formato para el salón más icónico de cada categoría (Café San Bernardo, Bar El Destello, Acatraz Multiespacio) con foto inmersiva, mística & qué se juega, maridaje & picada, y botón directo "+ Ronda desde este templo".
   - **Pases Nocturnos Dinámicos**: Tarjetas de trasnoche más ágiles y compactas para el resto de los lugares con 3 filas vivenciales (`🎯 A qué se juega`, `🍻 Para picar`, `📍 Barrio` y estado en vivo con luz piloto `pulse-slow`). Aprobado por el Harness y desplegado en producción (`RULE-DEP-01`, commit `f5a3485`).
+- [x] **Paso 17: Efecto de Rebote Cinemático & Destello de Punto en Títulos de Cartas**
+  - **Coreografía en Títulos de Cartas**: Integración sistemática de la animación de emergencia con rebote elástico (`animate-hero-title`) y el punto final ámbar con latido/destello (`animate-punto-destello`) en todas las tarjetas de la app:
+    - *Juegos & Pool*: Título de categoría, Templo Insignia (Hero) y Pases Nocturnos con `key={`${selectedPlayVibe}-${group.id}`}` reactivo al alternar de vibra.
+    - *Guías por Barrio*: Spot de Portada (Hero), Boletos Culturales y Cápsulas de Joyitas Imperdibles.
+    - *Agenda Finde & Ferias*: Postales cinemáticas de eventos de fin de semana.
+  - Aprobado por el Harness y desplegado en producción (`RULE-DEP-01`, commit `b4b19cc`).
